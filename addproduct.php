@@ -94,6 +94,19 @@
                       <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity">
                     </div>
                   </div>
+
+                  <div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select class="select" id="category" name="category">
+            <option value="living_room">Living Room</option>
+            <option value="dining_room">Dining Room</option>
+            <option value="bedroom">Bedroom</option>
+            <option value="home_office">Home Office</option>
+        </select>
+    </div>
+</div>
+
                   
 
                   <div class="col-lg-5">

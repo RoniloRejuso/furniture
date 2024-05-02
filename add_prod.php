@@ -17,6 +17,7 @@ if ($conn->connect_error) {
 if (isset($_POST['submit'])) {
     // Retrieve form data
     $productName = $_POST['productName'];
+    $category = $_POST['category']; // Retrieve the selected category
 
     if (isset($_POST['status'])) {
         $status = $_POST['status'];
@@ -44,8 +45,8 @@ if (isset($_POST['submit'])) {
     }
 
     // Insert data into the database (assuming $productImage is set correctly)
-    $sql = "INSERT INTO products (product_name, status, price, quantity, product_image) 
-             VALUES ('$productName', '$status', '$price', '$quantity', '$targetFilePath')";
+    $sql = "INSERT INTO products (product_name, category, status, price, quantity, product_image) 
+             VALUES ('$productName', '$category', '$status', '$price', '$quantity', '$targetFilePath')";
 
     if ($conn->query($sql) === TRUE) {
         // Product added successfully, redirect to product_list.php
@@ -55,6 +56,7 @@ if (isset($_POST['submit'])) {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+
 
 // Close database connection
 $conn->close();

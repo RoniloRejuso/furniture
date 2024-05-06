@@ -1,99 +1,69 @@
+
 <!DOCTYPE html>
 <html lang="en">
+   <head>
 <?php
 include 'user_header.php';
 ?>
+ <style>
+.buttons {
+  text-align: center;
+}
+
+.buttons a {
+  display: inline-block;
+  background-color: red; 
+  color: white; 
+  text-decoration: none; 
+  padding: 10px 20px; 
+  border-radius: 20px; 
+  margin: -10px; 
+}
+.add_to_cart {
+  float: right;
+}
+
+.view {
+  float: left;
+}
+.buttons a:hover {
+  background-color: darkred; /* Dark red background on hover */
+}
+
+
+.product-name {
+  float: left; 
+  margin-right: 20px; 
+}
+
+  </style>
+ </head>
    <body>
    <?php
 include 'user_body.php';
 ?>
-      
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-   <div class="carousel-inner">
-   <?php
-include "dbcon.php";
 
-
-$sql = "SELECT * FROM carousel_banners";
-$result = mysqli_query($conn, $sql); 
-
-
-if ($result) {
-    if (mysqli_num_rows($result) > 0) {
-        $active = true;
-        while ($row = mysqli_fetch_assoc($result)) {
-            // Render carousel items dynamically
-            echo '<div class="carousel-item ' . ($active ? 'active' : '') . '">';
-            echo '<img src="' . $row['image_url'] . '" class="d-block w-100" alt="' . $row['title'] . '">';
-            echo '<div class="carousel-caption d-none d-md-block">';
-            echo '<h1 class="banner_taital">' . $row['title'] . '</h1>';
-            echo '<p class="banner_text">' . $row['description'] . '</p>';
-            echo '<div class="read_bt"><a href="#">Buy Now</a></div>';
-            echo '</div></div>';
-            $active = false;
-        }
-    } else {
-        echo "No carousel banners found.";
-    }
-} else {
-    echo "Error: " . mysqli_error($conn);
-}
-
-
-mysqli_close($conn);
-?>
-
-   </div>
-</div>
-
-      <div class="category_buttons_section layout_padding">
-         <div class="container">
-             <div class="row">
-                 <div class="col-sm-12">
-                     <div class="row justify-content-between" id="category_buttons_container">
-                         <div class="col-md-auto">
-                             <a href="#" class="category_button"><i class="fas fa-cube" style="font-size: 14px;"></i></a>
-                         </div>
-                         <div class="col-md-auto">
-                             <a href="#" class="category_button"><i class="fas fa-tags"style="font-size: 14px;"></i></a>
-                         </div>
-                         <div class="col-md-auto">
-                             <a href="#" class="category_button"><i class="fas fa-couch"style="font-size: 14px;"></i></a>
-                         </div>
-                         <div class="col-md-auto">
-                             <a href="#" class="category_button"><i class="fas fa-chair"style="font-size: 20px;"></i></a>
-                         </div>
-                         <div class="col-md-auto">
-                             <a href="#" class="category_button"><i class="fas fa-bed"style="font-size: 14px;"></i></a>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
-
+</head>
 
 <div class="product_section layout_padding">
    <div class="container">
       <div class="row">
          <div class="col-sm-12">
             <h1 class="product_taital">Our Products</h1>
-            <p class="product_text">incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+
          </div>
       </div>
       <div class="product_section_2 layout_padding">
          <div class="row">
-
          <?php
-include "dbcon.php"; // Include your database connection script
+
+include "dbcon.php";
 
 $sql = "SELECT * FROM products";
 $result = mysqli_query($conn, $sql);
 $products = [];
 
-// Check if there are any products
 if (mysqli_num_rows($result) > 0) {
-    // Fetch each row as an associative array and add it to the $products array
     while ($row = mysqli_fetch_assoc($result)) {
         $products[] = $row;
     }
@@ -104,46 +74,53 @@ if (mysqli_num_rows($result) > 0) {
 mysqli_close($conn);
 ?>
 
-<?php foreach ($products as $product) { ?>
-    <div class="col-lg-3 col-sm-6">
-        <div class="product_box">
-            <h4 class="bursh_text"><?php echo $product['product_name']; ?></h4>
-            <p class="lorem_text"><?php echo $product['quantity']; ?> in stock</p>
-            
-            <!-- Display the image -->
-            <img src="<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
-            
-            <div class="btn_main">
-                <h3 class="price_text">Price <?php echo $product['price']; ?></h3>
-            </div>
+<?php
+foreach ($products as $product) {
+?>
+
+<div class="col-lg-3 col-sm-6">
+    <div class="product_box">
+        <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+        <div class="product-info">
+            <h4 class="product-name"><?php echo $product['product_name']; ?></h4>
+            <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3>
         </div>
+        <p class="lorem_text"><?php echo ucfirst(str_replace('_', ' ', $product['category'])); ?></p>
+        <p class="lorem_text"><?php echo $product['status']; ?></p>
+        <p class="lorem_text">Quantity: <?php echo $product['quantity']; ?></p>
+
+        
     </div>
-<?php } ?>
+</div>
 
-
-
-
+<?php
+}
+?>
 
          </div>
          <div class="seemore_bt"><a href="#">See More</a></div>
       </div>
+      <div class="recommended_products">
+         <h2>Recommended for You</h2>
+         <div class="row">
+            
+         </div>
+      </div>
    </div>
 </div>
 
-      <div class="copyright_section">
-         <div class="container">
-            <p class="copyright_text">2024 All Rights Reserved. OUR | HOME</a></p>
-         </div>
-      </div>
-      
+<?php
+include 'user_footer.php';
+?>
+
+
          <div class="floating-navbar">
-            <a href="index.html" class="active"><i class="fas fa-home"></i></a>
-            <a href="all_products.html"><i class="fas fa-couch"></i></a>
+            <a href="user_index.html" class="active"><i class="fas fa-home"></i></a>
+            <a href="user_prod.php"><i class="fas fa-couch"></i></a>
             <a href="favorites.html"><i class="fas fa-heart"></i></a>
-            <a href="cart.html"><i class="fas fa-shopping-bag"></i></a>
-            <a href="user.html"><i class="fas fa-user"></i></a>
+            <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
+            <a href="user.php"><i class="fas fa-user"></i></a>
          </div>
-      
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>

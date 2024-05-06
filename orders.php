@@ -37,8 +37,8 @@
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Inventory Report</h4>
-                    <h6>Manage your Inventory Report</h6>
+                    <h4>Order Report</h4>
+
                 </div>
             </div>
             <div class="card">
@@ -49,10 +49,10 @@
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
-                                    <th>Product ID</th>
-                                    <th>Order Date</th>
-                                    <th>Order Status</th>
-                                    <th>Order Amount</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,11 +60,11 @@
                                 // Loop through fetched orders and display them in the table
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
-                                    echo "<td>" . $row['order_id'] . "</td>";
-                                    echo "<td>" . $row['product_id'] . "</td>";
-                                    echo "<td>" . $row['order_date'] . "</td>";
-                                    echo "<td>" . $row['order_status'] . "</td>";
-                                    echo "<td>" . $row['order_amount'] . "</td>";
+                                    echo "<td>" . $row['id'] . "</td>";
+                                    echo "<td>" . $row['product_name'] . "</td>";
+                                    echo "<td>" . $row['quantity'] . "</td>";
+                                    echo "<td>" . $row['amount'] . "</td>";
+                                    echo "<td>" . $row['date'] . "</td>";
                                     echo "</tr>";
                                 }
                                 ?>

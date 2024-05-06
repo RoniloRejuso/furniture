@@ -27,6 +27,9 @@ if (isset($_POST['submit'])) {
 
     $price = $_POST['price'];
     $quantity = $_POST['quantity'];
+    $color = $_POST['color']; // Retrieve color from form
+$size = $_POST['size']; // Retrieve size from form
+$weightCapacity = $_POST['weight_capacity'];
 
     if (isset($_FILES['product-image']) && $_FILES['product-image']['error'] === 0) {
         $productImage = $_FILES['product-image']['name'];
@@ -45,8 +48,8 @@ if (isset($_POST['submit'])) {
     }
 
     // Insert data into the database (assuming $productImage is set correctly)
-    $sql = "INSERT INTO products (product_name, category, status, price, quantity, product_image) 
-             VALUES ('$productName', '$category', '$status', '$price', '$quantity', '$targetFilePath')";
+    $sql = "INSERT INTO products (product_name, category, status, price, quantity, product_image, color, size, weight_capacity) 
+    VALUES ('$productName', '$category', '$status', '$price', '$quantity', '$targetFilePath', '$color', '$size', '$weightCapacity')";
 
     if ($conn->query($sql) === TRUE) {
         // Product added successfully, redirect to product_list.php

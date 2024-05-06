@@ -24,6 +24,7 @@
      
      include 'header.php';
      include 'session.php';
+   
      include 'dbcon.php';
           ?>
      
@@ -270,23 +271,25 @@
                     die("Connection failed: " . mysqli_connect_error());
                 }
 
-                // Query to fetch product data from the database
-                $query = "SELECT product_image, product_name, quantity, price FROM products";
-                $result = mysqli_query($connection, $query);
 
-                // Check if there are any rows returned
-                if(mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td><img src='".$row['product_image']."' alt='Product Image'></td>";
-                        echo "<td>".$row['product_name']."</td>";
-                        echo "<td>".$row['quantity']."</td>";
-                        echo "<td>".$row['price']."</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='4'>No products found</td></tr>";
-                }
+                      // Query to fetch top 3 products with highest quantity from the database
+                      $query = "SELECT product_image, product_name, quantity, price FROM products ORDER BY quantity DESC LIMIT 2";
+                      $result = mysqli_query($connection, $query);
+
+                      // Check if there are any rows returned
+                      if(mysqli_num_rows($result) > 0) {
+                          while($row = mysqli_fetch_assoc($result)) {
+                              echo "<tr>";
+                              echo "<td><img src='".$row['product_image']."' alt='Product Image'></td>";
+                              echo "<td>".$row['product_name']."</td>";
+                              echo "<td>".$row['quantity']."</td>";
+                              echo "<td>".$row['price']."</td>";
+                              echo "</tr>";
+                          }
+                      } else {
+                          echo "<tr><td colspan='4'>No products found</td></tr>";
+                      }
+
                 ?>
             </tbody>
         </table>
@@ -298,137 +301,60 @@
           </div>
 
           <div class="card mb-0">
-            <div class="card-body">
-              <h4 class="card-title">
-                Recent Orders
-              </h4>
+    <div class="card-body">
+        <h4 class="card-title">Recent Orders</h4>
 
-              <div class="table-responsive dataview">
-                <table class="table datatable">
-                  <thead>
+        <div class="table-responsive dataview">
+            <table class="table datatable">
+                <thead>
                     <tr>
-                      <th>
-                        Product
-                      </th>
-                      <th>
-                        Order ID
-                      </th>
-                      <th>
-                        Date
-                      </th>
-                      <th>
-                        Status
-                      </th>
-                      <th>
-                        Amount
-                      </th>
+                        
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Amount Change</th>
+                        <th>Date</th>
+                        <th>ID</th>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                        <a href="javascript:void(0);">
-                          IT0001
-                        </a>
-                      </td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img src="assets/img/product/product2.jpg" alt="product">
-                        </a>
-                        <a href="productlist.html">
-                          Orange
-                        </a>
-                      </td>
-                      <td>
-                        N/D
-                      </td>
-                      <td>
-                        Fruits
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        <a href="javascript:void(0);">
-                          IT0002
-                        </a>
-                      </td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img src="assets/img/product/product3.jpg" alt="product">
-                        </a>
-                        <a href="productlist.html">
-                          Pineapple
-                        </a>
-                      </td>
-                      <td>
-                        N/D
-                      </td>
-                      <td>
-                        Fruits
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        <a href="javascript:void(0);">
-                          IT0003
-                        </a>
-                      </td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img src="assets/img/product/product4.jpg" alt="product">
-                        </a>
-                        <a href="productlist.html">
-                          Stawberry
-                        </a>
-                      </td>
-                      <td>
-                        N/D
-                      </td>
-                      <td>
-                        Fruits
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        <a href="javascript:void(0);">
-                          IT0004
-                        </a>
-                      </td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img src="assets/img/product/product5.jpg" alt="product">
-                        </a>
-                        <a href="productlist.html">
-                          Avocat
-                        </a>
-                      </td>
-                      <td>
-                        N/D
-                      </td>
-                      <td>
-                        Fruits
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                </thead>
+
+                <tbody>
+                    <?php
+                    // Include your database connection configuration file
+                    @include 'config.php';
+
+                    // Fetch the latest 10 orders from the 'orders' table
+                    $fetch_orders_query = mysqli_query($conn, "SELECT * FROM orders ORDER BY date DESC LIMIT 10");
+
+                    // Check if there are any orders
+                    if (mysqli_num_rows($fetch_orders_query) > 0) {
+                        while ($order = mysqli_fetch_assoc($fetch_orders_query)) {
+                            echo "<tr>";
+                            
+                            echo "<td>" . $order['product_name'] . "</td>";
+                            echo "<td>₱" . number_format($order['price'], 2) . "</td>";
+                            echo "<td>" . $order['quantity'] . "</td>";
+                            echo "<td>₱" . number_format($order['amount_change'], 2) . "</td>";
+                            echo "<td>" . $order['date'] . "</td>";
+                            echo "<td>" . $order['id'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6'>No orders found</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+          
         </div>
       </div>
     </div>
+
     <script src="assets/js/jquery-3.6.0.min.js">
     </script>
     <script src="assets/js/feather.min.js">

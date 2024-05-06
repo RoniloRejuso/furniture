@@ -36,16 +36,16 @@ include 'user_body.php';
             ?>
                 <div class="col-lg-3 col-md-6">
                     <div class="product_item">
-                        <!-- Product Image -->
+
                         <img src="<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
-                        <!-- Product Name -->
+                        
                         <h4><?php echo $product['product_name']; ?></h4>
-                        <!-- Product Price -->
+                   
                         <p><?php echo $product['price']; ?></p>
-                        <!-- Heart Icon for Adding to Favorites -->
+
                         <button class="add-to-favorites"><i class="fas fa-heart"></i></button>
-                        <!-- Link to Product Details -->
-                        <a href="product.php?id=<?php echo $product['product_id']; ?>" class="product-details-link">View Details</a>
+
+                        <a href="user_prod.php?id=<?php echo $product['product_id']; ?>" class="product-details-link">View Details</a>
                     </div>
                 </div>
             <?php
@@ -57,21 +57,9 @@ include 'user_body.php';
         </div>
     </div>
 </div>
-
-<!-- Bedroom Section End -->
-
-
-      <!-- Floating navbar section start -->
-         <div class="floating-navbar">
-            <a href="index.html" class="active"><i class="fas fa-home"></i></a>
-            <a href="all_products.html"><i class="fas fa-couch"></i></a>
-            <a href="favorites.html"><i class="fas fa-heart"></i></a>
-            <a href="cart.html"><i class="fas fa-shopping-bag"></i></a>
-            <a href="user.html"><i class="fas fa-user"></i></a>
-         </div>
-      <!-- Floating navbar section end -->
-      
-      <!-- Javascript files-->
+<?php
+include 'user_footer.php';
+?>
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>

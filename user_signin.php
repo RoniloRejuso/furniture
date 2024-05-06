@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
         if (password_verify($password, $hashed_password)) {
-            header("Location: new.php");
+            header("Location: user_index.php");
             exit();
         } else {
             echo '<script>alert("Incorrect password."); window.location.href = "login.php";</script>';

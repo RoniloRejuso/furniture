@@ -58,11 +58,21 @@
                 </div>
 
                 <div class="col-lg-3 col-sm-6 col-12">
-                    <div class="form-group">
-                      <label for="productName">Product Name</label>
-                      <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name">
-                    </div>
-                  </div>
+  <div class="form-group">
+    <label for="productName">Product Name</label>
+    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name">
+  </div>
+</div>
+
+<script>
+  document.getElementById('productName').addEventListener('input', function() {
+    var fixedName = 'Our Home'; // Your fixed name
+    var userInput = this.value; // User input from the input field
+    var result = fixedName + ' ' + userInput;
+    document.getElementById('productName').value = result;
+  });
+</script>
+
                   
 
 
@@ -106,6 +116,29 @@
         </select>
     </div>
 </div>
+
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="color">Color</label>
+        <input type="text" class="form-control" id="color" name="color" placeholder="Enter color">
+    </div>
+</div>
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="size">Size</label>
+        <input type="text" class="form-control" id="size" name="size" placeholder="Enter size">
+    </div>
+</div>
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="weight_capacity">Weight Capacity</label>
+        <input type="text" class="form-control" id="weight_capacity" name="weight_capacity" placeholder="Enter weight capacity">
+    </div>
+</div>
+
 
                   
 

@@ -1,5 +1,4 @@
-<?php
-include('dbcon.php'); ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +23,7 @@ include('dbcon.php'); ?>
             <h1 class="m-0 text-primary" style="color: #ffd698;">Log in</h1>
             </div>
 
-            <form method="post" class="form-horizontal">
+            <form method="post" class="form-horizontal" action="log.php">
                 <div class="logcontrol-group">
                     <label class="logcontrol-label" for="inputUsername"></label>
                     <div class="logcontrols">
@@ -39,41 +38,9 @@ include('dbcon.php'); ?>
                             <img src="assets/img/icons/eye1.svg" alt="Toggle Password Visibility">
                         </span>
                     </div>
-                    <?php
-session_start();
-include('dbcon.php');
+                    
 
-if (isset($_POST['submit1'])) {
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-
-    $query = "SELECT * FROM admin WHERE username=?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($result) {
-        $row = mysqli_fetch_assoc($result);
-
-        if ($row && password_verify($password, $row['password'])) {
-            $_SESSION['id'] = $row['id']; // Assuming 'admin_id' is 'id' in your admin table
-            if ($row['is_admin'] == 1) {
-                header("Location: index.php");
-                exit();
-            } else {
-                $error = "You are not an admin";
-            }
-        } else {
-            $error = "Login Error: Please check your Username and Password";
-        }
-    } else {
-        $error = "Database error: " . mysqli_error($conn);
-    }
-}
-?>
-
-                    <a href="forgot_password.php" style="margin-left: 320px; color: #ffd698;">Forgot Your Password?</a>
+                    <a href="change_pass.php" style="margin-left: 320px; color: #ffd698;">Forgot Your Password?</a>
                 </div>
                 <div class="logcontrol-group">
                     <div class="logcontrols">
@@ -86,6 +53,7 @@ if (isset($_POST['submit1'])) {
                 </div>
                 <img src="assets/img/our home.png" alt="" style="width: 200px; height: auto; margin-top: 5px; margin-left: 30px;">
             </form>
+
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

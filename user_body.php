@@ -14,7 +14,7 @@
                           <a class="dropdown-item" href="user_diningroom.php">Dining Room</a>
                           <a class="dropdown-item" href="user_bedroom.php">Bedroom</a>
                           <a class="dropdown-item" href="user_office.php">Home Office</a>
-                          <a class="dropdown-item" href="user_product.php">All products</a>
+                          <a class="dropdown-item" href="user_prod.php">All products</a>
                       </div>
                   </div>
                   <div class="login-signup">

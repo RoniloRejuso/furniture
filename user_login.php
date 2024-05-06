@@ -22,7 +22,7 @@ include 'user_body.php';
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 offset-md-3">
-                    <form id="loginForm" method="POST" action="signin.php">
+                    <form id="loginForm" method="POST" action="user_signin.php">
     <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
@@ -55,7 +55,7 @@ include 'user_body.php';
                     <h3 class="signup-modal-title" style="text-align: center;" id="signupModalLabel"><big>Create Account</big></h3>
                     <div class="modal-body">
 
-                    <form id="signupForm" method="POST" action="signup.php">
+                    <form id="signupForm" method="POST" action="user_signup.php">
 
     <div class="form-group">
         <label for="firstname">First name:</label>

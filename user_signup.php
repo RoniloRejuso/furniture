@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         // Redirect to login.php after successful registration
-        header("Location: login.php");
+        header("Location: user_login.php");
         exit(); // Make sure to exit after sending the header to prevent further script execution
     } else {
         echo "Error: " . $stmt->error;

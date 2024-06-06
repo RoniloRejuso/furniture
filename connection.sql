@@ -13,13 +13,13 @@ CREATE TABLE products (
 
 
 CREATE TABLE admin (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     is_admin INT NOT NULL DEFAULT 0,
 );
 CREATE TABLE orders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    orders_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,  -- Corrected the syntax here
     quantity INT NOT NULL,

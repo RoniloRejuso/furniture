@@ -26,59 +26,47 @@ include 'user_body.php';
                <select name="filter_by_category">
                   <option value="all">All Categories</option>
                </select>
-            <!-- Total newly added products -->
-            <?php
-               // Simulated data for newly added products
-               $newly_added_products = 10; // Example count of newly added products
-               ?>
-               <p><?php echo $newly_added_products;?> Products: </p>
+                     <div class="row">
+                     <?php
+                        $conn = mysqli_connect('localhost', 'root', '', 'furniture');
 
-            </div>
-            
-            <!-- Product Grid Section -->
-            <div class="product_grid_section">
-               <?php
-                  // Simulated product data
-                  $products = array(
-                     array("name" => "Product 1", "price" => 100, "category" => "Category 1"),
-                     array("name" => "Product 2", "price" => 150, "category" => "Category 2"),
-                     // More product data
-                  );
+                        if ($conn->connect_error) {
+                           die("Connection failed: " . $conn->connect_error);
+                        }
 
-                  // Pagination and product display
-                  $limit = 6; // Number of products per page
-                  $page = isset($_GET['page']) ? $_GET['page'] : 1;
-                  $offset = ($page - 1) * $limit;
-                  $total_products = count($products);
-                  $total_pages = ceil($total_products / $limit);
-                  
-                  // Display products based on pagination
-                  for ($i = $offset; $i < min($offset + $limit, $total_products); $i++) {
-                     echo "<div class='product'>";
-                     echo "<h3>" . $products[$i]['name'] . "</h3>";
-                     echo "<p>Price: $" . $products[$i]['price'] . "</p>";
-                     echo "<p>Category: " . $products[$i]['category'] . "</p>";
-                     echo "</div>";
-                  }
+                        $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE date <= NOW() ORDER BY date DESC");
+                        $stmt->execute();
+                        $result = $stmt->get_result();
 
-                  // Display total number of products
-                  echo "<p>Total Products: " . $total_products . "</p>";
-
-                  // Pagination links
-                  echo "<div class='pagination'>";
-                  for ($i = 1; $i <= $total_pages; $i++) {
-                     echo "<a href='?page=" . $i . "'>" . $i . "</a>";
-                  }
-                  echo "</div>";
-               ?>
+                        while ($product = $result->fetch_assoc()) {
+                        ?>
+                        <div class="col-lg-3 col-sm-6">
+                           <div class="product_box">
+                              <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                              <div class="product-info">
+                                    <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
+                                    <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price'];?></h3><br><br>
+                              </div>
+                           </div>
+                        </div>
+                        <?php
+                        }
+                        // Close database connection
+                        $stmt->close();
+                        $conn->close();
+                        ?>
+               </div>
             </div>
          </div>
       </div>
 
 
-      <?php
-include 'user_footer.php';
-?>
+      <div class="floating-navbar">
+        <a href="user_index.php"><i class="fas fa-home"></i></a>
+        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
+        <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
+        <a href="user.php"><i class="fas fa-user"></i></a>
+      </div>
 
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>

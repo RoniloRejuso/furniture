@@ -1,7 +1,7 @@
 <div class="header_section">
          <div class="container-fluid">
             <nav class="navbar navbar-light bg-light justify-content-between">
-               <div id="mySidenav" class="sidenav">
+               <div id="mySidenav" class="sidenav"><br><br><br>
                   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                   <a href="user_new_products.php">New Products</a>
                   <a href="user_products_sale.php">Products on Sale</a>
@@ -13,12 +13,9 @@
                           <a class="dropdown-item" href="user_livingroom.php">Living Room</a>
                           <a class="dropdown-item" href="user_diningroom.php">Dining Room</a>
                           <a class="dropdown-item" href="user_bedroom.php">Bedroom</a>
-                          <a class="dropdown-item" href="user_office.php">Home Office</a>
+                          <a class="dropdown-item" href="user_office.php">Office</a>
                           <a class="dropdown-item" href="user_prod.php">All products</a>
                       </div>
-                  </div>
-                  <div class="login-signup">
-                     <a href="user_login.php">Log in</a> | <a href="user_login.php">Sign up</a>
                   </div>
                </div>                          
                <span class="toggle_icon" onclick="openNav()"><img src="images/toggle-icon.png"></span>

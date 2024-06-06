@@ -12,7 +12,7 @@ include 'user_body.php';
         <div class="row">
             <?php
             // Establish a database connection and fetch dining room products
-            $conn = new mysqli("localhost", "username", "password", "furniture");
+            $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
             // Check connection
             if ($conn->connect_error) {
@@ -27,20 +27,15 @@ include 'user_body.php';
             // Loop through the fetched products
             while ($product = $result->fetch_assoc()) {
             ?>
-                <div class="col-lg-3 col-md-6">
-                    <div class="product_item">
-                        <!-- Product Image -->
-                        <img src="<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
-                        <!-- Product Name -->
-                        <h4><?php echo $product['product_name']; ?></h4>
-                        <!-- Product Price -->
-                        <p><?php echo $product['price']; ?></p>
-                        <!-- Heart Icon for Adding to Favorites -->
-                        <button class="add-to-favorites"><i class="fas fa-heart"></i></button>
-                        <!-- Link to Product Details -->
-                        <a href="user_prod.php?id=<?php echo $product['product_id']; ?>" class="product-details-link">View Details</a>
-                    </div>
-                </div>
+               <div class="col-lg-3 col-sm-6">
+                  <div class="product_box">
+                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                     <div class="product-info">
+                           <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
+                           <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price'];?></h3><br><br>
+                        </div>
+                  </div>
+               </div>
             <?php
             }
             // Close database connection
@@ -49,11 +44,14 @@ include 'user_body.php';
             ?>
         </div>
     </div>
-</div>
+</div><br><br>
 
-<?php
-include 'user_footer.php';
-?>
+      <div class="floating-navbar">
+        <a href="user_index.php"><i class="fas fa-home"></i></a>
+        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
+        <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
+        <a href="user.php"><i class="fas fa-user"></i></a>
+      </div>
 
 
       <script src="js/jquery.min.js"></script>
@@ -88,6 +86,6 @@ include 'user_footer.php';
          function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
          }
-      </script> > 
+      </script>
    </body>
 </html>

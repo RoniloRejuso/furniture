@@ -1,3 +1,13 @@
+<?php
+session_start();
+include 'dbcon.php';
+
+if (!isset($_SESSION['admin_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   
@@ -24,14 +34,7 @@
   <body>
 
 
-  <?php
-     
-     include 'header.php'; // This will include the content of header.php
-          
-     ?>
-     
-
-
+  <?php include 'header.php';?>
       <div class="page-wrapper">
         <div class="content">
           <div class="page-header">
@@ -39,39 +42,33 @@
               <h4>
                 Product Add
               </h4>
-              <h6>
-                Create new product
-              </h6>
+              <h6>Create new product</h6>
             </div>
           </div>
+          
           <form action="add_prod.php" method="POST" enctype="multipart/form-data">
           <div class="card">
             <div class="card-body">
               <div class="row">
-                <div class="col-lg-3 col-sm-6 col-12">
-                  <div class="form-group">
-                    <label>
-                      Product ID
-                    </label>
-                    <input type="text">
-                  </div>
-                </div>
 
-                <div class="col-lg-3 col-sm-6 col-12">
+
+              <div class="col-lg-3 col-sm-6 col-12">
   <div class="form-group">
     <label for="productName">Product Name</label>
-    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name">
+    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name" maxlength="100">
   </div>
 </div>
 
 <script>
   document.getElementById('productName').addEventListener('input', function() {
-    var fixedName = 'Our Home'; // Your fixed name
-    var userInput = this.value; // User input from the input field
-    var result = fixedName + ' ' + userInput;
-    document.getElementById('productName').value = result;
+    var userInput = this.value.toLowerCase(); // Convert input to lowercase for case-insensitivity
+    if (userInput.includes('sofa')) {
+      // If "sofa" is present in the input, prepend "Our Home"
+      this.value = 'Our Home ' + userInput;
+    }
   });
 </script>
+
 
                   
 
@@ -90,20 +87,43 @@
 
 
 
-                <div class="col-lg-3 col-sm-6 col-12">
-                    <div class="form-group">
-                      <label for="price">Price</label>
-                      <input type="text" class="form-control" id="price" name="price" placeholder="Enter price">
-                    </div>
-                  </div>
-                  
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" class="form-control" id="price" name="price" placeholder="Enter price" onkeypress="return isNumberKey(event)" maxlength="9">
+        <small id="priceHelpBlock" class="form-text text-muted"></small>
+    </div>
+</div>
 
-                  <div class="col-lg-3 col-sm-6 col-12">
-                    <div class="form-group">
-                      <label for="quantity">Quantity</label>
-                      <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity">
-                    </div>
-                  </div>
+                  <script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity" onkeypress="return isNumberKey(event)" maxlength="9">
+        <small id="quantityHelpBlock" class="form-text text-muted"></small>
+    </div>
+</div>
+
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
 
                   <div class="col-lg-3 col-sm-6 col-12">
     <div class="form-group">
@@ -121,21 +141,32 @@
 <div class="col-lg-3 col-sm-6 col-12">
     <div class="form-group">
         <label for="color">Color</label>
-        <input type="text" class="form-control" id="color" name="color" placeholder="Enter color">
+        <input type="text" class="form-control" id="color" name="color" placeholder="Enter color" maxlength="50" onkeypress="return onlyAlphabetic(event)">
+        <small id="colorHelpBlock" class="form-text text-muted"></small>
     </div>
 </div>
+<script>
+    function onlyAlphabetic(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
 
 <div class="col-lg-3 col-sm-6 col-12">
     <div class="form-group">
         <label for="size">Size</label>
-        <input type="text" class="form-control" id="size" name="size" placeholder="Enter size">
+        <input type="text" class="form-control" id="size" name="size" placeholder="Enter size" maxlength="50">
     </div>
 </div>
 
 <div class="col-lg-3 col-sm-6 col-12">
     <div class="form-group">
         <label for="weight_capacity">Weight Capacity</label>
-        <input type="text" class="form-control" id="weight_capacity" name="weight_capacity" placeholder="Enter weight capacity">
+        <input type="text" class="form-control" id="weight_capacity" name="weight_capacity" placeholder="Enter weight capacity" maxlength="50"> 
     </div>
 </div>
 
@@ -149,7 +180,8 @@
                       </label>
                       <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
                     </div>
-                  </div>                           
+                  </div>             
+                                
 
                   <div class="col-lg-12">
     <button type="submit" class="btn btn-submit me-2" name="submit">Submit</button>

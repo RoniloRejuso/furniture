@@ -15,6 +15,13 @@ if ($conn->connect_error) {
 
 // Process form submission
 if (isset($_POST['submit'])) {
+    // Check if required fields are filled
+    if (empty($_POST['productName']) || empty($_POST['price']) || empty($_POST['quantity']) || empty($_POST['color'])) {
+        echo "<script>alert('Please fill in all required fields.');
+              window.location.href = 'addproduct.php';</script>";
+        exit();
+    }
+
     // Retrieve form data
     $productName = $_POST['productName'];
     $category = $_POST['category']; // Retrieve the selected category
@@ -28,8 +35,8 @@ if (isset($_POST['submit'])) {
     $price = $_POST['price'];
     $quantity = $_POST['quantity'];
     $color = $_POST['color']; // Retrieve color from form
-$size = $_POST['size']; // Retrieve size from form
-$weightCapacity = $_POST['weight_capacity'];
+    $size = isset($_POST['size']) ? $_POST['size'] : ''; // Retrieve size from form
+    $weightCapacity = isset($_POST['weight_capacity']) ? $_POST['weight_capacity'] : '';
 
     if (isset($_FILES['product-image']) && $_FILES['product-image']['error'] === 0) {
         $productImage = $_FILES['product-image']['name'];
@@ -42,9 +49,11 @@ $weightCapacity = $_POST['weight_capacity'];
             // Upload successful, proceed with insertion
         } else {
             echo "Error uploading image: " . $_FILES['product-image']['error'];
+            exit();
         }
     } else {
         echo "Error: No image uploaded or upload failed.";
+        exit();
     }
 
     // Insert data into the database (assuming $productImage is set correctly)
@@ -59,7 +68,6 @@ $weightCapacity = $_POST['weight_capacity'];
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-
 
 // Close database connection
 $conn->close();

@@ -1,8 +1,14 @@
 <?php
-$conn= mysqli_connect('localhost', 'root', '', 'furniture');
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "furniture";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $database);
+
+// Check connection
 if (!$conn) {
-	// 	echo ("Connection Failed: ".mysqli_error($conn));
-	echo ("Connection Failed: " . mysqli_connect_error());
-	exit;
+    die("Connection failed: " . mysqli_connect_error());
 }
 ?>

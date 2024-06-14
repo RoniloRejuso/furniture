@@ -411,8 +411,13 @@ button {
 #loginForm {
     background-color: #FFF6EB;
     padding: 20px;
+<<<<<<< HEAD
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+=======
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
     
 }
 
@@ -826,7 +831,11 @@ button {
     position: relative;
     width: 400px;
     height: 200px;
+<<<<<<< HEAD
     margin: 10px auto;
+=======
+    margin: 20px auto;
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 
 }
 @media (max-width: 768px) {
@@ -841,6 +850,7 @@ button {
 
 .product-image {
     margin-top: 20px;
+<<<<<<< HEAD
     margin-right: 50px;
     width: 70px;
     height: 70px;
@@ -858,6 +868,17 @@ button {
     }
 }
 
+=======
+    margin-right: 20px;
+    width: 70px;
+    height: 70px;
+
+}
+
+.product-image img {
+    max-width: 150px;
+}
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 .product-details{
     padding: 10px;
 }

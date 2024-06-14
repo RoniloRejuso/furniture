@@ -32,6 +32,7 @@ include 'user_body.php';
 
             while ($product = $result->fetch_assoc()) {
             ?>
+<<<<<<< HEAD
                         <div class="col-lg-3 col-sm-6">
                             <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
@@ -43,6 +44,17 @@ include 'user_body.php';
                                 </div>
                             </a>
                         </div>
+=======
+               <div class="col-lg-3 col-sm-6">
+                  <div class="product_box">
+                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                     <div class="product-info">
+                           <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
+                           <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price'];?></h3><br><br>
+                        </div>
+                  </div>
+               </div>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
             <?php
             }
             // Close database connection

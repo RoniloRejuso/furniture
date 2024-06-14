@@ -7,7 +7,11 @@ error_reporting(E_ALL);?>
 <head>
 
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>Our Home</title>
+=======
+    <title>Registers</title>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 
     <script src='sweetalert.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -18,6 +22,10 @@ error_reporting(E_ALL);?>
 <body>
 
 <?php
+<<<<<<< HEAD
+=======
+
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 include('dbcon.php');
 
 if (isset($_POST['register_btn'])) {
@@ -182,4 +190,9 @@ else if (isset($_POST['login_btn'])) {
 
 
 </body>
+<<<<<<< HEAD
+=======
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 </html>

@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
 
 :root{
    --blue:gray;
@@ -13,7 +19,7 @@
 }
 
 *{
-   font-family: 'Poppins', sans-serif;
+   font-family: 'Montserrat', sans-serif;
    margin:0; padding:0;
    box-sizing: border-box;
    outline: none; border:none;
@@ -338,6 +344,7 @@ section{
 .shopping-cart .checkout-btn{
    text-align: center;
    margin-top: 1rem;
+   width: 100px;
 }
 
 .shopping-cart .checkout-btn a{
@@ -388,14 +395,14 @@ section{
 
 .display-order{
    max-width: 50rem;
-   background-color: var(--white);
+   background-color: #FFF6EB;
    border-radius: .5rem;
    text-align: center;
    padding:1.5rem;
    margin:0 auto;
    margin-bottom: 2rem;
    box-shadow: var(--box-shadow);
-   border:var(--border);
+   border: transparent;
 }
 
 .display-order span{
@@ -409,11 +416,10 @@ section{
 }
 
 .display-order span.grand-total{
-   width: 100%;
-   background-color: var(--red);
-   color:var(--white);
-   padding:1rem;
+   color: #000;
+   background-color: transparent;
    margin-top: 1rem;
+   margin-left: 31%;
 }
 
 .order-message-container{
@@ -445,7 +451,7 @@ section{
 
 .order-message-container .message-container{
    width: 50rem;
-   background-color: var(--white);
+   background-color: #FFF6EB;
    border-radius: .5rem;
    padding:2rem;
    text-align: center;
@@ -457,7 +463,7 @@ section{
 }
 
 .order-message-container .message-container .order-detail{
-   background-color: var(--bg-color);
+   background-color: var(transparent);
    border-radius: .5rem;
    padding:1rem;
    margin:1rem 0;
@@ -596,4 +602,4 @@ section{
       grid-template-columns: 1fr;
    }
 
-}
+} 

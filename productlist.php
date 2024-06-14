@@ -1,3 +1,28 @@
+<?php
+session_start();
+include 'dbcon.php';
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if (isset($_GET['delete_id'])) {
+    $product_id = $_GET['delete_id'];
+
+    $delete_query = "DELETE FROM products WHERE product_id = $product_id";
+
+    if (mysqli_query($conn, $delete_query)) {
+        header("Location: productlist.php");
+        exit();
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
+    }
+}
+
+$sql = "SELECT * FROM products";
+$result = $conn->query($sql);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   
@@ -23,8 +48,8 @@
   
   <body>
   <?php
-     
-     include 'header.php'; // This will include the content of header.php
+
+     include 'header.php';
             ?>
   
       <div class="page-wrapper">
@@ -63,112 +88,16 @@
                     </a>
                   </div>
                 </div>
+
                 <div class="wordset">
                   <ul>
-                    <li>
-                      <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf">
-                        <img src="assets/img/icons/pdf.svg" alt="img">
-                      </a>
-                    </li>
-                    <li>
-                      <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel">
-                        <img src="assets/img/icons/excel.svg" alt="img">
-                      </a>
-                    </li>
-                    <li>
-                      <a data-bs-toggle="tooltip" data-bs-placement="top" title="print">
-                        <img src="assets/img/icons/printer.svg" alt="img">
-                      </a>
-                    </li>
+                  <li>
+            <a href="pdf_product.php" data-bs-toggle="tooltip" data-bs-placement="top" title="pdf">
+                <img src="assets/img/icons/pdf.svg" alt="img">
+            </a>
+        </li>
+                    
                   </ul>
-                </div>
-              </div>
-
-              <div class="card mb-0" id="filter_inputs">
-                <div class="card-body pb-0">
-                  <div class="row">
-                    <div class="col-lg-12 col-sm-12">
-                      <div class="row">
-                        <div class="col-lg col-sm-6 col-12">
-                          <div class="form-group">
-                            <select class="select">
-                              <option>
-                                Choose Product
-                              </option>
-                              <option>
-                                Macbook pro
-                              </option>
-                              <option>
-                                Orange
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="col-lg col-sm-6 col-12">
-                          <div class="form-group">
-                            <select class="select">
-                              <option>
-                                Choose Category
-                              </option>
-                              <option>
-                                Computers
-                              </option>
-                              <option>
-                                Fruits
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-lg col-sm-6 col-12">
-                          <div class="form-group">
-                            <select class="select">
-                              <option>
-                                Choose Sub Category
-                              </option>
-                              <option>
-                                Computer
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="col-lg col-sm-6 col-12">
-                          <div class="form-group">
-                            <select class="select">
-                              <option>
-                                Brand
-                              </option>
-                              <option>
-                                N/D
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="col-lg col-sm-6 col-12 ">
-                          <div class="form-group">
-                            <select class="select">
-                              <option>
-                                Price
-                              </option>
-                              <option>
-                                150.00
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-1 col-sm-6 col-12">
-                          <div class="form-group">
-                            <a class="btn btn-filters ms-auto">
-                              <img src="assets/img/icons/search-whites.svg" alt="img">
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -212,55 +141,32 @@
 
                   <tbody>
                   <?php
-      // Database configuration
-      $dbHost = 'localhost';
-      $dbUsername = 'root';
-      $dbPassword = '';
-      $dbName = 'furniture';
-
-      // Establish database connection
-      $conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
-
-      // Check connection
-      if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-      }
-
-      // Fetch data from the database
-      $sql = "SELECT * FROM products";
-      $result = $conn->query($sql);
-
-      if ($result->num_rows > 0) {
-          // Output data of each row
-          while ($row = $result->fetch_assoc()) {
-              echo '<tr>';
-              echo '<td>
-                      <label class="checkboxs">
-                        <input type="checkbox">
-                        <span class="checkmarks"></span>
-                      </label>
-                    </td>';
-              echo '<td>' . $row["product_id"] . '</td>';
-              echo '<td>' . $row["product_name"] . '</td>';
-              echo '<td>' . $row["status"] . '</td>';
-              echo '<td>' . $row["price"] . '</td>';
-              echo '<td>' . $row["quantity"] . '</td>';
-              echo '<td><img src="' . $row["product_image"] . '" alt="Product Image" width="50"></td>';
-              echo '<td>
-                      <a href="edit_product.php?id=' . $row["product_id"] . '">Edit</a>
-                      <a href="delete_product.php?id=' . $row["product_id"] . '">Delete</a>
-                    </td>';
-              echo '</tr>';
-          }
-      } else {
-          echo "<tr><td colspan='8'>0 results</td></tr>";
-      }
-
-      // Close database connection
-      $conn->close();
-      ?>
-                  </tbody>
-                </table>
+        if ($result->num_rows > 0) {
+            // Output data of each row
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td>
+                        <label class="checkboxs">
+                          <input type="checkbox">
+                          <span class="checkmarks"></span>
+                        </label>
+                      </td>';
+                echo '<td>' . $row["product_id"] . '</td>';
+                echo '<td>' . $row["product_name"] . '</td>';
+                echo '<td>' . $row["status"] . '</td>';
+                echo '<td>' . $row["price"] . '</td>';
+                echo '<td>' . $row["quantity"] . '</td>';
+                echo '<td><img src="' . $row["product_image"] . '" alt="Product Image" width="50"></td>';
+                echo '<td>
+                        <a href="?delete_id=' . $row["product_id"] . '">Delete</a>
+                      </td>';
+                echo '</tr>';
+            }
+        } else {
+            echo "<tr><td colspan='8'>0 results</td></tr>";
+        }
+        ?>
+    </table>
 
 
               </div>

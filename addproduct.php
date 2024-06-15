@@ -33,7 +33,7 @@ if (!isset($_SESSION['admin_id'])) {
         <div class="content">
           <div class="page-header">
             <div class="page-title">
-              <h4>Product Add Here</h4>
+              <h4>Product Add New</h4>
               <h6>Create new product</h6>
             </div>
           </div>

@@ -34,7 +34,7 @@ if (!isset($_SESSION['admin_id'])) {
           <div class="page-header">
             <div class="page-title">
               <h4>Product Add New</h4>
-              <h6>Created another new product</h6>
+              <h6>Created another newer product</h6>
             </div>
           </div>
           <form action="add_prod.php" method="POST" enctype="multipart/form-data">

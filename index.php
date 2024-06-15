@@ -1,6 +1,18 @@
+<?php
+session_start();
+include 'dbcon.php';
+
+if (!isset($_SESSION['admin_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: login.php");
+    exit();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
-  
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -17,17 +29,11 @@
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
-  
   <body>
-   
   <?php
-     
-     include 'header.php';
-     include 'session.php';
-   
      include 'dbcon.php';
+     include 'header.php'
           ?>
-     
       <div class="page-wrapper">
         <div class="content">
           <div class="row">
@@ -38,21 +44,28 @@
                     <img src="assets/img/icons/dash1.svg" alt="img">
                   </span>
                 </div>
+
                 <div class="dash-widgetcontent">
-                    <h6>
-                        Orders
-                      </h6>
-                  <h5>
-                    $
-                    <span class="counters" data-count="307144.00">
-                      $307,144.00
-                    </span>
+                    <h6>Orders</h6>
+                      <h5>
+                      <?php
+                      $sql = "SELECT SUM(quantity) AS total_orders FROM orders";
+                      $result = $conn->query($sql);
+
+                      if ($result->num_rows > 0) {
+                          $row = $result->fetch_assoc();
+                          $orderCount = $row['total_orders'];
+                      } else {
+                          $orderCount = 0;
+                      }
+
+                      echo '<span class="counters" data-count="' . $orderCount . '">' . $orderCount . '</span>';
+                      ?>
                   </h5>
                 </div>
               </div>
             </div>
-
-
+            
             <div class="col-lg-4 col-sm-8 col-12">
               <div class="dash-widget dash1">
                 <div class="dash-widgetimg">
@@ -61,18 +74,25 @@
                   </span>
                 </div>
                 <div class="dash-widgetcontent">
-                    <h6>
-                        Revenue
-                      </h6>
+                    <h6>Revenue</h6>
                   <h5>
-                    $
-                    <span class="counters" data-count="4385.00">
-                    </span>
+                  ₱
+                <?php
+                $sql = "SELECT SUM(amount) AS total_revenue FROM orders";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $totalRevenue = $row['total_revenue'];
+                } else {
+                    $totalRevenue = 0;
+                }
+                echo '<span class="counters" data-count="' . $totalRevenue . '">' . $totalRevenue . '</span>';
+                ?>
                   </h5>
                 </div>
               </div>
             </div>
-
             <div class="col-lg-4 col-sm-6 col-12">
               <div class="dash-widget dash2">
                 <div class="dash-widgetimg">
@@ -81,23 +101,26 @@
                   </span>
                 </div>
                 <div class="dash-widgetcontent">
-                    <h6>
-                        Products
-                      </h6>
-                  <h5>
-                    $
-                    <span class="counters" data-count="385656.50">
-                      385,656.50
-                    </span>
+                    <h6>Products</h6>
+                      <h5>
+                      <?php
+                      require_once('dbcon.php');
+
+                      $sql = "SELECT SUM(quantity) AS total_products FROM products";
+                      $result = $conn->query($sql);
+
+                      if ($result->num_rows > 0) {
+                          $row = $result->fetch_assoc();
+                          $totalProducts = $row['total_products'];
+                      } else {
+                          $totalProducts = 0;
+                      }
+                      echo '<span class="counters" data-count="' . $totalProducts . '">' . $totalProducts . '</span>';
+                      ?>
                   </h5>
                 </div>
               </div>
             </div>
-
-
-            
-
-
           <div class="row">
             <div class="col-lg-7 col-sm-12 col-12 d-flex">
               <div class="card flex-fill">
@@ -171,7 +194,7 @@
                         series: [{
                                 name: 'Orders',
                                 type: 'column',
-                                data: [440, 505, 414, 671, 227, 413, 201, 352, 752, 320, 257, 160]
+                                data: response
                             },
                             {
                                 name: 'Products Quantity',
@@ -257,24 +280,23 @@
             </thead>
             <tbody>
                 <?php
-                // Assuming you have established a database connection already
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
                 $database = "furniture";
 
                 // Create connection
-                $connection = mysqli_connect($servername, $username, $password, $database);
+                $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
                 // Check connection
-                if (!$connection) {
+                if (!$conn) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
 
 
                       // Query to fetch top 3 products with highest quantity from the database
                       $query = "SELECT product_image, product_name, quantity, price FROM products ORDER BY quantity DESC LIMIT 2";
-                      $result = mysqli_query($connection, $query);
+                      $result = mysqli_query($conn, $query);
 
                       // Check if there are any rows returned
                       if(mysqli_num_rows($result) > 0) {
@@ -308,11 +330,10 @@
             <table class="table datatable">
                 <thead>
                     <tr>
-                        
                         <th>Product</th>
                         <th>Price</th>
                         <th>Quantity</th>
-                        <th>Amount Change</th>
+                        <th>Amount</th>
                         <th>Date</th>
                         <th>ID</th>
                     </tr>
@@ -330,13 +351,12 @@
                     if (mysqli_num_rows($fetch_orders_query) > 0) {
                         while ($order = mysqli_fetch_assoc($fetch_orders_query)) {
                             echo "<tr>";
-                            
                             echo "<td>" . $order['product_name'] . "</td>";
-                            echo "<td>₱" . number_format($order['price'], 2) . "</td>";
+                            echo "<td>₱" .$order['price'] . "</td>";
                             echo "<td>" . $order['quantity'] . "</td>";
-                            echo "<td>₱" . number_format($order['amount_change'], 2) . "</td>";
+                            echo "<td>₱" . number_format($order['amount'], 2) . "</td>";
                             echo "<td>" . $order['date'] . "</td>";
-                            echo "<td>" . $order['id'] . "</td>";
+                            echo "<td>" . $order['orders_id'] . "</td>";
                             echo "</tr>";
                         }
                     } else {
@@ -348,31 +368,17 @@
         </div>
     </div>
 </div>
-
-
-          
         </div>
       </div>
     </div>
-
-    <script src="assets/js/jquery-3.6.0.min.js">
-    </script>
-    <script src="assets/js/feather.min.js">
-    </script>
-    <script src="assets/js/jquery.slimscroll.min.js">
-    </script>
-    <script src="assets/js/jquery.dataTables.min.js">
-    </script>
-    <script src="assets/js/dataTables.bootstrap4.min.js">
-    </script>
-    <script src="assets/js/bootstrap.bundle.min.js">
-    </script>
-    <script src="assets/plugins/apexchart/apexcharts.min.js">
-    </script>
-    <script src="assets/plugins/apexchart/chart-data.js">
-    </script>
-    <script src="assets/js/script.js">
-    </script>
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/feather.min.js"> </script>
+    <script src="assets/js/jquery.slimscroll.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/plugins/apexchart/apexcharts.min.js"></script>
+    <script src="assets/plugins/apexchart/chart-data.js"></script>
+    <script src="assets/js/script.js"></script>
   </body>
-
 </html>

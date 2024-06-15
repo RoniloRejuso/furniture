@@ -1,237 +1,303 @@
 <?php
 @include 'config.php';
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header('Location: user_login.php');
+    exit();
+}
+
+$email = $_SESSION['email'];
+
+// Fetch the user's details from the database
+$user_query = mysqli_query($conn, "SELECT user_id, firstname, lastname, address, phone_number FROM users WHERE email = '$email'");
+if (mysqli_num_rows($user_query) == 0) {
+    die('User not found in the database.');
+}
+$user_data = mysqli_fetch_assoc($user_query);
+$user_id = $user_data['user_id'];  // Get the user ID
+$firstname = $user_data['firstname'];
+$lastname = $user_data['lastname'];
+$address_parts = explode(', ', $user_data['address']);
+$address = $address_parts[0];
+$barangay = isset($address_parts[1]) ? $address_parts[1] : '';
+$city = isset($address_parts[2]) ? $address_parts[2] : '';
+$province = isset($address_parts[3]) ? $address_parts[3] : '';
+$additional_address = '';
+$postal_code = isset($address_parts[4]) ? $address_parts[4] : '';
+$phone_number = $user_data['phone_number'];
 
 if (isset($_POST['order_btn'])) {
-    
-    $amountPaid = $_POST['amount'];
-    $change = $_POST['amount_change'];
+    // Validate and sanitize input data
+    $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+    $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $barangay = mysqli_real_escape_string($conn, $_POST['barangay']);
+    $city = mysqli_real_escape_string($conn, $_POST['city']);
+    $province = mysqli_real_escape_string($conn, $_POST['province']);
+    $additional_address = mysqli_real_escape_string($conn, $_POST['additional_address']);
+    $postal_code = mysqli_real_escape_string($conn, $_POST['postal_code']);
+    $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
+    $payment_method = mysqli_real_escape_string($conn, $_POST['payment_method']);
+    $billing_address_option = mysqli_real_escape_string($conn, $_POST['billing_address']);
 
-    $cart_query = mysqli_query($conn, "SELECT * FROM `cart`");
+    // Compile full address
+    $full_address = "$address, $barangay, $city, $province $postal_code";
+
+    // Fetch the cart items
+    $cart_query = mysqli_query($conn, "SELECT * FROM cart");
     $price_total = 0;
-
-    // Initialize product details array
     $product_details = array();
+    $product_images = array();
+    $prices = array();
+    $quantities = array();
 
     if (mysqli_num_rows($cart_query) > 0) {
         while ($product_item = mysqli_fetch_assoc($cart_query)) {
-            // Add product details to the array
-            $product_details[] = array(
-                'name' => $product_item['product_name'], // Use product_name instead of brand and flavor
-                'quantity' => $product_item['quantity'],
-                'price' => $product_item['price'] * $product_item['quantity']
-            );
-
-            $price_total += $product_item['price'] * $product_item['quantity'];
-
-
             $product_name = mysqli_real_escape_string($conn, $product_item['product_name']);
-            $quantity = (int)$product_item['quantity'];
+            $quantity = mysqli_real_escape_string($conn, $product_item['quantity']);
+            $price = mysqli_real_escape_string($conn, $product_item['price']);
+            $product_image = mysqli_real_escape_string($conn, $product_item['product_image']);
+            $total_price = $price * $quantity;
 
+            $price_total += $total_price;
+            $product_details[] = $product_name;
+            $product_images[] = $product_image;
+            $prices[] = $price;
+            $quantities[] = $quantity;
 
-            $check_product_query = mysqli_query($conn, "SELECT * FROM `products` WHERE `product_name` = '$product_name'");
-            if (mysqli_num_rows($check_product_query) > 0) {
-                // Update product quantity in the products table
-                $reduce_quantity_query = mysqli_query($conn, "UPDATE `products` SET `quantity` = `quantity` - $quantity WHERE `product_name` = '$product_name'");
-
-                if (!$reduce_quantity_query) {
-                    die('Failed to update product quantity in the database: ' . mysqli_error($conn));
-                }
-            } else {
-                die('Product not found in the products table: ' . $product_name);
+            // Update the product quantity in the 'products' table
+            $reduce_quantity_query = mysqli_query($conn, "UPDATE products SET quantity = quantity - $quantity WHERE product_name = '$product_name'");
+            if (!$reduce_quantity_query) {
+                die('Failed to update product quantity in the database: ' . mysqli_error($conn));
             }
         }
 
-        $receipt_details = '';
-        foreach ($product_details as $product) {
-            $receipt_details .= $product['name'] . ' x' . $product['quantity'] . ', '; // Display only 
-        }
+        $receipt_details = implode(', ', $product_details);
 
-        $receipt_details = rtrim($receipt_details, ', ');
+        // Insert order details into the database
+        $insert_order_query = mysqli_query($conn, "INSERT INTO orders (user_id, email, name, address, phone_number, payment_method, billing_address_option, product_name, product_image, price, quantity, amount, date) VALUES ('$user_id', '$email', '$firstname $lastname', '$full_address', '$phone_number', '$payment_method', '$billing_address_option', '" . implode(', ', $product_details) . "', '" . implode(', ', $product_images) . "', '" . implode(', ', $prices) . "', '" . implode(', ', $quantities) . "', '$price_total', NOW())");
 
-        // Insert order details into the order table
-        // Insert order details into the order table
-$detail_query = mysqli_query($conn, "INSERT INTO `orders` (product_name, quantity, price, amount, amount_change) VALUES ('$receipt_details', '$quantity', '$price_total', '$amountPaid', '$change')") or die('Failed to insert order details into the database: ' . mysqli_error($conn));
-
-
-        if (!$detail_query) {
+        if (!$insert_order_query) {
             die('Failed to insert order details into the database: ' . mysqli_error($conn));
         }
+    } else {
+        die('Your cart is empty!');
     }
 
-    // Clear the cart after updating the products table
-    mysqli_query($conn, "DELETE FROM `cart`");
+    // Clear the cart after successful order placement
+    $delete_cart_query = mysqli_query($conn, "DELETE FROM cart");
+    if (!$delete_cart_query) {
+        die('Failed to clear the cart: ' . mysqli_error($conn));
+    }
 
+    // Display order confirmation
     echo "
     <div class='order-message-container'>
         <div class='message-container'>
             <h3>Thank you for shopping!</h3>
             <div class='order-detail'>
+                <span>" . implode(', ', $product_images) . "</span>
                 <span>" . $receipt_details . "</span>
-                <span class='total'> Total: ₱" . $price_total . "  </span>
-                <span class='amount-paid'> Amount Paid: ₱" . $amountPaid . " </span>
-                <span class='change'> Change: ₱" . $change . " </span>
+                <span class='total' style='background:transparent;color:black;'> Total: ₱" . number_format($price_total, 2) . " </span>
             </div>
-            <a href='user_prod.php' class='btn'>Keep Shopping</a>
-            <a href='user_login.php' class='btn'>Exit</a>
+            <a href='user_index.php' class='btn' style='background-color: #493A2D;'>Keep Shopping</a>
+            <a href='user_login.php' class='btn' style='background-color: #493A2D;'>Exit</a>
         </div>
     </div>
     ";
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-   <head>
 <?php
 include 'user_header.php';
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.section_container {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #FFF6EB;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+}
 
-<!-- custom css file link  -->
-<link rel="stylesheet" href="cs/style.css">
-  
- </head>
-   <body>
-   <?php
+@media (min-width: 768px) {
+    .section_container {
+        width: 100%;
+    }
+}
+
+.section_container h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.section_container input[type="text"],
+.section_container input[type="email"],
+.section_container input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.additional_address input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.section_container label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+}
+
+.payment_section label {
+    display: block;
+    margin: 10px 0;
+}
+
+.order_summary_section {
+    margin-bottom: 20px;
+}
+
+.checkout_button_section {
+    text-align: center;
+}
+
+.checkout_button_section .pay_now_btn {
+    padding: 15px 30px;
+    background-color: #964B33;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.checkout_button_section .pay_now_btn:hover {
+    background-color: #7c3a28;
+}
+
+@media (max-width: 768px) {
+    .section_container {
+        padding: 15px;
+    }
+
+    .checkout_button_section .pay_now_btn {
+        width: 100%;
+    }
+}
+</style>
+<body>
+<?php
 include 'user_body.php';
 ?>
-
-</head>
-
-<div class="product_section layout_padding">
-   <div class="container">
-      <div class="row">
-         <div class="col-sm-12">
-            <h1 class="product_taital">Our Products</h1>
-
-         </div>
-      </div>
-      <div class="product_section_2 layout_padding">
-         <div class="row">
-</head>
-<body>
-   
-<?php
-
-if(isset($message)){
-   foreach($message as $message){
-      echo '<div class="message"><span>'.$message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = `none`;"></i> </div>';
-   };
-};
-
-?>
-
-<div class="container">
-
-<section class="checkout-form">
-
-   <h1 class="heading">complete your order</h1>
-
-   <form action="" method="post">
-
-   <div class="display-order">
-   <div class="display-order">
-   <?php
-$select_cart = mysqli_query($conn, "SELECT * FROM `cart`");
-$total = 0;
-$grand_total = 0;
-
-if (mysqli_num_rows($select_cart) > 0) {
-    while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
-        $total_price = $fetch_cart['price'] * $fetch_cart['quantity'];
-        $grand_total += $total_price;
-        echo '<span>' . $fetch_cart['product_name'] . ' (' . $fetch_cart['quantity'] . ')</span>'; // Display product_name instead of brand
-    }
-} else {
-    echo "<div class='display-order'><span>Your cart is empty!</span></div>";
-}
-?>
-<span class="grand-total"> grand total : ₱<?= number_format($grand_total, 2); ?>/- </span>
-
-
-
-      <div class="flex">
-
-
-
-
-
-
-<div class="inputBox">
-    <span>Amount Paid</span>
-    <input type="text" pattern="\d*" oninput="calculateChange()" placeholder="e.g. 123456" name="amount" id="amount" required>
+<div class="second_header_section">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light bg-light">
+            <a href="user_prod.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+        </nav>
+    </div>
 </div>
+<div class="user_settings_section text-center">
+    <div class="container">
+        <div class="checkout_section">
+            <form action="" method="post">
+                <div class="section_container">
+                    <h2>Contact</h2>
+                    <div>
+                        <input type="email" class="email_input" value="<?= $email ?>" required>
+                    </div>
+                </div>
+                <div class="section_container">
+                    <div class="delivery_section">
+                        <h2>Delivery Address</h2>
+                        <input type="text" name="firstname" placeholder="First Name" value="<?= $firstname ?>" required>
+                        <input type="text" name="lastname" placeholder="Last Name" value="<?= $lastname ?>" required>
+                        <input type="text" name="address" placeholder="Address" value="<?= $address ?>" required>
+                        <input type="text" name="barangay" placeholder="Barangay" value="<?= $barangay ?>" required>
+                        <input type="text" name="city" placeholder="City" value="<?= $city ?>" required>
+                        <input type="text" name="province" placeholder="Province" value="<?= $province ?>" required>
 
-<div class="inputBox">
-    <span>Change</span>
-    <input type="text" readonly placeholder="Change" name="amount_change" id="amount_change">
+                        <div class="additional_address">
+                            <input type="text" name="additional_address" placeholder="Apartment, Suite, etc..." value="<?= $additional_address ?>">
+                        </div>
+                        <input type="text" name="postal_code" placeholder="Postal Code" value="<?= $postal_code ?>" required>
+                        <input type="tel" name="phone_number" placeholder="Phone Number" value="<?= $phone_number ?>" required>
+                        <label><input type="checkbox" required> Validate information</label>
+                    </div>
+                </div>
+                <div class="section_container">
+                    <div class="payment_section">
+                        <h2>Payment Method</h2>
+                        <label><input type="radio" name="payment_method" value="cash_on_delivery" required> Cash on Delivery (COD)</label>
+                    </div>
+                </div>
+                <div class="section_container">
+                    <div class="billing_section">
+                        <h2>Billing Address</h2>
+                        <label><input type="radio" name="billing_address" value="same_as_shipping" required> Same as Shipping Address</label>
+                        <label><input type="radio" name="billing_address" value="different" required> Use Different Billing Address</label>
+                    </div>
+                </div>
+                <div class="section_container">
+                    <div class="order_summary_section">
+                        <h2>Order Summary</h2>
+                        <?php
+                        $select_cart = mysqli_query($conn, "SELECT * FROM cart");
+                        $grand_total = 0;
+
+                        if (mysqli_num_rows($select_cart) > 0) {
+                            while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+                                $total_price = $fetch_cart['price'] * $fetch_cart['quantity'];
+                                $grand_total += $total_price;
+                                echo '<span>' . $fetch_cart['product_name'] . ' (' . $fetch_cart['quantity'] . ')</span>';
+                            }
+                        } else {
+                            echo "<div class='display-order'><span>Your cart is empty!</span></div>";
+                        }
+                        ?>
+                        <span class="grand-total">Total: ₱<?= number_format($grand_total, 2); ?></span>
+                    </div>
+                </div>
+                <div class="checkout_button_section">
+                    <button class="pay_now_btn" name="order_btn" type="submit">Place Order</button>
+                </div>
+            </form>
+        </div><br><br>
+    </div>
 </div>
-
-
-      <input type="submit" value="Pay now" name="order_btn" class="btn">
-   </form>
-
-</section>
-
-</div>
-
-
 <script src="js/script.js"></script>
-  
-  <script>
-    function calculateChange() {
-        var amountPaid = parseInt(document.getElementById('amount').value);
-        var grandTotal = <?= $grand_total ?>;
-        
-        if (!isNaN(amountPaid)) {
-            var change = amountPaid - grandTotal;
-            document.getElementById('amount_change').value = (change >= 0) ? change.toFixed(2) : '';
-        } else {
-            document.getElementById('amount_change').value = '';
-        }
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-3.0.0.min.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/owl.carousel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "100%";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
     }
 </script>
-
-
-
-
-
-<script src="js/script.js"></script>
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <script src="js/plugin.js"></script>
-      <!-- sidebar -->
-      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="js/custom.js"></script>
-      <!-- javascript --> 
-      <script src="js/owl.carousel.js"></script>
-      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>  
-      <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-      <script>
-         function openNav() {
-           document.getElementById("mySidenav").style.width = "100%";
-         }
-         
-         function closeNav() {
-           document.getElementById("mySidenav").style.width = "0";
-         }
-         function toggleDropdown() {
-            var dropdownMenu = document.getElementById("furnitureMenu");
-            if (dropdownMenu.style.display === "block") {
-               dropdownMenu.style.display = "none";
-            } else {
-               dropdownMenu.style.display = "block";
-            }
-         }
-
-         function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-         }
-      </script> 
-      <script src="java/script.js"></script>
-      
-   </body>
+</body>
 </html>

@@ -1,48 +1,49 @@
+<?php
+session_start();
+include('dbcon.php')
+?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
 include 'user_header.php';
 ?>
    <body>
-      <!-- header section start -->
+
       <?php
 include 'user_body.php';
 ?>
 
       <div class="living_room_section">
-    <div class="container">
-        <div class="row">
-            <?php
-           
-            $conn = new mysqli("localhost", "username", "password", "furniture");
+      <div class="container" style="padding:20px;">
+         <div class="row">
+               <?php
+            
+               $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+               // Check connection
+               if ($conn->connect_error) {
+                  die("Connection failed: " . $conn->connect_error);
+               }
 
-            // Prepare and execute SQL statement to fetch living room products
-            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'living_room' AND status = 'Available'");
-            $stmt->execute();
-            $result = $stmt->get_result();
+               // Prepare and execute SQL statement to fetch living room products
+               $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'living_room' AND status = 'Available'");
+               $stmt->execute();
+               $result = $stmt->get_result();
 
 
-            while ($product = $result->fetch_assoc()) {
-            ?>
-                <div class="col-lg-3 col-md-6">
-                    <div class="product_item">
-                        
-                        <img src="<?php echo $product['product_image']; ?>" alt="<?php echo $product['product_name']; ?>">
-                        
-                        <h4><?php echo $product['product_name']; ?></h4>
-                        
-                        <p><?php echo $product['price']; ?></p>
-                        
-                        <button class="add-to-favorites"><i class="fas fa-heart"></i></button>
-                        
-                        <a href="user_prod.php?id=<?php echo $product['product_id']; ?>" class="product-details-link">View Details</a>
-                    </div>
-                </div>
+               while ($product = $result->fetch_assoc()) {
+               ?>
+                        <div class="col-lg-3 col-sm-6">
+                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
+                                <div class="product_box">
+                                    <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                                    <div class="product-info">
+                                        <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
+                                        <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
             <?php
             }
             // Close database connection
@@ -51,12 +52,13 @@ include 'user_body.php';
             ?>
         </div>
     </div>
-</div>
-
-
-<?php
-include 'user_footer.php';
-?>
+</div><br><br>
+      <div class="floating-navbar">
+            <a href="user_index.php"><i class="fas fa-home"></i></a>
+            <a href="user_prod.php" class="active"><i class="fas fa-couch"></i></a>
+            <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
+            <a href="user.php"><i class="fas fa-user"></i></a>
+      </div>
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>
@@ -89,6 +91,6 @@ include 'user_footer.php';
          function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
          }
-      </script> > 
+      </script>
    </body>
 </html>

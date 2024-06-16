@@ -2,14 +2,11 @@
 session_start();
 include 'dbcon.php';
 
-<<<<<<< HEAD
 $conn = mysqli_connect('localhost', 'root', '', 'furniture');
 if (!$conn) {
 	echo ("Connection Failed: " . mysqli_connect_error());
 	exit;
 }
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -26,23 +23,16 @@ if (isset($_GET['delete_id'])) {
         header("Location: orders.php");
         exit(); 
     } else {
-<<<<<<< HEAD
         $_SESSION['error'] = "Error deleting record: " . $conn->error;
-=======
-        echo "Error deleting record: " . $conn->error;
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
     }
 }
 
 $sql = "SELECT * FROM orders";
 $result = $conn->query($sql);
-<<<<<<< HEAD
 
 if (!$result) {
     die("Query failed: " . $conn->error);
 }
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,14 +64,11 @@ if (!$result) {
         </div>
         <div class="card">
             <div class="card-body">
-<<<<<<< HEAD
                 <?php if (isset($_SESSION['message'])): ?>
                     <div class="alert alert-success">
                         <?php echo $_SESSION['message']; unset($_SESSION['message']); ?>
                     </div>
                 <?php endif; ?>
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
                 <div class="table-top">
                     <div class="search-set">
                         <div class="search-path">
@@ -108,17 +95,6 @@ if (!$result) {
                         </ul>
                     </div>
                 </div>
-<<<<<<< HEAD
-=======
-                <?php if (isset($_SESSION['message'])): ?>
-                    <div class="alert alert-success">
-                        <?php 
-                            echo $_SESSION['message']; 
-                            unset($_SESSION['message']);
-                        ?>
-                    </div>
-                <?php endif; ?>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
                 <table class="table datanew">
                     <thead>
                         <tr>
@@ -149,32 +125,20 @@ if (!$result) {
                                         </label>
                                     </td>
                                     <td><?php echo $row["orders_id"]; ?></td>
-<<<<<<< HEAD
                                     <td><?php echo $row["name"]; ?></td>
-=======
-                                    <td><?php echo $row["customer"]; ?></td>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
                                     <td><?php echo $row["price"]; ?></td>
                                     <td><?php echo $row["product_name"]; ?></td>
                                     <td><?php echo $row["quantity"]; ?></td>
                                     <td><?php echo $row["amount"]; ?></td>
                                     <td><?php echo $row["date"]; ?></td>
                                     <td>
-<<<<<<< HEAD
                                         <a href="#" data-id="<?php echo $row["orders_id"]; ?>" class="btn btn-danger btn-sm delete-btn">Delete</a>
-=======
-                                        <a href="?delete_id=<?php echo $row["orders_id"]; ?>" class="btn btn-danger btn-sm">Delete</a>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
-<<<<<<< HEAD
                                 <td colspan="9" class="text-center">No orders found</td>
-=======
-                                <td colspan="8">No orders found</td>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -196,24 +160,11 @@ if (!$result) {
 <script>
 // Ensure select-all checkbox functionality
 $('#select-all').click(function(event) {
-<<<<<<< HEAD
     $(':checkbox').prop('checked', this.checked);
-=======
-    if(this.checked) {
-        $(':checkbox').each(function() {
-            this.checked = true;
-        });
-    } else {
-        $(':checkbox').each(function() {
-            this.checked = false;
-        });
-    }
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 });
 
 $(document).ready(function() {
     $('[data-bs-toggle="tooltip"]').tooltip();
-<<<<<<< HEAD
 
     $('.delete-btn').click(function(e) {
         e.preventDefault();
@@ -223,8 +174,6 @@ $(document).ready(function() {
             window.location.href = deleteUrl;
         }
     });
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 });
 </script>
 </body>

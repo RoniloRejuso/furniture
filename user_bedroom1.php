@@ -1,19 +1,16 @@
-<?php
-session_start();
-include('dbcon.php')
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include 'user_header.php';
+include 'user_header1.php';
 ?>
    <body>
-   <?php
+      <?php
 include 'user_body.php';
 ?>
-      <div class="dining_room_section">
-      <div class="container" style="padding:20px;">
-         <div class="row">
+
+<div class="bedroom_section">
+<div class="container" style="padding:20px;">
+   <div class="row">
             <?php
             $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
@@ -22,12 +19,13 @@ include 'user_body.php';
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            // Prepare and execute SQL statement to fetch dining room products
-            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'dining_room' AND status = 'Available'");
+            $selected_category = $_POST['category'] ?? $_GET['category'] ?? 'bedroom'; // Default to 'bedroom' if not provided
+
+            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = ? AND status = 'Available'");
+            $stmt->bind_param("s", $selected_category);
             $stmt->execute();
             $result = $stmt->get_result();
 
-            // Loop through the fetched products
             while ($product = $result->fetch_assoc()) {
             ?>
                         <div class="col-lg-3 col-sm-6">
@@ -50,15 +48,12 @@ include 'user_body.php';
         </div>
     </div>
 </div><br><br>
-
       <div class="floating-navbar">
         <a href="user_index.php"><i class="fas fa-home"></i></a>
         <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php"><i class="fas fa-user"></i></a>
       </div>
-
-
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>

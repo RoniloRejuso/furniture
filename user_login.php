@@ -5,7 +5,6 @@ include 'user_header.php';
 ?>
 <style>
     .error {
-<<<<<<< HEAD
         border-color: red;
     }
     .form-text.text-danger {
@@ -30,37 +29,10 @@ include 'user_header.php';
     }
 </style>
 <body>
-=======
-    border-color: red;
-}
-.form-text.text-danger {
-    color: red;
-}
-input[type="password"].password-input.invalid {
-      border-color: red !important;
-    }
-    input[type="password"].password-input.valid {
-      border-color: green !important;
-    }
-    .form-group {
-            position: relative;
-        }
-        .toggle-password {
-            position: absolute;
-            top: 75%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
-
-        }
-</style>
-   <body>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 <?php
 include 'user_body.php';
 ?>
 
-<<<<<<< HEAD
     <div class="second_header_section">
         <div class="container-fluid">
             <nav class="navbar navbar-light bg-light">
@@ -73,27 +45,12 @@ include 'user_body.php';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-=======
-        <div class="second_header_section">
-            <div class="container-fluid">
-                <nav class="navbar navbar-light bg-light">
-                    <a href="user_index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
-                </nav>
-                </div>
-            </div>
-
-        <div class="login_section">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                     <form id="loginForm" method="POST" action="user_dex.php">
                         <div class="form-group">
                             <label for="email">Email:</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
                         </div>
-<<<<<<< HEAD
 
                         <div class="form-group">
                             <label for="password">Password:</label>
@@ -289,149 +246,6 @@ include 'user_body.php';
     <script src="js/owl.carousel.js"></script>
     <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-=======
-                        
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
-                        <div class="or-divider">
-                            <span class="divider-line"></span>   OR   <span class="divider-line"></span>
-                        </div>
-                        <button type="button" class="btn btn-custom-color" data-toggle="modal" data-target="#signupModal">Create Account</button>
-                    </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <h3 class="signup-modal-title" style="text-align: center;" id="signupModalLabel"><big>Create Account</big></h3>
-                    <div class="modal-body">
-
-                    <form id="signupForm" method="POST" action="user_dex.php" onsubmit="return validateForm()">
-    <div class="form-group">
-        <label for="firstname">First name:</label>
-        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter first name" maxlength="50">
-    </div>
-
-    <div class="form-group">
-        <label for="lastname">Last name:</label>
-        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter last name" maxlength="50">
-    </div>
-
-    <script>
-        // Function to validate if the input contains only letters
-        function validateInput(inputElement) {
-            var inputValue = inputElement.value;
-            var lettersOnlyRegex = /^[A-Za-z]+$/;
-            if (!lettersOnlyRegex.test(inputValue)) {
-                // If input contains non-letter characters, clear the input value
-                inputElement.value = inputValue.replace(/[^A-Za-z]/g, '');
-            }
-        }
-
-        // Add event listeners to input fields to validate input on keyup event
-        document.getElementById("firstname").addEventListener("keyup", function () {
-            validateInput(this);
-        });
-
-        document.getElementById("lastname").addEventListener("keyup", function () {
-            validateInput(this);
-        });
-    </script>
-
-    <div class="form-group">
-        <label for="signupEmail">Email:</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50">
-    </div>
-
-    <div class="form-group">
-        <label for="signupPassword">Password:</label>
-        <input type="password" class="form-control" id="npassword" name="password" placeholder="Enter your password" maxlength="10" required>
-        <i class="fas fa-eye toggle-password" onclick="togglePassword('npassword')"></i>
-    </div>
-
-    <div class="form-group">
-        <label for="signupCPassword">Confirm Password:</label>
-        <input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
-        <i class="fas fa-eye toggle-password" onclick="togglePassword('cpassword')"></i>
-        <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
-    </div>
-
-
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
-        <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
-    </div>
-
-    <script>
-    document.getElementById('npassword').addEventListener('input', validatePasswords);
-    document.getElementById('cpassword').addEventListener('input', validatePasswords);
-
-    function validatePasswords() {
-        var password = document.getElementById('npassword').value;
-        var confirmPassword = document.getElementById('cpassword').value;
-        var passwordError = document.getElementById('passwordError');
-
-        if (password !== confirmPassword) {
-            document.getElementById('cpassword').classList.add('error');
-            passwordError.style.display = 'block';
-        } else {
-            document.getElementById('cpassword').classList.remove('error');
-            passwordError.style.display = 'none';
-        }
-    }
-</script>
-
-<script>
-        function togglePassword(id) {
-            const passwordField = document.getElementById(id);
-            const eyeIcon = passwordField.nextElementSibling;
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        }
-    </script>
-    
-    <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
-</form>
-<script>
-    function validateForm() {
-        var acceptTermsCheckbox = document.getElementById("acceptTerms");
-        var acceptPrivacyCheckbox = document.getElementById("acceptPrivacy");
-        if (!acceptTermsCheckbox.checked || !acceptPrivacyCheckbox.checked) {
-            alert("Please accept both the terms and privacy policies.");
-            return false;
-        }
-        return true;
-    }
-</script>
-                    </div>
-                </div>
-            </div>
-        </div>
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <script src="js/plugin.js"></script>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 
     <script>
         function openNav() {

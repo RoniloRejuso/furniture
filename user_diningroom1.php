@@ -1,11 +1,7 @@
-<?php
-session_start();
-include('dbcon.php')
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include 'user_header.php';
+include 'user_header1.php';
 ?>
    <body>
    <?php
@@ -31,7 +27,7 @@ include 'user_body.php';
             while ($product = $result->fetch_assoc()) {
             ?>
                         <div class="col-lg-3 col-sm-6">
-                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
+                        <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">

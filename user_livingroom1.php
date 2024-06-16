@@ -1,35 +1,34 @@
-<?php
-session_start();
-include('dbcon.php')
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
-include 'user_header.php';
+include 'user_header1.php';
 ?>
    <body>
-   <?php
+
+      <?php
 include 'user_body.php';
 ?>
-      <div class="dining_room_section">
+
+      <div class="living_room_section">
       <div class="container" style="padding:20px;">
          <div class="row">
-            <?php
-            $conn= mysqli_connect('localhost', 'root', '', 'furniture');
+               <?php
+            
+               $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+               // Check connection
+               if ($conn->connect_error) {
+                  die("Connection failed: " . $conn->connect_error);
+               }
 
-            // Prepare and execute SQL statement to fetch dining room products
-            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'dining_room' AND status = 'Available'");
-            $stmt->execute();
-            $result = $stmt->get_result();
+               // Prepare and execute SQL statement to fetch living room products
+               $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'living_room' AND status = 'Available'");
+               $stmt->execute();
+               $result = $stmt->get_result();
 
-            // Loop through the fetched products
-            while ($product = $result->fetch_assoc()) {
-            ?>
+
+               while ($product = $result->fetch_assoc()) {
+               ?>
                         <div class="col-lg-3 col-sm-6">
                             <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
@@ -50,15 +49,12 @@ include 'user_body.php';
         </div>
     </div>
 </div><br><br>
-
       <div class="floating-navbar">
-        <a href="user_index.php"><i class="fas fa-home"></i></a>
-        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
-        <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-        <a href="user.php"><i class="fas fa-user"></i></a>
+            <a href="user_index.php"><i class="fas fa-home"></i></a>
+            <a href="user_prod.php" class="active"><i class="fas fa-couch"></i></a>
+            <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
+            <a href="user.php"><i class="fas fa-user"></i></a>
       </div>
-
-
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>

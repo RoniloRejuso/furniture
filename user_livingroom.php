@@ -14,11 +14,8 @@ include 'user_body.php';
 ?>
 
       <div class="living_room_section">
-<<<<<<< HEAD
       <div class="container" style="padding:20px;">
-=======
       <div class="container">
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
          <div class="row">
                <?php
             

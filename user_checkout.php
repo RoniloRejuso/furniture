@@ -55,10 +55,7 @@ $postal_code = isset($address_parts[5]) ? $address_parts[5] : '';
 $phone_number = $user_data['phone_number'];
 
 if (isset($_POST['order_btn'])) {
-<<<<<<< HEAD
     // Validate and sanitize input data
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
     $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
     $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
@@ -74,30 +71,17 @@ if (isset($_POST['order_btn'])) {
     // Compile full address
     $full_address = "$address, $barangay, $city, $province $postal_code";
 
-<<<<<<< HEAD
-=======
-    // Update the user's address in the 'users' table
-    $update_user_query = mysqli_query($conn, "UPDATE users SET address = '$full_address' WHERE email = '$email'");
-    if (!$update_user_query) {
-        die('Failed to update user address in the database: ' . mysqli_error($conn));
-    }
-
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
     // Fetch the cart items
     $cart_query = mysqli_query($conn, "SELECT * FROM cart");
     $price_total = 0;
     $product_details = array();
     $product_images = array();
-<<<<<<< HEAD
     $prices = array();
     $quantities = array();
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 
     if (mysqli_num_rows($cart_query) > 0) {
         while ($product_item = mysqli_fetch_assoc($cart_query)) {
             $product_name = mysqli_real_escape_string($conn, $product_item['product_name']);
-<<<<<<< HEAD
             $quantity = mysqli_real_escape_string($conn, $product_item['quantity']);
             $price = mysqli_real_escape_string($conn, $product_item['price']);
             $product_image = mysqli_real_escape_string($conn, $product_item['product_image']);
@@ -109,22 +93,6 @@ if (isset($_POST['order_btn'])) {
             $prices[] = $price;
             $quantities[] = $quantity;
 
-=======
-            $quantity = (int)$product_item['quantity'];
-            $price = (float)$product_item['price'];
-            $total_price = $price * $quantity;
-
-            // Insert each product into the 'orders' table
-            $insert_order_query = mysqli_query($conn, "INSERT INTO orders (email, name, address, phone_number, payment_method, billing_address_option, product_image, product_name, price, quantity) VALUES ('$email', '$firstname $lastname', '$full_address', '$phone_number', '$payment_method', '$billing_address_option', '{$product_item['product_image']}', '$product_name', '$price', '$quantity')");
-            if (!$insert_order_query) {
-                die('Failed to insert order details into the database: ' . mysqli_error($conn));
-            }
-
-            $price_total += $total_price;
-            $product_details[] = $product_item['product_name'] . ' (' . $product_item['quantity'] . ')';
-            $product_images[] = $product_item['product_image'];
-
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
             // Update the product quantity in the 'products' table
             $reduce_quantity_query = mysqli_query($conn, "UPDATE products SET quantity = quantity - $quantity WHERE product_name = '$product_name'");
             if (!$reduce_quantity_query) {
@@ -133,34 +101,18 @@ if (isset($_POST['order_btn'])) {
         }
 
         $receipt_details = implode(', ', $product_details);
-<<<<<<< HEAD
 
         // Insert order details into the database
         $insert_order_query = mysqli_query($conn, "INSERT INTO orders (user_id, email, name, address, phone_number, payment_method, billing_address_option, product_name, product_image, price, quantity, amount, date) VALUES ('$user_id', '$email', '$firstname $lastname', '$full_address', '$phone_number', '$payment_method', '$billing_address_option', '" . implode(', ', $product_details) . "', '" . implode(', ', $product_images) . "', '" . implode(', ', $prices) . "', '" . implode(', ', $quantities) . "', '$price_total', NOW())");
 
         if (!$insert_order_query) {
             die('Failed to insert order details into the database: ' . mysqli_error($conn));
-=======
-        $product_images_json = json_encode($product_images);
-
-        // Compile the name
-        $name = "$firstname $lastname";
-
-        // Insert total amount into the 'orders' table
-        $insert_total_amount_query = mysqli_query($conn, "UPDATE orders SET amount = '$price_total' WHERE email = '$email' AND amount IS NULL");
-        if (!$insert_total_amount_query) {
-            die('Failed to update total amount in the database: ' . mysqli_error($conn));
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
         }
     } else {
         die('Your cart is empty!');
     }
 
-<<<<<<< HEAD
     // Clear the cart after successful order placement
-=======
-    // Clear the cart after the order is placed
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
     $delete_cart_query = mysqli_query($conn, "DELETE FROM cart");
     if (!$delete_cart_query) {
         die('Failed to clear the cart: ' . mysqli_error($conn));

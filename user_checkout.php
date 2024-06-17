@@ -2,6 +2,12 @@
 @include 'config.php';
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: user_login.php");
+    exit();
+}
+
 if (!isset($_SESSION['email'])) {
     header('Location: user_login.php');
     exit();
@@ -25,33 +31,6 @@ $city = isset($address_parts[2]) ? $address_parts[2] : '';
 $province = isset($address_parts[3]) ? $address_parts[3] : '';
 $additional_address = '';
 $postal_code = isset($address_parts[4]) ? $address_parts[4] : '';
-$phone_number = $user_data['phone_number'];
-
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header('Location: user_login.php');
-    exit();
-}
-
-$email = $_SESSION['email'];
-
-// Fetch the user's details from the database
-$user_query = mysqli_query($conn, "SELECT firstname, lastname, address, phone_number FROM users WHERE email = '$email'");
-if (mysqli_num_rows($user_query) == 0) {
-    die('User not found in the database.');
-}
-$user_data = mysqli_fetch_assoc($user_query);
-$firstname = $user_data['firstname'];
-$lastname = $user_data['lastname'];
-$address_parts = explode(', ', $user_data['address']);
-$address = $address_parts[0];
-$region = isset($address_parts[1]) ? $address_parts[1] : '';
-$barangay = isset($address_parts[2]) ? $address_parts[2] : '';
-$city = isset($address_parts[3]) ? $address_parts[3] : '';
-$province = isset($address_parts[4]) ? $address_parts[4] : '';
-$additional_address = '';
-$postal_code = isset($address_parts[5]) ? $address_parts[5] : '';
 $phone_number = $user_data['phone_number'];
 
 if (isset($_POST['order_btn'])) {
@@ -118,20 +97,33 @@ if (isset($_POST['order_btn'])) {
         die('Failed to clear the cart: ' . mysqli_error($conn));
     }
 
-    // Display order confirmation
+    // Display order confirmation using SweetAlert
     echo "
-    <div class='order-message-container'>
-        <div class='message-container'>
-            <h3>Thank you for shopping!</h3>
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Thank you for shopping!',
+        html: `
             <div class='order-detail'>
-                <span>" . implode(', ', $product_images) . "</span>
+                <div><img src='" . implode(", ", $product_images) . "' style='max-width: 100px;'></div>
                 <span>" . $receipt_details . "</span>
                 <span class='total' style='background:transparent;color:black;'> Total: ₱" . number_format($price_total, 2) . " </span>
             </div>
-            <a href='user_index.php' class='btn' style='background-color: #493A2D;'>Keep Shopping</a>
-            <a href='user_login.php' class='btn' style='background-color: #493A2D;'>Exit</a>
-        </div>
-    </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Keep Shopping',
+        cancelButtonText: 'Exit',
+        confirmButtonColor: '#493A2D',
+        cancelButtonColor: '#493A2D'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'user_product.php';
+        } else {
+            window.location.href = 'user_index.php';
+        }
+    });
+    </script>
     ";
 }
 ?>
@@ -142,6 +134,7 @@ if (isset($_POST['order_btn'])) {
 include 'user_header.php';
 ?>
 <style>
+/* Add your CSS styles here */
 .section_container {
     margin-bottom: 20px;
     padding: 20px;
@@ -327,8 +320,4 @@ include 'user_body.php';
     }
 </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54

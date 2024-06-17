@@ -3,6 +3,12 @@ session_start();
 include('dbcon.php');
 @include 'config.php';
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: user_login.php");
+    exit();
+}
+
 if(isset($_POST['add_to_cart'])){
 
     $product_name = $_POST['product_name'];
@@ -68,21 +74,33 @@ include 'user_body.php';
 </head>
 <div class="product_section layout_padding">
    <div class="container" style="padding:20px;">
-      <div class="row">
-         <div class="col-sm-12"><br>
+   <div class="col-sm-12"><br>
             <h1 class="product_taital">All Products</h1>
-
          </div>
+         <div class="search-section" style="text-align: center;">
+         <form method="GET" action="">
+            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;">
+            <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
+            </form>
       </div>
-      <div class="product_section_2 layout_padding">
-         <div class="row">
-</head>
-<body>
-<div class="container">
+      <div class="sorting_filtering_section" style="text-align: center; margin-top: 10px;">
+         <form method="GET" action="" id="filterForm">
+            <select name="sort_by" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
+               <option value="default">Default Sorting</option>
+               <option value="name_asc">Name: A to Z</option>
+               <option value="name_desc">Name: Z to A</option>
+               <option value="price_asc">Price: Low to High</option>
+               <option value="price_desc">Price: High to Low</option>
+            </select>
+            <select name="filter_by_category" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
+                <option value="all">All Categories</option>
+                <option value="bedroom">Bedroom</option>
+                <option value="dining_room">Dining Room</option>
+                <option value="living_room">Living Room</option>
+                <option value="office">Office</option>            </select>
+         </form>
+      </div>
 <div class="row">
-            <div class="col-sm-12">
-                <h1 class="product_taital"></h1>
-            </div>
         </div>
         <div class="product_section_2 layout_padding">
             <div class="row">
@@ -106,7 +124,7 @@ include 'user_body.php';
 
                     <?php foreach ($products as $product) { ?>
                         <div class="col-lg-3 col-sm-6">
-                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
+                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">

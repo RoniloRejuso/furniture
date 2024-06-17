@@ -1,6 +1,12 @@
 <?php
 session_start();
-include('dbcon.php')
+include('dbcon.php');
+
+if (!isset($_SESSION['user_id'])) {
+   $_SESSION['message'] = "You must log in first";
+   header("Location: user_login.php");
+   exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -13,9 +19,29 @@ include 'user_header.php';
 include 'user_body.php';
 ?>
 <!-- Office Section -->
-<div class="office_section">
-<div class="container" style="padding:20px;">
-   <div class="row">
+      <div class="office_section">
+         <div class="container" style="padding:20px;">
+            <div class="col-sm-12">
+                <h1 class="product_taital">Office</h1>
+            </div>
+            <div class="search-section" style="text-align: center;">
+         <form method="GET" action="">
+            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;">
+            <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
+            </form>
+      </div>
+      <div class="sorting_filtering_section" style="text-align: center; margin-top: 10px;">
+         <form method="GET" action="" id="filterForm">
+            <select name="sort_by" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
+               <option value="default">Default Sorting</option>
+               <option value="name_asc">Name: A to Z</option>
+               <option value="name_desc">Name: Z to A</option>
+               <option value="price_asc">Price: Low to High</option>
+               <option value="price_desc">Price: High to Low</option>
+            </select>
+         </form>
+      </div>
+         <div class="row">
             <?php
             $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
@@ -31,7 +57,6 @@ include 'user_body.php';
             // Loop through the fetched products
             while ($product = $result->fetch_assoc()) {
             ?>
-<<<<<<< HEAD
                         <div class="col-lg-3 col-sm-6">
                             <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
@@ -43,17 +68,6 @@ include 'user_body.php';
                                 </div>
                             </a>
                         </div>
-=======
-               <div class="col-lg-3 col-sm-6">
-                  <div class="product_box">
-                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
-                     <div class="product-info">
-                           <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
-                           <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price'];?></h3><br><br>
-                        </div>
-                  </div>
-               </div>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
             <?php
             }
             // Close database connection
@@ -62,7 +76,7 @@ include 'user_body.php';
             ?>
         </div>
     </div>
-</div><br><br>
+</di><br><br>
       <div class="floating-navbar">
         <a href="user_index.php"><i class="fas fa-home"></i></a>
         <a href="user_prod.php"><i class="fas fa-couch"></i></a>

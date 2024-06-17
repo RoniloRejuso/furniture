@@ -1,13 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['message'] = "You must log in first";
-    header("Location:user_login.php");
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 </style>
 </head>
 <body>
-<?php include 'user_body.php'; ?>
-
+<?php include 'user_body1.php'; ?>
 <div class="product_section layout_padding">
     <div class="container">
         <div class="row">
@@ -34,6 +23,7 @@ if (!isset($_SESSION['user_id'])) {
                 <h1 class="product_taital">Our Products</h1>
             </div>
         </div>
+        
         <div class="product_section_2 layout_padding">
             <div class="row">
                     <?php
@@ -55,7 +45,7 @@ if (!isset($_SESSION['user_id'])) {
                     ?>
                     <?php foreach ($products as $product) { ?>
                         <div class="col-lg-3 col-sm-6">
-                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
+                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">

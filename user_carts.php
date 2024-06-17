@@ -3,12 +3,16 @@ session_start();
 include('dbcon.php');
 @include 'config.php';
 
-// Handle updates and removal
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location:user_login.php");
+    exit();
+}
+
 if (isset($_POST['update_update_btn'])) {
 $update_value = mysqli_real_escape_string($conn, $_POST['update_quantity']);
 $update_id = mysqli_real_escape_string($conn, $_POST['update_quantity_id']);
 
-    // Check if the new quantity is valid (greater than or equal to 0)
     if ($update_value >= 0) {
         $update_quantity_query = mysqli_query($conn, "UPDATE cart SET quantity = '$update_value' WHERE id = '$update_id'");
 
@@ -99,6 +103,19 @@ if (isset($_POST['checkout'])) {
     font-size: 20px;
     transform: scale(1.5);
 
+    
+}
+  .container {
+    background: #f6f6f6;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  @media (max-width: 768px) {
+    .container {
+    background: transparent;
+    padding: 0 20px;
+
+  }
 }
 </style>
 <body>
@@ -112,7 +129,7 @@ if (isset($_POST['checkout'])) {
     </div>
 </div>
 <div class="user_settings_section text-center">
-    <div class="container" style="background:#f6f6f6;padding:20px;border-radius:10px;">
+    <div class="container">
         <section class="cart-container">
             <form method="post" action="">
                 <?php

@@ -64,11 +64,6 @@ if (!$result) {
         </div>
         <div class="card">
             <div class="card-body">
-                <?php if (isset($_SESSION['message'])): ?>
-                    <div class="alert alert-success">
-                        <?php echo $_SESSION['message']; unset($_SESSION['message']); ?>
-                    </div>
-                <?php endif; ?>
                 <div class="table-top">
                     <div class="search-set">
                         <div class="search-path">
@@ -106,7 +101,6 @@ if (!$result) {
                             </th>
                             <th>Order ID</th>
                             <th>Customer</th>
-                            <th>Price</th>
                             <th>Product Name</th>
                             <th>Quantity</th>
                             <th>Amount</th>
@@ -126,7 +120,6 @@ if (!$result) {
                                     </td>
                                     <td><?php echo $row["orders_id"]; ?></td>
                                     <td><?php echo $row["name"]; ?></td>
-                                    <td><?php echo $row["price"]; ?></td>
                                     <td><?php echo $row["product_name"]; ?></td>
                                     <td><?php echo $row["quantity"]; ?></td>
                                     <td><?php echo $row["amount"]; ?></td>

@@ -29,7 +29,6 @@ if(isset($_POST['add_to_cart'])){
         }
     }
 
-    // Redirect the user after adding to cart
     header("Location: user_carts.php");
     exit();
 }
@@ -279,7 +278,7 @@ if(isset($_GET['product_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
     <script>
         function openNav() {
-            document.getElementById("mySidenav").style.width = "100%";
+            document.getElementById("mySidenav").style.width = "360px";
         }
 
         function closeNav() {

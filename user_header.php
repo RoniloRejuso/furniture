@@ -21,7 +21,6 @@
       <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Include Font Awesome CSS -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<!-- custom css file link  -->
-<link rel="stylesheet" href="css/style.css">
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+      <link rel="stylesheet" href="css/style.css">
    

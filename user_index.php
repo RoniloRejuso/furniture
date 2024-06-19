@@ -81,6 +81,10 @@ if (!isset($_SESSION['user_id'])) {
                 include 'config.php';
 
                 function generateRecommendations($transactions, $minSupport) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                     $allProducts = [];
                     foreach ($transactions as $transaction) {
                         $products = explode(', ', $transaction["product_name"]);
@@ -149,6 +153,83 @@ if (!isset($_SESSION['user_id'])) {
                 echo '</div>';
                 }
 
+<<<<<<< HEAD
+=======
+=======
+                $allProducts = [];
+                foreach ($transactions as $transaction) {
+                    $products = explode(', ', $transaction["product_name"]);
+                    $allProducts = array_merge($allProducts, $products);
+                }
+                return array_unique($allProducts);
+                }
+
+                // Connect to the database
+                $conn = new mysqli($host, $user, $password, $database);
+
+                // Check connection
+                if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Fetch data from the orders table
+                $sql = "SELECT product_name, price, product_image FROM orders";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                // Store transactions in an array
+                $transactions = [];
+                while ($row = $result->fetch_assoc()) {
+                    $transactions[] = $row;
+                }
+
+                // Generate recommendations
+                $minSupport = 0.1; // Minimum support threshold (adjust as needed)
+                $recommendations = generateRecommendations($transactions, $minSupport);
+
+                // Shuffle the recommendations
+                shuffle($recommendations);
+
+                // Limit the number of displayed products
+                $displayLimit = 4; // Set the limit of products to display
+                $count = 0;
+
+                // Output recommendations
+                foreach ($recommendations as $product) {
+                    // Fetch the price and image for each product
+                    foreach ($transactions as $transaction) {
+                        if (strpos($transaction["product_name"], $product) !== false) {
+                            $price = $transaction["price"];
+                            $product_image = $transaction["product_image"];
+                            break;
+                        }
+                    }
+
+                    // Display the product
+                    echo '<div class="col-lg-3 col-sm-7">';
+                    echo '<div class="product_box">';
+                    echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
+                    echo '<div class="product-info">';
+                    echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
+                    echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+
+                    // Increment the count and check the limit
+                    $count++;
+                    if ($count >= $displayLimit) {
+                        break;
+                    }
+                }
+                } else {
+                echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                echo '<b>No Products available.<b>';
+                echo '</div>';
+                }
+
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 $conn->close();
                 ?>
          </div>

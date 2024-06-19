@@ -121,11 +121,19 @@ else if (isset($_POST['login_btn'])) {
                 $_SESSION['message'] = "Logged in successfully";
                 echo "<script>
                     Swal.fire({
+<<<<<<< HEAD
                         title: 'Error!',
                         text: 'Log in again',
                         icon: 'error'
                     }).then(() => {
                         window.location.href = 'login.php';
+=======
+                        title: 'Success!',
+                        text: 'Logged in successfully',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = 'index.php';
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                     });
                 </script>";
                 exit();

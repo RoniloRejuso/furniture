@@ -127,12 +127,27 @@ include 'user_body.php';
             include 'config.php';
 
             function generateRecommendations($transactions, $minSupport) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 $allProducts = [];
                 foreach ($transactions as $transaction) {
                     $products = explode(', ', $transaction["product_name"]);
                     $allProducts = array_merge($allProducts, $products);
                 }
                 return array_unique($allProducts);
+<<<<<<< HEAD
+=======
+=======
+            $allProducts = [];
+            foreach ($transactions as $transaction) {
+                $products = explode(', ', $transaction["product_name"]);
+                $allProducts = array_merge($allProducts, $products);
+            }
+            return array_unique($allProducts);
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             }
 
             // Connect to the database
@@ -140,7 +155,15 @@ include 'user_body.php';
 
             // Check connection
             if ($conn->connect_error) {
+<<<<<<< HEAD
                 die("Connection failed: " . $conn->connect_error);
+=======
+<<<<<<< HEAD
+                die("Connection failed: " . $conn->connect_error);
+=======
+            die("Connection failed: " . $conn->connect_error);
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             }
 
             // Fetch data from the orders table
@@ -148,6 +171,10 @@ include 'user_body.php';
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 // Store transactions in an array
                 $transactions = [];
                 while ($row = $result->fetch_assoc()) {
@@ -176,6 +203,40 @@ include 'user_body.php';
                         }
                     }
 
+<<<<<<< HEAD
+=======
+=======
+            // Store transactions in an array
+            $transactions = [];
+            while ($row = $result->fetch_assoc()) {
+                $transactions[] = $row;
+            }
+
+            // Generate recommendations
+            $minSupport = 0.1; // Minimum support threshold (adjust as needed)
+            $recommendations = generateRecommendations($transactions, $minSupport);
+
+            // Shuffle the recommendations
+            shuffle($recommendations);
+
+            // Limit the number of displayed products
+            $displayLimit = 4; // Set the limit of products to display
+            $count = 0;
+
+            // Output recommendations
+            foreach ($recommendations as $product) {
+                // Fetch the price and image for each product
+                foreach ($transactions as $transaction) {
+                    if (strpos($transaction["product_name"], $product) !== false) {
+                        $price = $transaction["price"];
+                        $product_image = $transaction["product_image"];
+                        break;
+                    }
+                }
+
+                // Display the product
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 echo '<div class="col-lg-3 col-sm-7">';
                 echo '<div class="product_box">';
                 echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
@@ -186,6 +247,13 @@ include 'user_body.php';
                 echo '</div>';
                 echo '</div>';
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+                // Increment the count and check the limit
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 $count++;
                 if ($count >= $displayLimit) {
                     break;
@@ -239,7 +307,15 @@ include 'user_body.php';
          }
 
         function viewInAR() {
+<<<<<<< HEAD
             window.location.href = 'ar.php';
+=======
+<<<<<<< HEAD
+            window.location.href = 'ar.php';
+=======
+            window.location.href = 'AR.html';
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
         }
 
          function closeNav() {

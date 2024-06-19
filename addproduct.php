@@ -28,19 +28,43 @@ if (!isset($_SESSION['admin_id'])) {
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
   <body>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
   <?php include 'header.php';?>
       <div class="page-wrapper">
         <div class="content">
           <div class="page-header">
             <div class="page-title">
+<<<<<<< HEAD
               <h4>Product Add New</h4>
               <h6>Created another newer product</h6>
+=======
+<<<<<<< HEAD
+              <h4>Product Add</h4>
+=======
+              <h4>
+                Product Add
+              </h4>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+              <h6>Create new product</h6>
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             </div>
           </div>
+          
           <form action="add_prod.php" method="POST" enctype="multipart/form-data">
           <div class="card">
             <div class="card-body">
               <div class="row">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
               <div class="col-lg-3 col-sm-6 col-12">
                 <div class="form-group">
                   <label for="productName">Product Name</label>
@@ -89,7 +113,87 @@ if (!isset($_SESSION['admin_id'])) {
                           <small id="quantityHelpBlock" class="form-text text-muted"></small>
                       </div>
                   </div>
+<<<<<<< HEAD
 
+=======
+=======
+
+
+              <div class="col-lg-3 col-sm-6 col-12">
+  <div class="form-group">
+    <label for="productName">Product Name</label>
+    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name" maxlength="100">
+  </div>
+</div>
+
+<script>
+  document.getElementById('productName').addEventListener('input', function() {
+    var userInput = this.value.toLowerCase(); // Convert input to lowercase for case-insensitivity
+    if (userInput.includes('sofa')) {
+      // If "sofa" is present in the input, prepend "Our Home"
+      this.value = 'Our Home ' + userInput;
+    }
+  });
+</script>
+
+
+                  
+
+
+                  <div class="col-lg-3 col-sm-6 col-12">
+  <div class="form-group">
+    <label for="status">Status</label>
+    <select class="select" id="status" name="status">
+      
+      <option >Available</option>
+      <option >Not available</option>
+    </select>
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" class="form-control" id="price" name="price" placeholder="Enter price" onkeypress="return isNumberKey(event)" maxlength="9">
+        <small id="priceHelpBlock" class="form-text text-muted"></small>
+    </div>
+</div>
+
+                  <script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity" onkeypress="return isNumberKey(event)" maxlength="9">
+        <small id="quantityHelpBlock" class="form-text text-muted"></small>
+    </div>
+</div>
+
+<script>
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                   <script>
                       function isNumberKey(evt) {
                           var charCode = (evt.which) ? evt.which : event.keyCode;
@@ -100,6 +204,60 @@ if (!isset($_SESSION['admin_id'])) {
                       }
                   </script>
                   <div class="col-lg-3 col-sm-6 col-12">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select class="select" id="category" name="category">
+            <option value="living_room">Living Room</option>
+            <option value="dining_room">Dining Room</option>
+            <option value="bedroom">Bedroom</option>
+            <option value="home_office">Home Office</option>
+        </select>
+    </div>
+</div>
+
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="color">Color</label>
+        <input type="text" class="form-control" id="color" name="color" placeholder="Enter color" maxlength="50" onkeypress="return onlyAlphabetic(event)">
+        <small id="colorHelpBlock" class="form-text text-muted"></small>
+    </div>
+</div>
+<script>
+    function onlyAlphabetic(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="size">Size</label>
+        <input type="text" class="form-control" id="size" name="size" placeholder="Enter size" maxlength="50">
+    </div>
+</div>
+
+<div class="col-lg-3 col-sm-6 col-12">
+    <div class="form-group">
+        <label for="weight_capacity">Weight Capacity</label>
+        <input type="text" class="form-control" id="weight_capacity" name="weight_capacity" placeholder="Enter weight capacity" maxlength="50"> 
+    </div>
+</div>
+
+
+                  
+
+                  <div class="col-lg-5">
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                     <div class="form-group">
                         <label for="category">Category</label>
                         <select class="select" id="category" name="category">
@@ -143,6 +301,10 @@ if (!isset($_SESSION['admin_id'])) {
                       <label for="product-image">Product Image</label>
                       <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
                     </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                   </div>  
                   <div class="col-lg-3 col-sm-6 col-12">
                     <div class="form-group">
@@ -150,6 +312,13 @@ if (!isset($_SESSION['admin_id'])) {
                       <input type="file" id="glb-file" name="glb-file" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
                     </div>
                   </div>
+<<<<<<< HEAD
+=======
+=======
+                  </div>             
+                                
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 
                   <div class="col-lg-3 col-sm-6 col-12">
                     <div class="form-group">

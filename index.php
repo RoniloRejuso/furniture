@@ -65,7 +65,10 @@ if (!isset($_SESSION['admin_id'])) {
                 </div>
               </div>
             </div>
+<<<<<<< HEAD
             
+=======
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             <div class="col-lg-4 col-sm-8 col-12">
               <div class="dash-widget dash1">
                 <div class="dash-widgetimg">

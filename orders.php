@@ -2,11 +2,20 @@
 session_start();
 include 'dbcon.php';
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 $conn = mysqli_connect('localhost', 'root', '', 'furniture');
 if (!$conn) {
 	echo ("Connection Failed: " . mysqli_connect_error());
 	exit;
 }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -23,16 +32,33 @@ if (isset($_GET['delete_id'])) {
         header("Location: orders.php");
         exit(); 
     } else {
+<<<<<<< HEAD
         $_SESSION['error'] = "Error deleting record: " . $conn->error;
+=======
+<<<<<<< HEAD
+        $_SESSION['error'] = "Error deleting record: " . $conn->error;
+=======
+        echo "Error deleting record: " . $conn->error;
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     }
 }
 
 $sql = "SELECT * FROM orders";
 $result = $conn->query($sql);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 
 if (!$result) {
     die("Query failed: " . $conn->error);
 }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,11 +90,20 @@ if (!$result) {
         </div>
         <div class="card">
             <div class="card-body">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 <?php if (isset($_SESSION['message'])): ?>
                     <div class="alert alert-success">
                         <?php echo $_SESSION['message']; unset($_SESSION['message']); ?>
                     </div>
                 <?php endif; ?>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 <div class="table-top">
                     <div class="search-set">
                         <div class="search-path">
@@ -95,6 +130,20 @@ if (!$result) {
                         </ul>
                     </div>
                 </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+                <?php if (isset($_SESSION['message'])): ?>
+                    <div class="alert alert-success">
+                        <?php 
+                            echo $_SESSION['message']; 
+                            unset($_SESSION['message']);
+                        ?>
+                    </div>
+                <?php endif; ?>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 <table class="table datanew">
                     <thead>
                         <tr>
@@ -125,20 +174,44 @@ if (!$result) {
                                         </label>
                                     </td>
                                     <td><?php echo $row["orders_id"]; ?></td>
+<<<<<<< HEAD
                                     <td><?php echo $row["name"]; ?></td>
+=======
+<<<<<<< HEAD
+                                    <td><?php echo $row["name"]; ?></td>
+=======
+                                    <td><?php echo $row["customer"]; ?></td>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                                     <td><?php echo $row["price"]; ?></td>
                                     <td><?php echo $row["product_name"]; ?></td>
                                     <td><?php echo $row["quantity"]; ?></td>
                                     <td><?php echo $row["amount"]; ?></td>
                                     <td><?php echo $row["date"]; ?></td>
                                     <td>
+<<<<<<< HEAD
                                         <a href="#" data-id="<?php echo $row["orders_id"]; ?>" class="btn btn-danger btn-sm delete-btn">Delete</a>
+=======
+<<<<<<< HEAD
+                                        <a href="#" data-id="<?php echo $row["orders_id"]; ?>" class="btn btn-danger btn-sm delete-btn">Delete</a>
+=======
+                                        <a href="?delete_id=<?php echo $row["orders_id"]; ?>" class="btn btn-danger btn-sm">Delete</a>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
+<<<<<<< HEAD
                                 <td colspan="9" class="text-center">No orders found</td>
+=======
+<<<<<<< HEAD
+                                <td colspan="9" class="text-center">No orders found</td>
+=======
+                                <td colspan="8">No orders found</td>
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -160,11 +233,31 @@ if (!$result) {
 <script>
 // Ensure select-all checkbox functionality
 $('#select-all').click(function(event) {
+<<<<<<< HEAD
     $(':checkbox').prop('checked', this.checked);
+=======
+<<<<<<< HEAD
+    $(':checkbox').prop('checked', this.checked);
+=======
+    if(this.checked) {
+        $(':checkbox').each(function() {
+            this.checked = true;
+        });
+    } else {
+        $(':checkbox').each(function() {
+            this.checked = false;
+        });
+    }
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 });
 
 $(document).ready(function() {
     $('[data-bs-toggle="tooltip"]').tooltip();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 
     $('.delete-btn').click(function(e) {
         e.preventDefault();
@@ -174,6 +267,11 @@ $(document).ready(function() {
             window.location.href = deleteUrl;
         }
     });
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
+>>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 });
 </script>
 </body>

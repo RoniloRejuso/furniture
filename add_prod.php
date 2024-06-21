@@ -20,22 +20,6 @@ if (isset($_POST['submit'])) {
         echo "<script>alert('Please fill in all required fields.');
               window.location.href = 'addproduct.php';</script>";
         exit();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-    }
-
-    // Retrieve form data
-    $productName = $_POST['productName'];
-    $category = $_POST['category']; // Retrieve the selected category
-
-    if (isset($_POST['status'])) {
-        $status = $_POST['status'];
-    } else {
-        $status = ''; // Or set a default value
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     }
 
     // Retrieve form data
@@ -44,22 +28,10 @@ if (isset($_POST['submit'])) {
     $status = isset($_POST['status']) ? $_POST['status'] : '';
     $price = $_POST['price'];
     $quantity = $_POST['quantity'];
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     $color = $_POST['color'];
     $size = isset($_POST['size']) ? $_POST['size'] : '';
     $weightCapacity = isset($_POST['weight_capacity']) ? $_POST['weight_capacity'] : '';
     $description = isset($_POST['description']) ? $_POST['description'] : '';
-<<<<<<< HEAD
-=======
-=======
-    $color = $_POST['color']; // Retrieve color from form
-    $size = isset($_POST['size']) ? $_POST['size'] : ''; // Retrieve size from form
-    $weightCapacity = isset($_POST['weight_capacity']) ? $_POST['weight_capacity'] : '';
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 
     // Handle file uploads
     $productImage = '';

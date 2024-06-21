@@ -4,7 +4,7 @@ include 'dbcon.php';
 
 if (!isset($_SESSION['admin_id'])) {
     $_SESSION['message'] = "You must log in first";
-    header("Location: login.php");
+    header("Location:login.php");
     exit();
 }
 ?>

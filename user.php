@@ -2,6 +2,12 @@
 session_start();
 include 'dbcon.php';
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: user_login.php");
+    exit();
+}
+
 $user_id = 1; // Assuming the user ID is 1 for now
 $query = "SELECT * FROM users WHERE user_id = $user_id"; // Adjust the query as needed
 $result = mysqli_query($conn, $query);
@@ -16,17 +22,12 @@ if ($result && mysqli_num_rows($result) > 0) {
 
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 <?php include 'user_header.php'; ?>
 <style>
     .profile-section {
         display: flex;
         align-items: center;
     }
-<<<<<<< HEAD
 
     .profile-info {
         display: flex;
@@ -64,97 +65,6 @@ if ($result && mysqli_num_rows($result) > 0) {
 <body>
 <?php include 'user_body.php'; ?>
 
-=======
-
-    .profile-info {
-        display: flex;
-        align-items: center;
-    }
-
-    .profile-pic-container {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 20px;
-        position: relative;
-    }
-    .profile-pic {
-        width: 100%;
-        height: auto;
-    }
-
-    .name {
-        font-size: 24px;
-    }
-
-    .default-profile-pic {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        display: none;
-    }
-</style>
-<body>
-<?php include 'user_body.php'; ?>
-
-=======
-<?php
-include 'user_header.php';
-?>
-<style>
-    .profile-section {
-    display: flex;
-    align-items: center;
-}
-
-.profile-info {
-    display: flex;
-    align-items: center;
-}
-
-.profile-pic-container {
-    width: 100px; /* Adjust the width as needed */
-    height: 100px; /* Adjust the height as needed */
-    border-radius: 50%; /* Make it circular */
-    overflow: hidden; /* Ensure the image stays within the circular container */
-    margin-right: 20px; /* Adjust the margin as needed */
-    position: relative; /* Ensure proper positioning of the default icon */
-}
-
-.profile-pic {
-    width: 100%;
-    height: auto;
-}
-
-.name {
-    font-size: 24px; /* Adjust the font size as needed */
-    /* Add any other styles you want */
-}
-
-.default-profile-pic {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    display: none;
-}
-
-</style>
-<body>
-<?php
-include 'user_body.php';
-?>
-
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
@@ -166,40 +76,18 @@ include 'user_body.php';
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                 <div class="account-form px-4 py-3" style="margin: 0 auto;">
                     <div class="profile-section mb-">
                         <br><br>
                         <div class="profile-pic-container">
                             <input type="file" id="profile-image-input" name="profile_picture" accept="image/*" onchange="previewImage(this)" style="display: none;">
-<<<<<<< HEAD
-=======
-=======
-                <div class="account-form px-4 py-3">
-                    <div class="profile-section mb-"><br><br>
-                        <div class="profile-pic-container">
-                            <input type="file" id="profile-image-input" accept="image/*" onchange="previewImage(this)" style="display: none;">
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                             <label for="profile-image-input" style="cursor: pointer;">
                                 <img id="profile-image-preview" class="profile-pic" src="<?php echo !empty($user['profile_picture']) ? $user['profile_picture'] : 'images/profile-pic.jpg'; ?>" alt="Profile Picture">
                                 <span style="position: absolute; bottom: 5px; right: 5px; background: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">Change</span>
                             </label>
                         </div>
                     </div>
-<<<<<<< HEAD
                     <form action="update_settings.php" method="POST" enctype="multipart/form-data" onsubmit="return confirmSaveChanges()">
-=======
-<<<<<<< HEAD
-                    <form action="update_settings.php" method="POST" enctype="multipart/form-data" onsubmit="return confirmSaveChanges()">
-=======
-
-                    <form action="update_settings.php" method="POST">
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                         <div class="form-group position-relative">
                             <label for="username" class="d-none">Name:</label>
                             <div class="input-group">
@@ -236,25 +124,12 @@ include 'user_body.php';
                                 </div>
                             </div>
                         </div>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                         <button type="submit" class="btn btn-success" id="save_button" style="display:none;margin:0 auto;">Save Changes</button>
                     </form>
                     <div class="logout-btn">
                         <form action="logout.php" method="POST">
                             <button type="submit" class="btn custom-logout-btn">Logout</button>
                         </form>
-<<<<<<< HEAD
-=======
-=======
-                        <button type="submit" class="btn btn-success" id="save_button" style="display: none;">Save Changes</button>
-                    </form>
-                    <div class="logout-btn">
-                        <button type="button" class="btn custom-logout-btn">Logout</button>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
                     </div>
                 </div>
             </div>
@@ -272,10 +147,6 @@ function enableEdit(fieldId) {
 function previewImage(input) {
     var preview = document.getElementById('profile-image-preview');
     var file = input.files[0];
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     var allowedTypes = ['image/jpeg', 'image/png'];
 
     if (file && allowedTypes.includes(file.type)) {
@@ -296,23 +167,6 @@ function previewImage(input) {
 function confirmSaveChanges() {
     return confirm('Are you sure you want to save the changes?');
 }
-<<<<<<< HEAD
-=======
-=======
-    var reader = new FileReader();
-
-    reader.onloadend = function () {
-        preview.src = reader.result;
-    }
-
-    if (file) {
-        reader.readAsDataURL(file);
-    } else {
-        preview.src = "images/profile-pic.jpg"; // Show placeholder image if no image selected
-    }
-}
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 </script>
 
 </body>

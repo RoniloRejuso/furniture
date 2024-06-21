@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location:user_login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +25,8 @@
 </style>
 </head>
 <body>
-<?php include 'user_body1.php'; ?>
+<?php include 'user_body.php'; ?>
+
 <div class="product_section layout_padding">
     <div class="container">
         <div class="row">
@@ -23,7 +34,6 @@
                 <h1 class="product_taital">Our Products</h1>
             </div>
         </div>
-        
         <div class="product_section_2 layout_padding">
             <div class="row">
                     <?php
@@ -45,7 +55,7 @@
                     ?>
                     <?php foreach ($products as $product) { ?>
                         <div class="col-lg-3 col-sm-6">
-                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">
@@ -146,7 +156,7 @@
     </div>
     <div class="floating-navbar">
         <a href="#" class="active"><i class="fas fa-home"></i></a>
-        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
+        <a href="user_product.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php"><i class="fas fa-user"></i></a>
     </div>

@@ -1,13 +1,3 @@
-<?php
-session_start();
-include('dbcon.php');
-
-if (!isset($_SESSION['user_id'])) {
-   $_SESSION['message'] = "You must log in first";
-   header("Location: user_login.php");
-   exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -15,8 +5,9 @@ include 'user_header.php';
 ?>
    <body>
       <?php
-include 'user_body.php';
+include 'user_body1.php';
 ?>
+
       <div class="sale_product_section">
          <div class="container">
          <div class="col-sm-12">
@@ -35,18 +26,16 @@ include 'user_body.php';
                   <option value="all">All Categories</option>
                </select>
                <?php
-                  $sale_products_count = 15; // Example count of sale products
+                  $sale_products_count = 15;
                ?>
                <p><?php echo $sale_products_count;?> Products on Sale</p>
             </div>
 
             <div class="product_grid_section">
                <?php
-                  // Simulated product data for sale
                   $sale_products = array(
                      array("name" => "Sale Product 1", "price" => 80, "category" => "Category 1"),
                      array("name" => "Sale Product 2", "price" => 120, "category" => "Category 2"),
-                     // More sale product data
                   );
 
                   // Pagination and product display
@@ -84,6 +73,7 @@ include 'user_body.php';
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php"><i class="fas fa-user"></i></a>
       </div>
+
 
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>

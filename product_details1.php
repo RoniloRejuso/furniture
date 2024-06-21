@@ -1,12 +1,5 @@
 <?php
-session_start();
 include 'dbcon.php';
-
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['message'] = "You must log in first";
-    header("Location: user_login.php");
-    exit();
-}
 
 if(isset($_POST['add_to_cart'])){
 
@@ -29,6 +22,7 @@ if(isset($_POST['add_to_cart'])){
         }
     }
 
+    // Redirect the user after adding to cart
     header("Location: user_carts.php");
     exit();
 }

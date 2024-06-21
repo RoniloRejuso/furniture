@@ -1,5 +1,13 @@
 <?php
+session_start();
+include('dbcon.php');
 @include 'config.php';
+
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: user_login.php");
+    exit();
+}
 
 if(isset($_POST['add_to_cart'])){
 
@@ -65,11 +73,11 @@ include 'user_body.php';
 </style>
 </head>
 <div class="product_section layout_padding">
-<div class="container">
-      <div class="col-sm-12">
-         <h1 class="product_taital">All Products</h1>
-      </div>
-      <div class="search-section" style="text-align: center;">
+   <div class="container" style="padding:20px;">
+   <div class="col-sm-12"><br>
+            <h1 class="product_taital">All Products</h1>
+         </div>
+         <div class="search-section" style="text-align: center;">
          <form method="GET" action="">
             <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;">
             <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
@@ -89,8 +97,7 @@ include 'user_body.php';
                 <option value="bedroom">Bedroom</option>
                 <option value="dining_room">Dining Room</option>
                 <option value="living_room">Living Room</option>
-                <option value="office">Office</option>
-            </select>
+                <option value="office">Office</option>            </select>
          </form>
       </div>
 <div class="row">

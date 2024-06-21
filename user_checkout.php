@@ -2,6 +2,12 @@
 @include 'config.php';
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: user_login.php");
+    exit();
+}
+
 if (!isset($_SESSION['email'])) {
     header('Location: user_login.php');
     exit();
@@ -23,48 +29,12 @@ $address = $address_parts[0];
 $barangay = isset($address_parts[1]) ? $address_parts[1] : '';
 $city = isset($address_parts[2]) ? $address_parts[2] : '';
 $province = isset($address_parts[3]) ? $address_parts[3] : '';
-$additional_address = '';
 $postal_code = isset($address_parts[4]) ? $address_parts[4] : '';
-$phone_number = $user_data['phone_number'];
-<<<<<<< HEAD
-
-if (isset($_POST['order_btn'])) {
-    // Validate and sanitize input data
-=======
-
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header('Location: user_login.php');
-    exit();
-}
-
-$email = $_SESSION['email'];
-
-// Fetch the user's details from the database
-$user_query = mysqli_query($conn, "SELECT firstname, lastname, address, phone_number FROM users WHERE email = '$email'");
-if (mysqli_num_rows($user_query) == 0) {
-    die('User not found in the database.');
-}
-$user_data = mysqli_fetch_assoc($user_query);
-$firstname = $user_data['firstname'];
-$lastname = $user_data['lastname'];
-$address_parts = explode(', ', $user_data['address']);
-$address = $address_parts[0];
-$region = isset($address_parts[1]) ? $address_parts[1] : '';
-$barangay = isset($address_parts[2]) ? $address_parts[2] : '';
-$city = isset($address_parts[3]) ? $address_parts[3] : '';
-$province = isset($address_parts[4]) ? $address_parts[4] : '';
 $additional_address = '';
-$postal_code = isset($address_parts[5]) ? $address_parts[5] : '';
 $phone_number = $user_data['phone_number'];
 
 if (isset($_POST['order_btn'])) {
-<<<<<<< HEAD
     // Validate and sanitize input data
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
     $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
@@ -80,78 +50,39 @@ if (isset($_POST['order_btn'])) {
     // Compile full address
     $full_address = "$address, $barangay, $city, $province $postal_code";
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-    // Update the user's address in the 'users' table
-    $update_user_query = mysqli_query($conn, "UPDATE users SET address = '$full_address' WHERE email = '$email'");
-    if (!$update_user_query) {
-        die('Failed to update user address in the database: ' . mysqli_error($conn));
-    }
-
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     // Fetch the cart items
     $cart_query = mysqli_query($conn, "SELECT * FROM cart");
     $price_total = 0;
     $product_details = array();
     $product_images = array();
-<<<<<<< HEAD
     $prices = array();
     $quantities = array();
-=======
-<<<<<<< HEAD
-    $prices = array();
-    $quantities = array();
-=======
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
+    $product_ids = array();
 
     if (mysqli_num_rows($cart_query) > 0) {
         while ($product_item = mysqli_fetch_assoc($cart_query)) {
             $product_name = mysqli_real_escape_string($conn, $product_item['product_name']);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             $quantity = mysqli_real_escape_string($conn, $product_item['quantity']);
             $price = mysqli_real_escape_string($conn, $product_item['price']);
             $product_image = mysqli_real_escape_string($conn, $product_item['product_image']);
             $total_price = $price * $quantity;
-<<<<<<< HEAD
 
-            $price_total += $total_price;
-            $product_details[] = $product_name;
-            $product_images[] = $product_image;
-            $prices[] = $price;
-            $quantities[] = $quantity;
-
-=======
-
-            $price_total += $total_price;
-            $product_details[] = $product_name;
-            $product_images[] = $product_image;
-            $prices[] = $price;
-            $quantities[] = $quantity;
-
-=======
-            $quantity = (int)$product_item['quantity'];
-            $price = (float)$product_item['price'];
-            $total_price = $price * $quantity;
-
-            // Insert each product into the 'orders' table
-            $insert_order_query = mysqli_query($conn, "INSERT INTO orders (email, name, address, phone_number, payment_method, billing_address_option, product_image, product_name, price, quantity) VALUES ('$email', '$firstname $lastname', '$full_address', '$phone_number', '$payment_method', '$billing_address_option', '{$product_item['product_image']}', '$product_name', '$price', '$quantity')");
-            if (!$insert_order_query) {
-                die('Failed to insert order details into the database: ' . mysqli_error($conn));
+            // Fetch product_id for the current product_name
+            $fetch_product_id_query = mysqli_query($conn, "SELECT product_id FROM products WHERE product_name = '$product_name'");
+            if ($fetch_product_id_query) {
+                $product_id_row = mysqli_fetch_assoc($fetch_product_id_query);
+                $product_id = $product_id_row['product_id'];
+                $product_ids[] = $product_id;
+            } else {
+                die('Failed to fetch product_id from the database: ' . mysqli_error($conn));
             }
 
             $price_total += $total_price;
-            $product_details[] = $product_item['product_name'] . ' (' . $product_item['quantity'] . ')';
-            $product_images[] = $product_item['product_image'];
+            $product_details[] = $product_name;
+            $product_images[] = $product_image;
+            $prices[] = $price;
+            $quantities[] = $quantity;
 
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             // Update the product quantity in the 'products' table
             $reduce_quantity_query = mysqli_query($conn, "UPDATE products SET quantity = quantity - $quantity WHERE product_name = '$product_name'");
             if (!$reduce_quantity_query) {
@@ -160,61 +91,46 @@ if (isset($_POST['order_btn'])) {
         }
 
         $receipt_details = implode(', ', $product_details);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 
         // Insert order details into the database
-        $insert_order_query = mysqli_query($conn, "INSERT INTO orders (user_id, email, name, address, phone_number, payment_method, billing_address_option, product_name, product_image, price, quantity, amount, date) VALUES ('$user_id', '$email', '$firstname $lastname', '$full_address', '$phone_number', '$payment_method', '$billing_address_option', '" . implode(', ', $product_details) . "', '" . implode(', ', $product_images) . "', '" . implode(', ', $prices) . "', '" . implode(', ', $quantities) . "', '$price_total', NOW())");
+        $insert_order_query = mysqli_query($conn, "INSERT INTO orders (user_id, email, firstname, lastname, address, barangay, city, province, postal_code, additional_address, phone_number, payment_method, billing_address_option, product_ids, product_name, product_image, price, quantity, amount, date) 
+                                                  VALUES ('$user_id', '$email', '$firstname', '$lastname', '$full_address', '$barangay', '$city', '$province', '$postal_code', '$additional_address', '$phone_number', '$payment_method', '$billing_address_option', '" . implode(', ', $product_ids) . "', '" . implode(', ', $product_details) . "', '" . implode(', ', $product_images) . "', '" . implode(', ', $prices) . "', '" . implode(', ', $quantities) . "', '$price_total', NOW())");
 
         if (!$insert_order_query) {
             die('Failed to insert order details into the database: ' . mysqli_error($conn));
-=======
-        $product_images_json = json_encode($product_images);
-
-        // Compile the name
-        $name = "$firstname $lastname";
-
-        // Insert total amount into the 'orders' table
-        $insert_total_amount_query = mysqli_query($conn, "UPDATE orders SET amount = '$price_total' WHERE email = '$email' AND amount IS NULL");
-        if (!$insert_total_amount_query) {
-            die('Failed to update total amount in the database: ' . mysqli_error($conn));
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
         }
     } else {
         die('Your cart is empty!');
     }
 
-<<<<<<< HEAD
     // Clear the cart after successful order placement
-=======
-<<<<<<< HEAD
-    // Clear the cart after successful order placement
-=======
-    // Clear the cart after the order is placed
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
     $delete_cart_query = mysqli_query($conn, "DELETE FROM cart");
     if (!$delete_cart_query) {
         die('Failed to clear the cart: ' . mysqli_error($conn));
     }
 
-    // Display order confirmation
     echo "
-    <div class='order-message-container'>
-        <div class='message-container'>
-            <h3>Thank you for shopping!</h3>
-            <div class='order-detail'>
-                <span>" . implode(', ', $product_images) . "</span>
-                <span>" . $receipt_details . "</span>
-                <span class='total' style='background:transparent;color:black;'> Total: ₱" . number_format($price_total, 2) . " </span>
-            </div>
-            <a href='user_index.php' class='btn' style='background-color: #493A2D;'>Keep Shopping</a>
-            <a href='user_login.php' class='btn' style='background-color: #493A2D;'>Exit</a>
-        </div>
-    </div>
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thank you for shopping!',
+            text: 'Your order has been placed successfully.',
+            showCancelButton: true,
+            confirmButtonText: 'Keep Shopping',
+            cancelButtonText: 'Exit',
+            confirmButtonColor: '#493A2D',
+            cancelButtonColor: '#493A2D'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'user_product.php';
+            } else {
+                window.location.href = 'user_index.php';
+            }
+        });
+    </script>
     ";
+    exit; 
 }
 ?>
 
@@ -327,66 +243,66 @@ include 'user_body.php';
                 <div class="section_container">
                     <h2>Contact</h2>
                     <div>
-                        <input type="email" class="email_input" value="<?= $email ?>" required>
-                    </div>
-                </div>
-                <div class="section_container">
-                    <div class="delivery_section">
-                        <h2>Delivery Address</h2>
-                        <input type="text" name="firstname" placeholder="First Name" value="<?= $firstname ?>" required>
-                        <input type="text" name="lastname" placeholder="Last Name" value="<?= $lastname ?>" required>
-                        <input type="text" name="address" placeholder="Address" value="<?= $address ?>" required>
-                        <input type="text" name="barangay" placeholder="Barangay" value="<?= $barangay ?>" required>
-                        <input type="text" name="city" placeholder="City" value="<?= $city ?>" required>
-                        <input type="text" name="province" placeholder="Province" value="<?= $province ?>" required>
-
-                        <div class="additional_address">
-                            <input type="text" name="additional_address" placeholder="Apartment, Suite, etc..." value="<?= $additional_address ?>">
-                        </div>
-                        <input type="text" name="postal_code" placeholder="Postal Code" value="<?= $postal_code ?>" required>
-                        <input type="tel" name="phone_number" placeholder="Phone Number" value="<?= $phone_number ?>" required>
-                        <label><input type="checkbox" required> Validate information</label>
-                    </div>
-                </div>
-                <div class="section_container">
-                    <div class="payment_section">
-                        <h2>Payment Method</h2>
-                        <label><input type="radio" name="payment_method" value="cash_on_delivery" required> Cash on Delivery (COD)</label>
-                    </div>
-                </div>
-                <div class="section_container">
-                    <div class="billing_section">
-                        <h2>Billing Address</h2>
-                        <label><input type="radio" name="billing_address" value="same_as_shipping" required> Same as Shipping Address</label>
-                        <label><input type="radio" name="billing_address" value="different" required> Use Different Billing Address</label>
-                    </div>
-                </div>
-                <div class="section_container">
-                    <div class="order_summary_section">
-                        <h2>Order Summary</h2>
-                        <?php
-                        $select_cart = mysqli_query($conn, "SELECT * FROM cart");
-                        $grand_total = 0;
-
-                        if (mysqli_num_rows($select_cart) > 0) {
-                            while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
-                                $total_price = $fetch_cart['price'] * $fetch_cart['quantity'];
-                                $grand_total += $total_price;
-                                echo '<span>' . $fetch_cart['product_name'] . ' (' . $fetch_cart['quantity'] . ')</span>';
-                            }
-                        } else {
-                            echo "<div class='display-order'><span>Your cart is empty!</span></div>";
-                        }
-                        ?>
-                        <span class="grand-total">Total: ₱<?= number_format($grand_total, 2); ?></span>
-                    </div>
-                </div>
-                <div class="checkout_button_section">
-                    <button class="pay_now_btn" name="order_btn" type="submit">Place Order</button>
-                </div>
-            </form>
-        </div><br><br>
+                        <input type="email" class="email_input" value="<?= $email ?>" readonly>
+                   
+</div>
+</div>
+<div class="section_container">
+    <div class="delivery_section">
+        <h2>Delivery Address</h2>
+        <input type="text" name="firstname" placeholder="First Name" value="<?= $firstname ?>" required>
+        <input type="text" name="lastname" placeholder="Last Name" value="<?= $lastname ?>" required>
+        <input type="text" name="address" placeholder="Address" value="<?= $address ?>" required>
+        <input type="text" name="barangay" placeholder="Barangay" value="<?= $barangay ?>" required>
+        <input type="text" name="city" placeholder="City" value="<?= $city ?>" required>
+        <input type="text" name="province" placeholder="Province" value="<?= $province ?>" required>
+        <input type="text" name="postal_code" placeholder="Postal Code" value="<?= $postal_code ?>" required>
+        <div class="additional_address">
+            <input type="text" name="additional_address" placeholder="Apartment, Suite, etc..." value="<?= $additional_address ?>">
+        </div>
+        <input type="tel" name="phone_number" placeholder="Phone Number" value="<?= $phone_number ?>" required>
+        <label><input type="checkbox" required> Validate information</label>
     </div>
+</div>
+<div class="section_container">
+    <div class="payment_section">
+        <h2>Payment Method</h2>
+        <label><input type="radio" name="payment_method" value="cash_on_delivery" required> Cash on Delivery (COD)</label>
+    </div>
+</div>
+<div class="section_container">
+    <div class="billing_section">
+        <h2>Billing Address</h2>
+        <label><input type="radio" name="billing_address" value="same_as_shipping" required> Same as Shipping Address</label>
+        <label><input type="radio" name="billing_address" value="different" required> Use Different Billing Address</label>
+    </div>
+</div>
+<div class="section_container">
+    <div class="order_summary_section">
+        <h2>Order Summary</h2>
+        <?php
+        $select_cart = mysqli_query($conn, "SELECT * FROM cart");
+        $grand_total = 0;
+
+        if (mysqli_num_rows($select_cart) > 0) {
+            while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+                $total_price = $fetch_cart['price'] * $fetch_cart['quantity'];
+                $grand_total += $total_price;
+                echo '<span>' . $fetch_cart['product_name'] . ' (' . $fetch_cart['quantity'] . ')</span>';
+            }
+        } else {
+            echo "<div class='display-order'><span>Your cart is empty!</span></div>";
+        }
+        ?>
+        <span class="grand-total">Total: ₱<?= number_format($grand_total, 2); ?></span>
+    </div>
+</div>
+<div class="checkout_button_section">
+    <button class="pay_now_btn" name="order_btn" type="submit">Place Order</button>
+</div>
+</form>
+</div><br><br>
+</div>
 </div>
 <script src="js/script.js"></script>
 <script src="js/jquery.min.js"></script>
@@ -409,12 +325,4 @@ include 'user_body.php';
     }
 </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-<<<<<<< HEAD
-</html>
-=======
-</html>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe

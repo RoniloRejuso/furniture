@@ -53,8 +53,8 @@ if (isset($_POST["reset"])) {
     /* Form container style */
     body {
             background-color: gray;
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            margin: 0;
+            padding: 0;
         }
     .form-container {
         max-width: 400px;

@@ -37,6 +37,7 @@ if (!isset($_SESSION['admin_id'])) {
       <div class="page-wrapper">
         <div class="content">
           <div class="row">
+
             <div class="col-lg-4 col-sm-8 col-12">
               <div class="dash-widget">
                 <div class="dash-widgetimg">
@@ -44,7 +45,6 @@ if (!isset($_SESSION['admin_id'])) {
                     <img src="assets/img/icons/dash1.svg" alt="img">
                   </span>
                 </div>
-
                 <div class="dash-widgetcontent">
                     <h6>Orders</h6>
                       <h5>
@@ -65,10 +65,7 @@ if (!isset($_SESSION['admin_id'])) {
                 </div>
               </div>
             </div>
-<<<<<<< HEAD
             
-=======
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
             <div class="col-lg-4 col-sm-8 col-12">
               <div class="dash-widget dash1">
                 <div class="dash-widgetimg">
@@ -96,6 +93,7 @@ if (!isset($_SESSION['admin_id'])) {
                 </div>
               </div>
             </div>
+            
             <div class="col-lg-4 col-sm-6 col-12">
               <div class="dash-widget dash2">
                 <div class="dash-widgetimg">
@@ -124,6 +122,8 @@ if (!isset($_SESSION['admin_id'])) {
                 </div>
               </div>
             </div>
+
+
           <div class="row">
             <div class="col-lg-7 col-sm-12 col-12 d-flex">
               <div class="card flex-fill">
@@ -324,56 +324,49 @@ if (!isset($_SESSION['admin_id'])) {
               </div>
             </div>
           </div>
-
           <div class="card mb-0">
-    <div class="card-body">
-        <h4 class="card-title">Recent Orders</h4>
-
-        <div class="table-responsive dataview">
-            <table class="table datatable">
-                <thead>
+            <div class="card-body">
+              <h4 class="card-title">Expired Products</h4>
+              <div class="table-responsive dataview">
+                <table class="table datatable">
+                  <thead>
                     <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>ID</th>
+                      <th>SNo</th>
+                      <th>Product Code</th>
+                      <th>Product Name</th>
+                      <th>Brand Name</th>
+                      <th>Category Name</th>
+                      <th>Expiry Date</th>
                     </tr>
-                </thead>
-
-                <tbody>
-                    <?php
-                    // Include your database connection configuration file
-                    @include 'config.php';
-
-                    // Fetch the latest 10 orders from the 'orders' table
-                    $fetch_orders_query = mysqli_query($conn, "SELECT * FROM orders ORDER BY date DESC LIMIT 10");
-
-                    // Check if there are any orders
-                    if (mysqli_num_rows($fetch_orders_query) > 0) {
-                        while ($order = mysqli_fetch_assoc($fetch_orders_query)) {
-                            echo "<tr>";
-                            echo "<td>" . $order['product_name'] . "</td>";
-                            echo "<td>₱" .$order['price'] . "</td>";
-                            echo "<td>" . $order['quantity'] . "</td>";
-                            echo "<td>₱" . number_format($order['amount'], 2) . "</td>";
-                            echo "<td>" . $order['date'] . "</td>";
-                            echo "<td>" . $order['orders_id'] . "</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='6'>No orders found</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><a href="javascript:void(0);">IT0001</a></td>
+                      <td class="productimgname">
+                        <a class="product-img" href="productlist.html">
+                          <img
+                            src="assets/img/product/product2.jpg"
+                            alt="product"
+                          />
+                        </a>
+                        <a href="productlist.html">Orange</a>
+                      </td>
+                      <td>N/D</td>
+                      <td>Fruits</td>
+                      <td>12-12-2022</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+          
+
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/feather.min.js"> </script>
     <script src="assets/js/jquery.slimscroll.min.js"></script>

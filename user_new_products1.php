@@ -1,13 +1,3 @@
-<?php
-session_start();
-include('dbcon.php');
-
-if (!isset($_SESSION['user_id'])) {
-   $_SESSION['message'] = "You must log in first";
-   header("Location: user_login.php");
-   exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -25,7 +15,7 @@ include 'user_body1.php';
       </div>
       <div class="search-section" style="text-align: center;">
          <form method="GET" action="">
-            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;border:transparent;">
+            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;">
             <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
             </form>
       </div>
@@ -39,11 +29,8 @@ include 'user_body1.php';
                <option value="price_desc">Price: High to Low</option>
             </select>
             <select name="filter_by_category" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
-                <option value="all">All Categories</option>
-                <option value="bedroom">Bedroom</option>
-                <option value="dining_room">Dining Room</option>
-                <option value="living_room">Living Room</option>
-                <option value="office">Office</option>
+               <option value="all">All Categories</option>
+               <!-- Add other categories dynamically if needed -->
             </select>
          </form>
       </div>

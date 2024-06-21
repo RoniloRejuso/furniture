@@ -7,16 +7,7 @@ error_reporting(E_ALL);?>
 <head>
 
     <meta charset="UTF-8">
-<<<<<<< HEAD
     <title>Our Home</title>
-=======
-<<<<<<< HEAD
-    <title>Our Home</title>
-=======
-    <title>Registers</title>
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
-
     <script src='sweetalert.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -26,13 +17,6 @@ error_reporting(E_ALL);?>
 <body>
 
 <?php
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 include('dbcon.php');
 
 if (isset($_POST['register_btn'])) {
@@ -47,7 +31,6 @@ if (isset($_POST['register_btn'])) {
     $check_email_result = mysqli_query($conn, $check_email_query);
 
     if (mysqli_num_rows($check_email_result) > 0) {
-        // Email already exists
         $_SESSION['message'] = "Email already exists";
         echo "<script>
             Swal.fire({
@@ -160,7 +143,7 @@ else if (isset($_POST['login_btn'])) {
                     text: 'Logged in successfully',
                     icon: 'success'
                 }).then(() => {
-                    window.location.href = 'user_index.php';
+                    window.location.href = 'user_home.php';
                 });
             </script>";
             exit();
@@ -199,10 +182,7 @@ else if (isset($_POST['login_btn'])) {
 </body>
 <<<<<<< HEAD
 =======
-<<<<<<< HEAD
-=======
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 >>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
->>>>>>> 927693bf1b5d2809947b51c4257e8d2106397efe
 </html>

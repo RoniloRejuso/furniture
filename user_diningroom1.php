@@ -1,20 +1,12 @@
-<?php
-session_start();
-include('dbcon.php');
-if (!isset($_SESSION['user_id'])) {
-   $_SESSION['message'] = "You must log in first";
-   header("Location: user_login.php");
-   exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
 include 'user_header.php';
+
 ?>
    <body>
    <?php
-include 'user_body.php';
+include 'user_body1.php';
 ?>
       <div class="dining_room_section">
       <div class="container" style="padding:20px;">
@@ -56,7 +48,7 @@ include 'user_body.php';
             while ($product = $result->fetch_assoc()) {
             ?>
                         <div class="col-lg-3 col-sm-6">
-                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                        <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">

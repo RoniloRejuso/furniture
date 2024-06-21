@@ -1,25 +1,17 @@
-<?php
-session_start();
-include('dbcon.php');
-if (!isset($_SESSION['user_id'])) {
-   $_SESSION['message'] = "You must log in first";
-   header("Location: user_login.php");
-   exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <?php
 include 'user_header.php';
 ?>
    <body>
-   <?php
-include 'user_body.php';
+<?php
+include 'user_body1.php';
 ?>
-      <div class="dining_room_section">
-      <div class="container" style="padding:20px;">
-      <div class="col-sm-12">
-                <h1 class="product_taital">Dining Room</h1>
+<!-- Office Section -->
+<div class="office_section">
+         <div class="container" style="padding:20px;">
+            <div class="col-sm-12">
+                <h1 class="product_taital">Office</h1>
             </div>
             <div class="search-section" style="text-align: center;">
          <form method="GET" action="">
@@ -38,7 +30,7 @@ include 'user_body.php';
             </select>
          </form>
       </div>
-         <div class="row">
+   <div class="row">
             <?php
             $conn= mysqli_connect('localhost', 'root', '', 'furniture');
 
@@ -46,9 +38,8 @@ include 'user_body.php';
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
-
-            // Prepare and execute SQL statement to fetch dining room products
-            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'dining_room' AND status = 'Available'");
+            // Prepare and execute SQL statement to fetch home office products
+            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'home_office' AND status = 'Available'");
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -75,15 +66,14 @@ include 'user_body.php';
         </div>
     </div>
 </div><br><br>
-
       <div class="floating-navbar">
         <a href="user_index.php"><i class="fas fa-home"></i></a>
         <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php"><i class="fas fa-user"></i></a>
       </div>
-
-
+      
+      <!-- Javascript files-->
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>

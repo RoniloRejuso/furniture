@@ -174,8 +174,7 @@ if(isset($_GET['product_id'])) {
                 </div>
             </div>
         </div>
-        <div class="recommended_products">
-            <br><br>
+        <div class="recommended_products"><br><br>
             <h2><small><b>Recommended for You</b></small></h2>
             <div class="row">
                 <?php
@@ -188,72 +187,72 @@ if(isset($_GET['product_id'])) {
                         $allProducts = array_merge($allProducts, $products);
                     }
                     return array_unique($allProducts);
-                }
-
-                // Connect to the database
-                $conn = new mysqli($host, $user, $password, $database);
-
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
-                // Fetch data from the orders table
-                $sql = "SELECT product_name, price, product_image FROM orders";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    $transactions = [];
-                    while ($row = $result->fetch_assoc()) {
-                        $transactions[] = $row;
                     }
 
-                    $minSupport = 0.1;
-                    $recommendations = generateRecommendations($transactions, $minSupport);
+                    $conn = mysqli_connect($servername, $username, $password, $database);
 
-                    shuffle($recommendations);
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
 
-                    $displayLimit = 4;
-                    $count = 0;
+                    $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image FROM orders o
+                    JOIN cart c ON o.cart_id = c.cart_id
+                    JOIN cart_items ci ON c.cart_id = ci.cart_id
+                    JOIN products p ON ci.product_id = p.product_id
+                    WHERE o.orders_id = ?;";
 
-                    foreach ($recommendations as $product) {
-                        foreach ($transactions as $transaction) {
-                            $products = explode(', ', $transaction["product_name"]);
-                            $prices = explode(', ', $transaction["price"]);
-                            $images = explode(', ', $transaction["product_image"]);
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $_GET['order_id']);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
-                            $index = array_search($product, $products);
-                            if ($index !== false) {
-                                $price = $prices[$index];
-                                $product_image = $images[$index];
+                    if ($result->num_rows > 0) {
+                        $transactions = [];
+                        while ($row = $result->fetch_assoc()) {
+                            $transactions[] = $row;
+                        }
+
+                        $minSupport = 0.1;
+                        $recommendations = generateRecommendations($transactions, $minSupport);
+
+                        shuffle($recommendations);
+
+                        $displayLimit = 4;
+                        $count = 0;
+
+                        foreach ($recommendations as $product) {
+                            foreach ($transactions as $transaction) {
+                                if ($product == $transaction["product_name"]) {
+                                    $product_id = $transaction["product_id"];
+                                    $price = $transaction["price"];
+                                    $product_image = $transaction["product_image"];
+                                    break;
+                                }
+                            }
+
+                            echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
+                            echo '<a href="product_details.php?product_id=' . $product_id . '">';
+                            echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
+                            echo '<div class="product-info">';
+                            echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
+                            echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
+                            echo '</div>';
+                            echo '</a>';
+                            echo '</div>';
+
+                            $count++;
+                            if ($count >= $displayLimit) {
                                 break;
                             }
                         }
-
-                        echo '<div class="col-lg-3 col-sm-7">';
-                        echo '<div class="product_box">';
-                        echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
-                        echo '<div class="product-info">';
-                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
-                        echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
+                    } else {
+                        echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                        echo '<b>No Products available.<b>';
                         echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-
-                        // Increment the count and check the limit
-                        $count++;
-                        if ($count >= $displayLimit) {
-                            break;
-                        }
                     }
-                } else {
-                    echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
-                    echo '<b>No Products available.<b>';
-                    echo '</div>';
-                }
 
-                $conn->close();
-                ?>
+                    $conn->close();
+                    ?>
             </div>
         </div>
     </div><br><br><br>

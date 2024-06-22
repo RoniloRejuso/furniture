@@ -1,23 +1,24 @@
 <?php
 session_start();
-include('dbcon.php');
-@include 'config.php';
+include('dbcon.php'); // Assuming this file contains database connection code
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = "You must log in first";
-    header("Location:user_login.php");
+    header("Location: user_login.php");
     exit();
 }
 
+// Handle updating quantity in cart
 if (isset($_POST['update_update_btn'])) {
     $update_value = mysqli_real_escape_string($conn, $_POST['update_quantity']);
     $update_id = mysqli_real_escape_string($conn, $_POST['update_quantity_id']);
 
     if ($update_value >= 0) {
-        $update_quantity_query = mysqli_query($conn, "UPDATE cart SET quantity = '$update_value' WHERE id = '$update_id'");
+        $update_quantity_query = mysqli_query($conn, "UPDATE cart_items SET quantity = '$update_value' WHERE cart_item_id = '$update_id'");
 
         if ($update_quantity_query) {
-            header('location: user_carts.php');
+            header('Location: user_carts.php');
+            exit();
         } else {
             die('Failed to update cart quantity: ' . mysqli_error($conn));
         }
@@ -29,14 +30,18 @@ if (isset($_POST['update_update_btn'])) {
 // Handle single item removal
 if (isset($_GET['remove'])) {
     $remove_id = $_GET['remove'];
-    mysqli_query($conn, "DELETE FROM cart WHERE id = '$remove_id'");
-    header('location: user_carts.php');
+    mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$remove_id'");
+    header('Location: user_carts.php');
+    exit();
 }
 
 // Handle clearing the entire cart
 if (isset($_GET['delete_all'])) {
-    mysqli_query($conn, "DELETE FROM cart");
-    header('location: user_carts.php');
+    // Assuming cart_id is stored in session or user-specific
+    $user_id = $_SESSION['user_id']; // Adjust based on your session handling
+    mysqli_query($conn, "DELETE FROM cart_items WHERE cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
+    header('Location: user_carts.php');
+    exit();
 }
 
 // Handle multiple item checkout
@@ -44,12 +49,12 @@ if (isset($_POST['checkout'])) {
     $selected_items = isset($_POST['selected_items']) ? $_POST['selected_items'] : [];
 
     if (empty($selected_items)) {
-        echo "<script>swal('Oops!', 'Please select at least one item to checkout',);</script>";
+        echo "<script>alert('Please select at least one item to checkout');</script>";
     } else {
         // Process multiple item checkout
         $selected_items_str = implode(',', $selected_items);
         echo "<script>window.location.href = 'user_checkout.php?items=$selected_items_str';</script>";
-        exit;
+        exit();
     }
 }
 ?>
@@ -102,8 +107,6 @@ if (isset($_POST['checkout'])) {
     color: #964B33;
     font-size: 20px;
     transform: scale(1.5);
-
-    
 }
   .container {
     background: #f6f6f6;
@@ -191,8 +194,7 @@ if (isset($_POST['checkout'])) {
                 </form>
             </section>
     
-            <div class="recommended_products">
-                <br><br>
+            <div class="recommended_products"><br><br>
                 <h3><small><span class="divider-line"></span><b> Interested in This? </b><span class="divider-line"></span></small></h3>
                 <div class="row">
                     <?php
@@ -207,32 +209,33 @@ if (isset($_POST['checkout'])) {
                         return array_unique($allProducts);
                     }
 
-                    // Connect to the database
-                    $conn = new mysqli($host, $user, $password, $database);
+                    $conn = mysqli_connect($servername, $username, $password, $database);
 
-                    // Check connection
                     if ($conn->connect_error) {
                         die("Connection failed: " . $conn->connect_error);
                     }
 
-                    // Fetch data from the orders and products table
-                    $sql = "SELECT o.product_name, o.price, o.product_image, p.product_id 
-                            FROM orders o 
-                            JOIN products p ON FIND_IN_SET(p.product_id, o.product_ids)";
-                    $result = $conn->query($sql);
+                    $sql = " SELECT p.product_id, p.product_name, p.price, p.product_image
+                    FROM orders o
+                    JOIN cart c ON o.cart_id = c.cart_id
+                    JOIN cart_items ci ON c.cart_id = ci.cart_id
+                    JOIN products p ON ci.product_id = p.product_id
+                    WHERE o.orders_id = ?;";
+
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $_GET['order_id']);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
                     if ($result->num_rows > 0) {
-                        // Store transactions in an array
                         $transactions = [];
                         while ($row = $result->fetch_assoc()) {
                             $transactions[] = $row;
                         }
 
-                        // Generate recommendations
-                        $minSupport = 0.1; // Minimum support threshold (adjust as needed)
+                        $minSupport = 0.1;
                         $recommendations = generateRecommendations($transactions, $minSupport);
 
-                        // Shuffle the recommendations
                         shuffle($recommendations);
 
                         $displayLimit = 1;
@@ -240,19 +243,10 @@ if (isset($_POST['checkout'])) {
 
                         foreach ($recommendations as $product) {
                             foreach ($transactions as $transaction) {
-                                // Explode product_name, price, and product_image
-                                $products = explode(', ', $transaction["product_name"]);
-                                $prices = explode(', ', $transaction["price"]);
-                                $images = explode(', ', $transaction["product_image"]);
-                                $product_ids = explode(', ', $transaction["product_ids"]);
-
-                                // Check if product is in current transaction
-                                $index = array_search($product, $products);
-                                if ($index !== false) {
-                                    // Get corresponding price and image
-                                    $price = $prices[$index];
-                                    $product_image = $images[$index];
-                                    $product_id = $product_ids[$index];
+                                if ($product == $transaction["product_name"]) {
+                                    $product_id = $transaction["product_id"];
+                                    $price = $transaction["price"];
+                                    $product_image = $transaction["product_image"];
                                     break;
                                 }
                             }

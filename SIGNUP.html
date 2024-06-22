@@ -1,0 +1,36 @@
+                <div class="modal-body">
+                    <form id="signupForm" method="POST" action="user_dex.php" class="validated-form" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label for="firstname">First name:</label>
+                            <input type="text" class="form-control name" id="firstname" name="firstname" placeholder="Enter first name" maxlength="100">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last name:</label>
+                            <input type="text" class="form-control name" id="lastname" name="lastname" placeholder="Enter last name" maxlength="100">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">Email:</label>
+                            <input type="email" class="form-control email" id="signupEmail" name="email" placeholder="Enter your email" maxlength="100">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password:</label>
+                            <input type="password" class="form-control password" id="npassword" name="password" placeholder="Enter your password" maxlength="20" required>
+                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('npassword')"></i>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupCPassword">Confirm Password:</label>
+                            <input type="password" class="form-control password" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="20" required>
+                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('cpassword')"></i>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms" required>
+                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
+                    </form>

@@ -4,7 +4,7 @@ include 'dbcon.php';
 
 if (!isset($_SESSION['admin_id'])) {
     $_SESSION['message'] = "You must log in first";
-    header("Location:login.php");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -133,19 +133,22 @@ if (!isset($_SESSION['admin_id'])) {
                           <input type="text" class="form-control" id="size" name="size" placeholder="Enter size" maxlength="50">
                       </div>
                   </div>
+
                   <div class="col-lg-3 col-sm-6 col-12">
                       <div class="form-group">
                           <label for="weight_capacity">Weight Capacity</label>
                           <input type="text" class="form-control" id="weight_capacity" name="weight_capacity" placeholder="Enter weight capacity" maxlength="50"> 
                       </div>
                   </div>
+
                   <div class="col-lg-3 col-sm-6 col-12">
                     <div class="form-group">
                       <label for="product-image">Product Image</label>
                       <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
                     </div>
                   </div>  
-                  <div class="col-lg-3 col-sm-6 col-12">
+
+                <div class="col-lg-3 col-sm-3 col-12">
                     <div class="form-group">
                       <label for="glb-file">Product Model</label>
                       <input type="file" id="glb-file" name="glb-file" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
@@ -157,7 +160,8 @@ if (!isset($_SESSION['admin_id'])) {
                       <label for="description">Product Description</label>
                       <textarea class="form-control" id="description" name="description" placeholder="Enter product description" rows="4"></textarea>
                     </div>
-                  </div>        
+                  </div>       
+
                   <div class="col-lg-12">
                     <button type="submit" class="btn btn-submit me-2" name="submit">Submit</button>
                     <a href="productlist.html" class="btn btn-cancel">Cancel</a>
@@ -169,6 +173,7 @@ if (!isset($_SESSION['admin_id'])) {
         </div>
       </div>
     </div>
+
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/feather.min.js"></script>
     <script src="assets/js/jquery.slimscroll.min.js"></script>

@@ -4,7 +4,7 @@ include 'dbcon.php';
 
 if (!isset($_SESSION['admin_id'])) {
     $_SESSION['message'] = "You must log in first";
-    header("Location:login.php");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -38,90 +38,108 @@ if (!isset($_SESSION['admin_id'])) {
         <div class="content">
           <div class="row">
 
-            <div class="col-lg-4 col-sm-8 col-12">
-              <div class="dash-widget">
-                <div class="dash-widgetimg">
-                  <span>
-                    <img src="assets/img/icons/dash1.svg" alt="img">
-                  </span>
-                </div>
-                <div class="dash-widgetcontent">
-                    <h6>Orders</h6>
-                      <h5>
-                      <?php
-                      $sql = "SELECT SUM(quantity) AS total_orders FROM orders";
-                      $result = $conn->query($sql);
-
-                      if ($result->num_rows > 0) {
-                          $row = $result->fetch_assoc();
-                          $orderCount = $row['total_orders'];
-                      } else {
-                          $orderCount = 0;
-                      }
-
-                      echo '<span class="counters" data-count="' . $orderCount . '">' . $orderCount . '</span>';
-                      ?>
-                  </h5>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-lg-4 col-sm-8 col-12">
-              <div class="dash-widget dash1">
-                <div class="dash-widgetimg">
-                  <span>
-                    <img src="assets/img/icons/dash2.svg" alt="img">
-                  </span>
-                </div>
-                <div class="dash-widgetcontent">
-                    <h6>Revenue</h6>
-                  <h5>
-                  ₱
+          <div class="col-lg-4 col-sm-8 col-12">
+    <div class="dash-widget">
+        <div class="dash-widgetimg">
+            <span>
+                <img src="assets/img/icons/dash1.svg" alt="img">
+            </span>
+        </div>
+        <div class="dash-widgetcontent">
+            <h6>Total Quantity of Products</h6>
+            <h5>
                 <?php
-                $sql = "SELECT SUM(amount) AS total_revenue FROM orders";
+                $sql = "SELECT SUM(quantity) AS total_quantity FROM products";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
-                    $totalRevenue = $row['total_revenue'];
+                    $totalQuantity = $row['total_quantity'];
                 } else {
-                    $totalRevenue = 0;
+                    $totalQuantity = null;
                 }
-                echo '<span class="counters" data-count="' . $totalRevenue . '">' . $totalRevenue . '</span>';
+
+                if (is_null($totalQuantity) || $totalQuantity == 0) {
+                    echo '<span class="counters" data-count="0">No data available</span>';
+                } else {
+                    echo '<span class="counters" data-count="' . $totalQuantity . '">' . $totalQuantity . '</span>';
+                }
                 ?>
-                  </h5>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-lg-4 col-sm-6 col-12">
-              <div class="dash-widget dash2">
-                <div class="dash-widgetimg">
-                  <span>
-                    <img src="assets/img/icons/printer.svg" alt="img">
-                  </span>
-                </div>
-                <div class="dash-widgetcontent">
-                    <h6>Products</h6>
-                      <h5>
-                      <?php
-                      require_once('dbcon.php');
+            </h5>
+        </div>
+    </div>
+</div>
 
-                      $sql = "SELECT SUM(quantity) AS total_products FROM products";
-                      $result = $conn->query($sql);
+<div class="col-lg-4 col-sm-8 col-12">
+    <div class="dash-widget dash1">
+        <div class="dash-widgetimg">
+            <span>
+                <img src="assets/img/icons/dash2.svg" alt="img">
+            </span>
+        </div>
+        <div class="dash-widgetcontent">
+            <h6>Total Price of Products</h6>
+            <h5>
+                ₱
+                <?php
+                $sql = "SELECT SUM(price * quantity) AS total_price FROM products";
+                $result = $conn->query($sql);
 
-                      if ($result->num_rows > 0) {
-                          $row = $result->fetch_assoc();
-                          $totalProducts = $row['total_products'];
-                      } else {
-                          $totalProducts = 0;
-                      }
-                      echo '<span class="counters" data-count="' . $totalProducts . '">' . $totalProducts . '</span>';
-                      ?>
-                  </h5>
-                </div>
-              </div>
-            </div>
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $totalPrice = $row['total_price'];
+                } else {
+                    $totalPrice = null;
+                }
+
+                if (is_null($totalPrice) || $totalPrice == 0) {
+                    echo '<span class="counters" data-count="0">No data available</span>';
+                } else {
+                    echo '<span class="counters" data-count="' . $totalPrice . '">' . $totalPrice . '</span>';
+                }
+                ?>
+            </h5>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-4 col-sm-6 col-12">
+    <div class="dash-widget dash2">
+        <div class="dash-widgetimg">
+            <span>
+                <img src="assets/img/icons/printer.svg" alt="img">
+            </span>
+        </div>
+        <div class="dash-widgetcontent">
+            <h6>Logged-in Admins</h6>
+            <h5>
+                <?php
+                $sql = "SELECT COUNT(*) AS admin_count FROM admin WHERE is_admin = 1";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $adminCount = $row['admin_count'];
+                } else {
+                    $adminCount = null;
+                }
+
+                if (is_null($adminCount) || $adminCount == 0) {
+                    echo '<span class="counters" data-count="0">No data available</span>';
+                } else {
+                    echo '<span class="counters" data-count="' . $adminCount . '">' . $adminCount . '</span>';
+                }
+                ?>
+            </h5>
+        </div>
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+
 
 
           <div class="row">
@@ -242,7 +260,6 @@ if (!isset($_SESSION['admin_id'])) {
 </script>
 
 
-
             <div class="col-lg-5 col-sm-12 col-12 d-flex">
               <div class="card flex-fill">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
@@ -263,7 +280,7 @@ if (!isset($_SESSION['admin_id'])) {
                       </li>
                       <li>
                         <a href="addproduct.html" class="dropdown-item">
-                          Product Add
+                          Product Add.
                         </a>
                       </li>
                     </ul>
@@ -324,46 +341,76 @@ if (!isset($_SESSION['admin_id'])) {
               </div>
             </div>
           </div>
-          <div class="card mb-0">
-            <div class="card-body">
-              <h4 class="card-title">Expired Products</h4>
-              <div class="table-responsive dataview">
-                <table class="table datatable">
-                  <thead>
+
+          <?php
+// Database connection details
+$servername = "localhost";  // Replace with your server name
+$username = "root";     // Replace with your MySQL username
+$password = "";     // Replace with your MySQL password
+$dbname = "furniture";  // Replace with your MySQL database name
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch recently added products query
+$query = "SELECT product_id, product_name, category, quantity, color, date
+          FROM products
+          WHERE date >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+          ORDER BY date DESC
+          LIMIT 10";
+
+$result = $conn->query($query);
+
+?>
+
+<div class="card mb-0">
+    <div class="card-body">
+        <h4 class="card-title">Recently Added Products</h4>
+        <div class="table-responsive dataview">
+            <table class="table datatable">
+                <thead>
                     <tr>
-                      <th>SNo</th>
-                      <th>Product Code</th>
-                      <th>Product Name</th>
-                      <th>Brand Name</th>
-                      <th>Category Name</th>
-                      <th>Expiry Date</th>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Color</th>
+                        <th>Date</th>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td><a href="javascript:void(0);">IT0001</a></td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img
-                            src="assets/img/product/product2.jpg"
-                            alt="product"
-                          />
-                        </a>
-                        <a href="productlist.html">Orange</a>
-                      </td>
-                      <td>N/D</td>
-                      <td>Fruits</td>
-                      <td>12-12-2022</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row["product_id"] . "</td>";
+                            echo '<td><a href="javascript:void(0);">' . $row["product_name"] . '</a></td>';
+                            echo '<td class="productimgname">' . $row["category"] . '</td>';
+                            echo "<td>" . $row["quantity"] . "</td>";
+                            echo "<td>" . $row["color"] . "</td>";
+                            echo "<td>" . $row["date"] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6'>No products found</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
-      </div>
     </div>
+</div>
+
+<?php
+// Close connection
+$conn->close();
+?>
+
 
           
 

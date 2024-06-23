@@ -1,31 +1,63 @@
 <?php
-include 'dbcon.php';
+include 'dbcon.php'; // Include your database connection file
 
-if(isset($_POST['add_to_cart'])){
+// Handle POST request to add product to cart
+if(isset($_POST['add_to_cart'])) {
+    // Sanitize and retrieve POST data
+    $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
+    $product_quantity = 1; // Default quantity, adjust as needed
 
-    $product_name = $_POST['product_name'];
-    $price = $_POST['price']; 
-    $product_quantity = 1;
-    $product_image = $_POST['product_image'];
+    // Fetch product details from products table using JOIN
+    $fetch_product_query = "SELECT p.product_name, p.product_image, p.price
+                            FROM products p
+                            WHERE p.product_id = '$product_id'";
+    
+    $result = mysqli_query($conn, $fetch_product_query);
 
-    $select_cart = mysqli_query($conn, "SELECT * FROM cart WHERE product_name = '$product_name'");
+    if(mysqli_num_rows($result) > 0) {
+        $product = mysqli_fetch_assoc($result);
 
-    if(mysqli_num_rows($select_cart) > 0){
-        $message[] = 'Product already added to cart';
-    }else{
-        $insert_product = mysqli_query($conn, "INSERT INTO `cart`(product_name, price, quantity, product_image) VALUES('$product_name', '$price', '$product_quantity', '$product_image')");
-        
-        if($insert_product){
+        // Retrieve or create cart ID (replace with actual user logic)
+        $user_id = 1; // Replace with actual user ID logic
+
+        $select_cart_id = mysqli_query($conn, "SELECT cart_id FROM cart WHERE user_id = '$user_id'");
+        if(mysqli_num_rows($select_cart_id) > 0) {
+            $cart_row = mysqli_fetch_assoc($select_cart_id);
+            $cart_id = $cart_row['cart_id'];
+        } else {
+            $insert_cart = mysqli_query($conn, "INSERT INTO cart (user_id) VALUES ('$user_id')");
+            if($insert_cart) {
+                $cart_id = mysqli_insert_id($conn);
+            } else {
+                echo 'Failed to create cart for user';
+                exit();
+            }
+        }
+
+        // Calculate amount (assuming price is fetched from products table)
+        $price = $product['price'];
+        $amount = $price * $product_quantity;
+
+        // Insert into cart_items table
+        $insert_cart_item = mysqli_query($conn, "INSERT INTO cart_items (cart_id, product_id, quantity, amount) 
+                                                 VALUES ('$cart_id', '$product_id', '$product_quantity', '$amount')");
+
+        if($insert_cart_item) {
             $message = 'Product added to cart successfully';
         } else {
             $message = 'Failed to add product to cart';
         }
+    } else {
+        echo "Product not found.";
+        exit;
     }
 
+    // Redirect to cart page after processing
     header("Location: user_carts.php");
     exit();
 }
 
+// Handle GET request to display product details
 if(isset($_GET['product_id'])) {
     $productId = mysqli_real_escape_string($conn, $_GET['product_id']);
 
@@ -45,7 +77,6 @@ if(isset($_GET['product_id'])) {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,10 +185,10 @@ if(isset($_GET['product_id'])) {
                     <p>Color: <?php echo $product['color']; ?></p>
                     <div class="buttons">
                         <form id="add-to-cart-form" action="" method="POST">
+                            <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                             <input type="hidden" name="product_name" value="<?php echo $product['product_name']; ?>">
                             <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
                             <input type="hidden" name="product_image" value="<?php echo $product['product_image']; ?>">
-                            <input type="hidden" id="product_quantity" value="<?php echo $product['quantity']; ?>">
                             <div class="button-container">
                                 <input type="button" class="btn btn-view-ar" value="View in AR" onclick="viewInAR()">
                                 <input type="submit" class="btn btn-add-to-cart" value="Add to cart" name="add_to_cart" onclick="checkStock(event)">

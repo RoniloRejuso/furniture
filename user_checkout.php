@@ -1,5 +1,6 @@
 <?php
 @include 'config.php';
+include ('dbcon.php');
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -119,7 +120,7 @@ if (isset($_POST['order_btn'])) {
             showCancelButton: true,
             confirmButtonText: 'Keep Shopping',
             cancelButtonText: 'Exit',
-            confirmButtonColor: '#493A2D',
+            confirmButtonColor: '#964B33',
             cancelButtonColor: '#493A2D'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -144,7 +145,7 @@ include 'user_header.php';
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #FFF6EB;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     width: 90%;
@@ -162,6 +163,7 @@ include 'user_header.php';
     font-size: 1.5em;
     margin-bottom: 15px;
     color: #333;
+    font-weight: bold;
 }
 
 .section_container input[type="text"],
@@ -281,8 +283,11 @@ include 'user_body.php';
     <div class="order_summary_section">
         <h2>Order Summary</h2>
         <?php
-        $select_cart = mysqli_query($conn, "SELECT * FROM cart");
-        $grand_total = 0;
+        $select_cart = mysqli_query($conn, "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, p.quantity, ci.quantity
+                                            FROM cart_items ci
+                                            JOIN products p ON ci.product_id = p.product_id
+                                            WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
+                            $grand_total = 0;
 
         if (mysqli_num_rows($select_cart) > 0) {
             while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {

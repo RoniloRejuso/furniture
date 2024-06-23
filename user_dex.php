@@ -5,14 +5,11 @@ error_reporting(E_ALL);?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <title>Our Home</title>
     <script src='sweetalert.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
-
 </head>
 <body>
 
@@ -24,9 +21,8 @@ if (isset($_POST['register_btn'])) {
     $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']); // Added confirm password
+    $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']);
 
-    // Check if email already exists in the database
     $check_email_query = "SELECT * FROM users WHERE email = '$email'";
     $check_email_result = mysqli_query($conn, $check_email_query);
 
@@ -180,9 +176,4 @@ else if (isset($_POST['login_btn'])) {
 
 
 </body>
-<<<<<<< HEAD
-=======
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
->>>>>>> adec6c4067db50e182594b88c33f3cc3db7b0e54
 </html>

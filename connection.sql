@@ -1,55 +1,71 @@
-CREATE TABLE products (
-    product_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
-    category ENUM('living_room', 'dining_room', 'bedroom', 'home_office') NOT NULL,
-    status ENUM('Available', 'Not available') NOT NULL DEFAULT 'Available',
-    price DECIMAL(9) NOT NULL,
-    quantity INT NOT NULL,
-    product_image VARCHAR(255),
-    color VARCHAR(50),
-    size VARCHAR(20),   
-    weight_capacity DECIMAL(8, 2) NOT NULL  
-);
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 24, 2024 at 10:03 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
-CREATE TABLE admin (
-    admin_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    is_admin INT NOT NULL DEFAULT 0,
-);
-CREATE TABLE orders (
-    orders_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,  -- Corrected the syntax here
-    quantity INT NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    amount_change INT NOT NULL,
-    date DATE NOT NULL
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Database: `furniture`
+--
 
-CREATE TABLE cart (
-    cart_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
-    price DECIMAL(9) NOT NULL,
-    product_image VARCHAR(255),
-    category VARCHAR(255) NOT NULL,
-    quantity INT(9) NOT NULL,
+-- --------------------------------------------------------
 
-);
-CREATE TABLE carousel_banners (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    image_url VARCHAR(255) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-CREATE TABLE users (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname VARCHAR(50),
-    lastname VARCHAR(50),
-    email VARCHAR(100) UNIQUE,
-    password VARCHAR(255)
-);
+--
+-- Table structure for table `orders`
+--
 
+CREATE TABLE `orders` (
+  `orders_id` int(11) NOT NULL,
+  `cart_id` int(11) DEFAULT NULL,
+  `payment_method` varchar(255) DEFAULT NULL,
+  `date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`orders_id`),
+  ADD KEY `cart_id` (`cart_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `orders_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

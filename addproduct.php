@@ -26,6 +26,14 @@ if (!isset($_SESSION['admin_id'])) {
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
   </head>
   <body>
   <?php include 'header.php';?>
@@ -133,7 +141,6 @@ if (!isset($_SESSION['admin_id'])) {
                           <input type="text" class="form-control" id="size" name="size" placeholder="Enter size" maxlength="50">
                       </div>
                   </div>
-
                   <div class="col-lg-3 col-sm-6 col-12">
                       <div class="form-group">
                           <label for="weight_capacity">Weight Capacity</label>
@@ -142,25 +149,58 @@ if (!isset($_SESSION['admin_id'])) {
                   </div>
 
                   <div class="col-lg-3 col-sm-6 col-12">
-                    <div class="form-group">
-                      <label for="product-image">Product Image</label>
-                      <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
-                    </div>
-                  </div>  
+        <div class="form-group">
+            <label for="product-image">Product Image</label>
+            <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;" accept="image/png, image/jpeg, image/webp">
+            <div class="error" id="file-error"></div>
+        </div>
+    </div>
 
-                <div class="col-lg-3 col-sm-3 col-12">
-                    <div class="form-group">
-                      <label for="glb-file">Product Model</label>
-                      <input type="file" id="glb-file" name="glb-file" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
-                    </div>
-                  </div>
+    <script>
+        document.getElementById('product-image').addEventListener('change', function () {
+            const fileInput = document.getElementById('product-image');
+            const errorDiv = document.getElementById('file-error');
+            const allowedExtensions = ['image/png', 'image/jpeg', 'image/webp'];
+            const file = fileInput.files[0];
+
+            if (file && !allowedExtensions.includes(file.type)) {
+                errorDiv.textContent = 'Invalid file type. Only PNG, JPEG, and WEBP files are allowed.';
+                fileInput.value = ''; // Clear the input
+            } else {
+                errorDiv.textContent = ''; // Clear the error message
+            }
+        });
+    </script>
+
+<div class="col-lg-3 col-sm-6 col-12">
+        <div class="form-group">
+            <label for="glb-file">Product Model</label>
+            <input type="file" id="glb-file" name="glb-file" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;" accept=".glb">
+            <div class="error" id="file-error"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('glb-file').addEventListener('change', function () {
+            const fileInput = document.getElementById('glb-file');
+            const errorDiv = document.getElementById('file-error');
+            const file = fileInput.files[0];
+
+            if (file && file.name.split('.').pop().toLowerCase() !== 'glb') {
+                errorDiv.textContent = 'Invalid file type. Only .glb files are allowed.';
+                fileInput.value = ''; // Clear the input
+            } else {
+                errorDiv.textContent = ''; // Clear the error message
+            }
+        });
+    </script>
 
                   <div class="col-lg-3 col-sm-6 col-12">
                     <div class="form-group">
                       <label for="description">Product Description</label>
-                      <textarea class="form-control" id="description" name="description" placeholder="Enter product description" rows="4"></textarea>
+                      <textarea class="form-control" id="description" name="description" placeholder="Enter product description" maxlength="200" rows="4"></textarea>
                     </div>
-                  </div>       
+                  </div>        
 
                   <div class="col-lg-12">
                     <button type="submit" class="btn btn-submit me-2" name="submit">Submit</button>
@@ -173,7 +213,6 @@ if (!isset($_SESSION['admin_id'])) {
         </div>
       </div>
     </div>
-
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/feather.min.js"></script>
     <script src="assets/js/jquery.slimscroll.min.js"></script>

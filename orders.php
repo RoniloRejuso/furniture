@@ -53,11 +53,7 @@ $result = $conn->query($sql);
                     <h4>Orders List</h4>
                     <h6>Manage your Orders</h6>
                 </div>
-                <div class="page-btn">
-                    <a href="addproduct.php" class="btn btn-added">
-                        <img src="assets/img/icons/plus.svg" alt="img" class="me-1">Add New Product
-                    </a>
-                </div>
+
             </div>
             
             <div class="card">
@@ -65,12 +61,7 @@ $result = $conn->query($sql);
                     <div class="table-top">
                         <div class="search-set">
                             <div class="search-path">
-                                <a class="btn btn-filter" id="filter_search">
-                                    <img src="assets/img/icons/filter.svg" alt="img">
-                                    <span>
-                                        <img src="assets/img/icons/closes.svg" alt="img">
-                                    </span>
-                                </a>
+
                             </div>
                             <div class="search-input">
                                 <a class="btn btn-searchset">

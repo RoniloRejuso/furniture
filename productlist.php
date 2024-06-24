@@ -2,12 +2,6 @@
 session_start();
 include 'dbcon.php';
 
-if (!isset($_SESSION['admin_id'])) {
-    $_SESSION['message'] = "You must log in first";
-    header("Location:login.php");
-    exit();
-}
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

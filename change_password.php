@@ -7,12 +7,14 @@
     <title>Change Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
-<body style="background-color: gray;">
-    <div class="container p-3 border border-5 rounded-3" style="width: 40%; background-color: white;">
+
+<body style="background-color: beige;">
+    <div class="container p-3 border border-5 rounded-3" style="width: 40%; background-color: white; margin-top:130px">
         <h1 class="display-6 text-center p-2 bg-light">
             Change Password
         </h1>
-        <form action="change_password_process.php" method="post" style="background-color: gray; padding: 20px;">
+
+        <form action="change_password_process.php" method="post" style="background-color: gray; padding: 20px; margin-top: 20px;">
             <div class="row mb-3 justify-content-md-center">
                 <label for="inputUsername" class="col-4 col-form-label" style="color: white;">Username</label>
                 <div class="col-lg-auto">

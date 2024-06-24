@@ -1,10 +1,27 @@
 <?php
-$queryTotalPendingNotifications = "SELECT COUNT(*) AS `Total Notification` FROM `orders`";
-$resultTotalPendingNotifications = mysqli_query($conn,$queryTotalPendingNotifications);
-$totalPendingNotificationRow = mysqli_fetch_assoc($resultTotalPendingNotifications);
+session_start();
+$conn = mysqli_connect("localhost", "root", "", "furniture");
 
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
+$session_id = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : null;
+$row = null;
+
+if ($session_id) {
+    $query = mysqli_query($conn, "SELECT * FROM admin WHERE admin_id='$session_id'") or die(mysqli_error($conn));
+    if (mysqli_num_rows($query) > 0) {
+        $row = mysqli_fetch_array($query);
+    }
+}
+
+$queryTotalPendingNotifications = "SELECT COUNT(*) AS TotalNotification FROM orders";
+$resultTotalPendingNotifications = mysqli_query($conn, $queryTotalPendingNotifications);
+$totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_assoc($resultTotalPendingNotifications) : null;
 ?>
+
+
     <div class="main-wrapper">
       <div class="header">
         <div class="header-left active">
@@ -68,31 +85,32 @@ $totalPendingNotificationRow = mysqli_fetch_assoc($resultTotalPendingNotificatio
                 </span>
               </span>
             </a>
+
             <div class="dropdown-menu menu-drop-user">
-              <div class="profilename">
-                <div class="profileset">
-                  <span class="user-img">
-                    <img src="assets/img/profiles/avator1.jpg" alt="">
-                    <span class="status online">
-                    </span>
-                  </span>
-                  <div class="profilesets">
-                  <?php
-                    $query = mysqli_query($conn, "select * from admin where admin_id='$session_id'") or die(mysqli_error($conn));
-                    $row = mysqli_fetch_array($query);
-                    ?>
-                  <h6><?php echo $row['username'];?></h6>
-                  <h5>Admin</h5>
-                  </div>
-                </div>
-                <hr class="m-0">
-                <a class="dropdown-item logout pb-0" href="logout.php">
-                  <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
-                </a>
-              </div>
+    <div class="profilename">
+        <div class="profileset">
+            <span class="user-img">
+                <img src="assets/img/profiles/avator1.jpg" alt="">
+                <span class="status online"></span>
+            </span>
+            <div class="profilesets">
+            <?php if ($row): ?>
+                <h6><?php echo htmlspecialchars($row['username']); ?></h6>
+                <h5>Admin</h5>
+            <?php else: ?>
+                <h6>Unknown User</h6>
+                <h5>Unknown Role</h5>
+            <?php endif; ?>
             </div>
-          </li>
-        </ul>
+        </div>
+        <hr class="m-0">
+        <a class="dropdown-item logout pb-0" href="logout.php">
+            <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
+        </a>
+    </div>
+</div>
+
+
         <div class="dropdown mobile-user-menu">
           <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
           aria-expanded="false">

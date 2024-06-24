@@ -41,7 +41,7 @@ if (isset($_POST['verify_email'])) {
 
     <title>Verification</title>
 
-    <link rel="shortcut icon" href="assets/img/badbunny.jpg">
+    <link rel="shortcut icon" href="assets/img/our home.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
@@ -84,16 +84,27 @@ if (isset($_POST['verify_email'])) {
     #timerDisplay {
             color: white;
         }
+        .image-container {
+            text-align: center;
+            margin-right: 100px; 
+            margin-left: 100px;  
+            margin-top: 50px;    
+            margin-bottom: 50px; 
+        }
+        .text-img {
+            display: block;
+            margin: auto;   
+            max-width: 100%; 
+            height: auto;
+        }
 </style>
 
 <body>
-    <div class="image-container">
-        <img src="assets/img/badbunny-removebg-preview.png" alt="Pic" class="text-img">
+    <div class="image-container" margin-right: 100px;>
+        <img src="assets/img/our home.png" alt="Pic" class="text-img">
     </div>
     <div class="row">
-        <div class="title-header">
-            <h5 style="color: #ffffff">SALES AND INVENTORY MANAGEMENT SYSTEM</h5>
-        </div>
+
     </div>
     <div class="container">
         <div class="row d-flex">
@@ -130,7 +141,7 @@ if (isset($_POST['verify_email'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<
+
 <div id="timerDisplay"></div>
 
 <!-- Resend button -->
@@ -193,8 +204,8 @@ if (isset($_POST['verify_email'])) {
 </script>
 
                     </div>
-                    <div class="card-body bg-light-alt text-center">
-                        <h5 class="text-muted d-none d-sm-inline-block">Bad Bunny SIMS © 2023</h5>
+                    <div class="card-body bg-light-alt text-center" >
+                        <h5  class="text-muted d-none d-sm-inline-block" style="color: black;">Our Home Furniture Shop</h5>
                     </div>
                 </div>
             </div>

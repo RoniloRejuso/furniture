@@ -50,9 +50,9 @@ if (isset($_POST["reset"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
     <style>
-    /* Form container style */
+   
     body {
-            background-color: gray;
+            background-color:  beige;
             margin: 0;
             padding: 0;
         }
@@ -60,13 +60,15 @@ if (isset($_POST["reset"])) {
         max-width: 400px;
         margin: 5px auto;
         padding: 20px;
-        background-color: #f9f9f9;
+        background-color: beige;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border: 5px solid black;
+        margin-top: 200px;
+
     }
 
-    /* Input field style */
+
     .form-container input[type="email"],
     .form-container input[type="submit"] {
         width: 100%;
@@ -77,26 +79,36 @@ if (isset($_POST["reset"])) {
         font-size: 16px;
     }
 
-    /* Submit button style */
+
     .form-container input[type="submit"] {
-        background-color: #007bff;
+        background-color: #ffd698;
         color: white;
         cursor: pointer;
         transition: background-color 0.3s;
     }
 
     .form-container input[type="submit"]:hover {
-        background-color: #0056b3;
+        background-color:  #ffd698;
     }
+    
+  .short-email-input {
+    width: 200px;
+  }
+
 </style>
 </head>
 <body>
-<div class="form-container" style="background-color: gray; padding: 20px;">
-    <h1 style="color: white;">RESET PASSWORD</h1>
-    <form method="POST">
-        <input type="email" maxlength="60" name="email" placeholder="Enter email" required />
-        <input type="submit" name="reset" value="Reset" style="background-color: red; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">
-    </form>
+<div class="form-container" style="background-color: lightgray; padding: 20px; width: 600px; height: 200px;">
+    <h1 style="color: black;">RESET PASSWORD</h1>
+    
+    <form method="POST" style="width: 250px; height: 50px; text-align: center;">
+    <input type="email" maxlength="60" name="email" placeholder="Enter email" required class="short-email-input" />
+    <input type="submit" name="reset" value="Reset" style="background-color: red; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 60px;">
+</form>
+
+
+
+
 </div>
 
 </body>

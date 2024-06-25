@@ -2,12 +2,6 @@
 session_start();
 include 'dbcon.php';
 
-if (!isset($_SESSION['admin_id'])) {
-    $_SESSION['message'] = "You must log in first";
-    header("Location:login.php");
-    exit();
-}
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -15,7 +9,7 @@ if ($conn->connect_error) {
 if (isset($_GET['delete_id'])) {
     $product_id = $_GET['delete_id'];
 
-    $delete_query = "DELETE FROM products WHERE product_id = $product_id";
+    $delete_query = "DELETE FROM orders WHERE product_id = $product_id";
 
     if (mysqli_query($conn, $delete_query)) {
         header("Location: productlist.php");
@@ -25,7 +19,7 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-$sql = "SELECT *, IF(quantity = 0, 'Unavailable', status) AS status FROM products";
+$sql = "SELECT *, IF(quantity = 0, 'Unavailable', status) AS status FROM orders";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -59,11 +53,7 @@ $result = $conn->query($sql);
                     <h4>Orders List</h4>
                     <h6>Manage your Orders</h6>
                 </div>
-                <div class="page-btn">
-                    <a href="addproduct.php" class="btn btn-added">
-                        <img src="assets/img/icons/plus.svg" alt="img" class="me-1">Add New Product
-                    </a>
-                </div>
+
             </div>
             
             <div class="card">
@@ -71,12 +61,7 @@ $result = $conn->query($sql);
                     <div class="table-top">
                         <div class="search-set">
                             <div class="search-path">
-                                <a class="btn btn-filter" id="filter_search">
-                                    <img src="assets/img/icons/filter.svg" alt="img">
-                                    <span>
-                                        <img src="assets/img/icons/closes.svg" alt="img">
-                                    </span>
-                                </a>
+
                             </div>
                             <div class="search-input">
                                 <a class="btn btn-searchset">
@@ -94,54 +79,67 @@ $result = $conn->query($sql);
                             </ul>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table datanew">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th>
-                                    <th>Product ID</th>
-                                    <th>Product Name</th>
-                                    <th>Status</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Image</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>
-                                                <label class="checkboxs">
-                                                    <input type="checkbox">
-                                                    <span class="checkmarks"></span>
-                                                </label>
-                                              </td>';
-                                        echo '<td>' . $row["product_id"] . '</td>';
-                                        echo '<td>' . $row["product_name"] . '</td>';
-                                        echo '<td>' . $row["status"] . '</td>';
-                                        echo '<td>' . $row["price"] . '</td>';
-                                        echo '<td>' . $row["quantity"] . '</td>';
-                                        echo '<td><img src="' . $row["product_image"] . '" alt="Product Image" width="50"></td>';
-                                        echo '<td>
-                                                <a href="?delete_id=' . $row["product_id"] . '">Delete</a>
-                                              </td>';
-                                        echo '</tr>';
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='8'>0 results</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "furniture");
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+$query = "SELECT * FROM orders";
+
+$result = mysqli_query($conn, $query);
+?>
+
+<div class="table-responsive">
+    <table class="table datanew">
+        <thead>
+            <tr>
+                <th>
+                    <label class="checkboxs">
+                        <input type="checkbox" id="select-all">
+                        <span class="checkmarks"></span>
+                    </label>
+                </th>
+                <th>Orders ID</th>
+                <th>Payment</th>
+                <th>Card_ID</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if ($result) {
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<tr>';
+                        echo '<td>
+                                <label class="checkboxs">
+                                    <input type="checkbox">
+                                    <span class="checkmarks"></span>
+                                </label>
+                              </td>';
+                        echo '<td>' . htmlspecialchars($row["orders_id"]) . '</td>';
+                        echo '<td>' . htmlspecialchars($row["payment_method"]) . '</td>';
+                        echo '<td>' . htmlspecialchars($row["cart_id"]) . '</td>';
+                        echo '<td>' . htmlspecialchars($row["date"]) . '</td>';
+                        echo '<td>
+                                <a href="?delete_id=' . htmlspecialchars($row["product_id"]) . '">Delete</a>
+                              </td>';
+                        echo '</tr>';
+                    }
+                } else {
+
+                    echo "<tr><td colspan='6'>No records found.</td></tr>";
+                }
+            } else {
+
+                echo "<tr><td colspan='6'>Error: " . mysqli_error($conn) . "</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
                 </div>
             </div>
         </div>

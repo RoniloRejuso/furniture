@@ -86,7 +86,7 @@ $totalPendingNotificationRow = mysqli_fetch_assoc($resultTotalPendingNotificatio
                   </div>
                 </div>
                 <hr class="m-0">
-                <a class="dropdown-item logout pb-0" href="logout.php">
+                <a class="dropdown-item logout pb-0" href="logout1.php">
                   <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
                 </a>
               </div>

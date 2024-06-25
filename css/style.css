@@ -539,10 +539,6 @@ button {
 .logout-btn .btn {
     width: 100%;
 }
-.custom-logout-btn {
-    background-color: #493A2D;
-    color: #fff;
-}
 
 .user_settings_section {
     padding-top: 50px; /* Adjust top padding as needed */

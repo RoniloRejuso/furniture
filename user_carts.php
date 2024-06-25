@@ -122,7 +122,7 @@ if (isset($_POST['checkout'])) {
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
-            <a href="user_index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
         </nav>
     </div>
 </div>

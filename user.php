@@ -15,8 +15,8 @@ $result = mysqli_query($conn, $query);
 if ($result && mysqli_num_rows($result) > 0) {
     $user = mysqli_fetch_assoc($result);
 } else {
-    // Handle error if user data is not found
     echo "User data not found.";
+    exit();
 }
 ?>
 
@@ -60,7 +60,44 @@ if ($result && mysqli_num_rows($result) > 0) {
         object-fit: cover;
         border-radius: 50%;
         display: none;
+        
     }
+
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    #save_button{
+        background-color: #964B33;
+        border: transparent;
+        color: white;
+        padding: 8px 20px;
+        cursor: pointer;
+        margin-left: 60px;
+    }
+
+    #cancel_button {
+        background-color: #493A2D;
+        border: transparent;
+        color: white;
+        padding: 8px 20px;
+        cursor: pointer;
+        margin-right: 80px;
+    }
+    .custom-logout-btn {
+        background-color: #493A2D;
+        color: #fff;
+    }
+
+    #save_button:hover,
+    #cancel_button,
+    .custom-logout-btn:hover {
+        opacity: 0.7;
+    }
+
 </style>
 <body>
 <?php include 'user_body.php'; ?>
@@ -68,7 +105,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
-            <a href="user_index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
         </nav>
     </div>
 </div>
@@ -77,23 +114,41 @@ if ($result && mysqli_num_rows($result) > 0) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="account-form px-4 py-3" style="margin: 0 auto;">
-                    <div class="profile-section mb-">
-                        <br><br>
+                    <div class="profile-section mb-3">
                         <div class="profile-pic-container">
                             <input type="file" id="profile-image-input" name="profile_picture" accept="image/*" onchange="previewImage(this)" style="display: none;">
                             <label for="profile-image-input" style="cursor: pointer;">
                                 <img id="profile-image-preview" class="profile-pic" src="<?php echo !empty($user['profile_picture']) ? $user['profile_picture'] : 'images/profile-pic.jpg'; ?>" alt="Profile Picture">
-                                <span style="position: absolute; bottom: 5px; right: 5px; background: rgba(255, 255, 255, 0.8); padding: 5px 10px; border-radius: 5px;">Change</span>
                             </label>
                         </div>
                     </div>
-                    <form action="update_settings.php" method="POST" enctype="multipart/form-data" onsubmit="return confirmSaveChanges()">
-                        <div class="form-group position-relative">
+                    <form id="user-settings-form" action="update_settings.php" method="POST" enctype="multipart/form-data" onsubmit="return confirmSaveChanges(event)">
+                        <div class="form-group position-relative" id="name-group">
                             <label for="username" class="d-none">Name:</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="username" name="username" value="<?php echo $user['firstname'] . ' ' . $user['lastname']; ?>" readonly>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('username')">Edit</button>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="splitName()">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="split-name-group" style="display: none;">
+                            <div class="form-group position-relative">
+                                <label for="firstname" class="d-none">First Name:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="firstname" name="firstname" pattern="[A-Z a-z ]+" value="<?php echo $user['firstname']; ?>" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('firstname')">Edit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group position-relative">
+                                <label for="lastname" class="d-none">Last Name:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="lastname" name="lastname" pattern="[A-Z a-z ]+" value="<?php echo $user['lastname']; ?>" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('lastname')">Edit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -124,8 +179,11 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success" id="save_button" style="display:none;margin:0 auto;">Save Changes</button>
-                    </form>
+                        <div class="button-container mb-1">
+                            <button type="submit" class="btn btn-success" id="save_button" style="display:none;">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" id="cancel_button" onclick="cancelChanges()" style="display:none;"><i class="fas fa-times"></i></button>
+                        </div>
+                   </form>
                     <div class="logout-btn">
                         <form action="logout.php" method="POST">
                             <button type="submit" class="btn custom-logout-btn">Logout</button>
@@ -141,7 +199,62 @@ if ($result && mysqli_num_rows($result) > 0) {
 function enableEdit(fieldId) {
     var field = document.getElementById(fieldId);
     field.removeAttribute('readonly');
+    
+    // Show save and cancel buttons
     document.getElementById("save_button").style.display = "block";
+    document.getElementById("cancel_button").style.display = "block";
+}
+
+function cancelChanges() {
+    var username = document.getElementById('username');
+    var firstname = document.getElementById('firstname');
+    var lastname = document.getElementById('lastname');
+    var email = document.getElementById('email');
+    var contact = document.getElementById('contact');
+    var address = document.getElementById('address');
+    
+    // Reset fields to original values
+    username.value = "<?php echo $user['firstname'] . ' ' . $user['lastname']; ?>";
+    firstname.value = "<?php echo $user['firstname']; ?>";
+    lastname.value = "<?php echo $user['lastname']; ?>";
+    email.value = "<?php echo $user['email']; ?>";
+    contact.value = "<?php echo $user['phone_number']; ?>";
+    address.value = "<?php echo $user['address']; ?>";
+
+    // Disable edit mode and hide save/cancel buttons
+    document.getElementById("save_button").style.display = "none";
+    document.getElementById("cancel_button").style.display = "none";
+    document.getElementById("split-name-group").style.display = "none";
+    document.getElementById("name-group").style.display = "block";
+    document.getElementById("firstname").setAttribute('readonly', 'readonly');
+    document.getElementById("lastname").setAttribute('readonly', 'readonly');
+    document.getElementById("email").setAttribute('readonly', 'readonly');
+    document.getElementById("contact").setAttribute('readonly', 'readonly');
+    document.getElementById("address").setAttribute('readonly', 'readonly');
+}
+
+
+function splitName() {
+    var username = document.getElementById('username');
+    var nameGroup = document.getElementById('name-group');
+    var splitNameGroup = document.getElementById('split-name-group');
+    var fullName = username.value.split(' ');
+    var firstName = fullName.slice(0, -1).join(' ');
+    var lastName = fullName.slice(-1).join(' ');
+
+    document.getElementById('firstname').value = firstName;
+    document.getElementById('lastname').value = lastName;
+    
+    nameGroup.style.display = 'none';
+    splitNameGroup.style.display = 'block';
+    enableEdit('firstname');
+    enableEdit('lastname');
+}
+
+function combineNames() {
+    var firstName = document.getElementById('firstname').value;
+    var lastName = document.getElementById('lastname').value;
+    document.getElementById('username').value = firstName + ' ' + lastName;
 }
 
 function previewImage(input) {
@@ -164,10 +277,24 @@ function previewImage(input) {
     }
 }
 
-function confirmSaveChanges() {
-    return confirm('Are you sure you want to save the changes?');
+function confirmSaveChanges(event) {
+    event.preventDefault(); // Prevent default form submission
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to save the changes?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#964B33',
+        cancelButtonColor: '#493A2D',
+        confirmButtonText: 'Save Changes'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            combineNames(); // Combine the names before submitting the form
+            document.getElementById('user-settings-form').submit(); // Submit the form
+        }
+    });
 }
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

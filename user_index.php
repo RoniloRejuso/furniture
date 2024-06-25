@@ -37,7 +37,7 @@
         <div class="product_section_2 layout_padding">
             <div class="row">
                     <?php
-                    include "dbcon.php";
+                    include ('dbcon.php');
 
                     $sql = "SELECT * FROM products LIMIT 8";
                     $result = mysqli_query($conn, $sql);
@@ -68,7 +68,7 @@
                             </a>
                         </div>
                     <?php } ?>
-                </div><br><br>
+                </div><br>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <a href="user_prod.php" class="btn" style="background-color: #964B33;color:#fff; width: 250px; margin:0 auto;">See More</a> <!-- Linking to user_prod.php -->

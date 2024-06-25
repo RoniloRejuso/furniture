@@ -1,13 +1,10 @@
 <?php
-include 'dbcon.php'; // Include your database connection file
+include 'dbcon.php';
 
-// Handle POST request to add product to cart
 if(isset($_POST['add_to_cart'])) {
-    // Sanitize and retrieve POST data
     $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
-    $product_quantity = 1; // Default quantity, adjust as needed
+    $product_quantity = 1;
 
-    // Fetch product details from products table using JOIN
     $fetch_product_query = "SELECT p.product_name, p.product_image, p.price
                             FROM products p
                             WHERE p.product_id = '$product_id'";
@@ -17,8 +14,7 @@ if(isset($_POST['add_to_cart'])) {
     if(mysqli_num_rows($result) > 0) {
         $product = mysqli_fetch_assoc($result);
 
-        // Retrieve or create cart ID (replace with actual user logic)
-        $user_id = 1; // Replace with actual user ID logic
+        $user_id = 1;
 
         $select_cart_id = mysqli_query($conn, "SELECT cart_id FROM cart WHERE user_id = '$user_id'");
         if(mysqli_num_rows($select_cart_id) > 0) {
@@ -34,11 +30,9 @@ if(isset($_POST['add_to_cart'])) {
             }
         }
 
-        // Calculate amount (assuming price is fetched from products table)
         $price = $product['price'];
         $amount = $price * $product_quantity;
 
-        // Insert into cart_items table
         $insert_cart_item = mysqli_query($conn, "INSERT INTO cart_items (cart_id, product_id, quantity, amount) 
                                                  VALUES ('$cart_id', '$product_id', '$product_quantity', '$amount')");
 

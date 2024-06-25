@@ -43,11 +43,9 @@ class ARButton {
             async function onSessionStarted(session) {
                 session.addEventListener('end', onSessionEnded);
 
-                // Configure renderer
                 renderer.xr.setReferenceSpaceType('local');
                 await renderer.xr.setSession(session);
 
-                // Update button state
                 button.textContent = 'STOP AR';
                 button.style.background = '#493A2D';
                 sessionInit.domOverlay.root.style.display = '';
@@ -59,13 +57,34 @@ class ARButton {
             function onSessionEnded() {
                 currentSession.removeEventListener('end', onSessionEnded);
 
-                // Change button appearance and text back to START AR
                 button.textContent = 'START AR';
                 button.style.background = '#964B33';
                 sessionInit.domOverlay.root.style.display = 'none';
 
                 currentSession = null;
                 isARSessionActive = false;
+
+                // Automatically refresh the page after stopping AR
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000); // Refresh after 1 second (adjust timing as needed)
+            }
+
+            function createBackButton() {
+                const backButton = document.createElement('button');
+                backButton.textContent = 'Back';
+                backButton.style.position = 'absolute';
+                backButton.style.bottom = '20px';
+                backButton.style.left = '20px';
+                backButton.style.padding = '10px';
+                backButton.style.background = '#333';
+                backButton.style.color = '#fff';
+                backButton.style.border = 'none';
+                backButton.style.cursor = 'pointer';
+                backButton.addEventListener('click', function () {
+                    window.history.back(); // Navigate back in history
+                });
+                document.body.appendChild(backButton);
             }
 
             button.style.display = '';
@@ -87,7 +106,6 @@ class ARButton {
 
             button.onclick = function () {
                 if (isARSessionActive) {
-                    // Change UI without ending session
                     onSessionEnded();
                 } else {
                     navigator.xr
@@ -121,7 +139,7 @@ class ARButton {
             element.style.bottom = '20px';
             element.style.padding = '12px 6px';
             element.style.border = 'transparent';
-            element.style.borderRadius = '4px';
+            element.style.borderRadius = '5px';
             element.style.background = '#964B33';
             element.style.color = '#fff';
             element.style.font = 'normal 13px sans-serif';

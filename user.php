@@ -136,7 +136,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <div class="form-group position-relative">
                                 <label for="firstname" class="d-none">First Name:</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="firstname" name="firstname" pattern="[A-Z a-z ]+" value="<?php echo $user['firstname']; ?>" readonly>
+                                    <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $user['firstname']; ?>" readonly>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('firstname')">Edit</button>
                                     </div>
@@ -145,7 +145,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <div class="form-group position-relative">
                                 <label for="lastname" class="d-none">Last Name:</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="lastname" name="lastname" pattern="[A-Z a-z ]+" value="<?php echo $user['lastname']; ?>" readonly>
+                                    <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $user['lastname']; ?>" readonly>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('lastname')">Edit</button>
                                     </div>
@@ -199,7 +199,10 @@ if ($result && mysqli_num_rows($result) > 0) {
 function enableEdit(fieldId) {
     var field = document.getElementById(fieldId);
     field.removeAttribute('readonly');
-    
+    // Trim leading and trailing spaces
+    if (fieldId === 'firstname' || fieldId === 'lastname') {
+        field.value = field.value.trim();
+    }
     // Show save and cancel buttons
     document.getElementById("save_button").style.display = "block";
     document.getElementById("cancel_button").style.display = "block";
@@ -214,12 +217,12 @@ function cancelChanges() {
     var address = document.getElementById('address');
     
     // Reset fields to original values
-    username.value = "<?php echo $user['firstname'] . ' ' . $user['lastname']; ?>";
-    firstname.value = "<?php echo $user['firstname']; ?>";
-    lastname.value = "<?php echo $user['lastname']; ?>";
-    email.value = "<?php echo $user['email']; ?>";
-    contact.value = "<?php echo $user['phone_number']; ?>";
-    address.value = "<?php echo $user['address']; ?>";
+    username.value = "<?php echo htmlspecialchars($user['firstname'] . ' ' . $user['lastname']); ?>";
+    firstname.value = "<?php echo htmlspecialchars($user['firstname']); ?>";
+    lastname.value = "<?php echo htmlspecialchars($user['lastname']); ?>";
+    email.value = "<?php echo htmlspecialchars($user['email']); ?>";
+    contact.value = "<?php echo htmlspecialchars($user['phone_number']); ?>";
+    address.value = "<?php echo htmlspecialchars($user['address']); ?>";
 
     // Disable edit mode and hide save/cancel buttons
     document.getElementById("save_button").style.display = "none";
@@ -233,6 +236,39 @@ function cancelChanges() {
     document.getElementById("address").setAttribute('readonly', 'readonly');
 }
 
+function confirmSaveChanges(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Validate first name and last name
+    var firstname = document.getElementById('firstname').value.trim();
+    var lastname = document.getElementById('lastname').value.trim();
+
+    if (firstname === '' || lastname === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please enter both first name and last name!',
+        });
+        return;
+    }
+
+    // Further validations can be added here if needed
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to save the changes?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#964B33',
+        cancelButtonColor: '#493A2D',
+        confirmButtonText: 'Save Changes'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            combineNames(); // Combine the names before submitting the form
+            document.getElementById('user-settings-form').submit(); // Submit the form
+        }
+    });
+}
 
 function splitName() {
     var username = document.getElementById('username');
@@ -244,7 +280,7 @@ function splitName() {
 
     document.getElementById('firstname').value = firstName;
     document.getElementById('lastname').value = lastName;
-    
+
     nameGroup.style.display = 'none';
     splitNameGroup.style.display = 'block';
     enableEdit('firstname');
@@ -275,24 +311,6 @@ function previewImage(input) {
         input.value = '';
         preview.src = "images/profile-pic.jpg";
     }
-}
-
-function confirmSaveChanges(event) {
-    event.preventDefault(); // Prevent default form submission
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "Do you want to save the changes?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#964B33',
-        cancelButtonColor: '#493A2D',
-        confirmButtonText: 'Save Changes'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            combineNames(); // Combine the names before submitting the form
-            document.getElementById('user-settings-form').submit(); // Submit the form
-        }
-    });
 }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

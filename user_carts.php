@@ -63,6 +63,10 @@ if (isset($_POST['checkout'])) {
     .btn {
         display: flex;
         justify-content: center;
+        background-color: #964B33;
+        color:#fff; 
+        width: 250px;
+        margin: 0 auto;
     }
 
     .cart-item1 {
@@ -71,13 +75,17 @@ if (isset($_POST['checkout'])) {
         padding: 20px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
         background-color: #FFF6EB;
-        width: 350px;
+        width: 300px;
         height: 250px;
         margin: 0 auto;
     }
 
     /* Mobile view adjustments */
-    @media (max-width: 768px) {
+    @media (max-width: 320px) {
+        .btn {
+            width: 100%;
+
+        }
         .cart-item1 {
             width: 100%;
             height: auto;
@@ -171,7 +179,7 @@ if (isset($_POST['checkout'])) {
                     <div class="cart-total">
                         <p><b>Total Amount: ₱ <span id="total_amount"><?php echo number_format($grand_total, 2); ?></span></b></p>
                         <div class="checkout-btn">
-                            <button type="button" class="btn" name="checkout" style="background-color: #964B33;color:#fff; width: 330px;margin: 0 auto;" onclick="confirmCheckout()" <?php echo $item_count == 0 ? 'disabled' : ''; ?>>Checkout</button>
+                            <button type="button" class="btn" name="checkout" onclick="confirmCheckout()" <?php echo $item_count == 0 ? 'disabled' : ''; ?>>Checkout</button>
                         </div>
                     </div>
                     <?php
@@ -180,7 +188,7 @@ if (isset($_POST['checkout'])) {
                     echo '<div class="product-box">';
                     echo '<img src="png/cart.png" alt="Cart Icon" style="width: 100px; margin-bottom: 20px;">';
                     echo '<div><b>No items in cart.</b></div><br>';
-                    echo '<div><a href="user_prod.php" class="btn" style="background-color: #964B33;color:#fff; width: 300px; margin:0 auto;">Browse Products</a></div>';
+                    echo '<div><a href="user_prod.php" class="btn">Browse Products</a></div>';
                     echo '</div>';
                     echo '</div>';
                 }

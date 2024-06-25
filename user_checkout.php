@@ -16,7 +16,6 @@ if (!isset($_SESSION['email'])) {
 
 $email = $_SESSION['email'];
 
-// Fetch the user's details from the database
 $user_query = mysqli_query($conn, "SELECT user_id, firstname, lastname, address, phone_number FROM users WHERE email = '$email'");
 if (mysqli_num_rows($user_query) == 0) {
     die('User not found in the database.');

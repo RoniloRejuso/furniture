@@ -184,8 +184,8 @@ if(isset($_GET['product_id'])) {
                             <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
                             <input type="hidden" name="product_image" value="<?php echo $product['product_image']; ?>">
                             <div class="button-container">
-                                <input type="button" class="btn btn-view-ar" value="View in AR" onclick="viewInAR()">
-                                <input type="submit" class="btn btn-add-to-cart" value="Add to cart" name="add_to_cart" onclick="checkStock(event)">
+                            <input type="button" class="btn btn-view-ar" value="View in AR" onclick="viewInAR(<?php echo $product['product_id']; ?>)">
+                            <input type="submit" class="btn btn-add-to-cart" value="Add to cart" name="add_to_cart" onclick="checkStock(event)">
                             </div>
                         </form>
                     </div>
@@ -311,9 +311,10 @@ if(isset($_GET['product_id'])) {
             }
         }
 
-        function viewInAR() {
-            window.location.href = 'ar.php';
-        }
+        function viewInAR(productId) {
+        window.location.href = 'ar1.php?product_id=' + encodeURIComponent(productId);
+    }
+
 
         function checkStock(event) {
             var quantity = document.getElementById('product_quantity').value;

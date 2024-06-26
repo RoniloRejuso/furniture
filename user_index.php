@@ -3,10 +3,10 @@
 <head>
 <?php include 'user_header.php'; ?>
 <style>
-        .btn {
-             display: flex;
-            justify-content: center;       
-        }
+    .btn {
+        display: flex;
+        justify-content: center;       
+    }
 
     .product-name {
         float: left;
@@ -56,12 +56,12 @@
                     mysqli_close($conn);
                     ?>
                     <?php foreach ($products as $product) { ?>
-                        <div class="col-lg-3 col-sm-6">
+                        <div class="col-lg-3 col-sm-1">
                             <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">
-                                        <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
+                                        <h4 class="product-name" style="margin-left: 5px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
                                         <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>
                                     </div>
                                 </div>

@@ -702,21 +702,31 @@ button {
 }
 
 .product_box {
-    width: 100%;
+    width: 200px;
     background-color: #fff6eb;
-    height: 350px;
+    height: 250px;
     border-radius: 5px;
     border: 1px solid #fff6eb;
-    padding: 0px 0px 20px 0px;
-    margin-top: 30px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    padding: 0px 0px 10px 0px;
+    margin-top: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+.image_1 {
+    width: 200px;
+    text-align: center;
+    margin: 10px 0px;
+    padding: 0px 10px;
+    height: 100px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 320px) {
     .product_box {
-        width: 300px; /* Adjust width for mobile view (50% of viewport width minus margins) */
-        height: 350px;
-        margin: 10px 0px 10px 15px;/* Add margin to create space between boxes */
+        width: 100%;
+        height: 200px;
+        margin: 10px 0px 10px 10px;
+    }
+    .image_1 {
+        width: 100%;
     }
 }
 .bursh_text {
@@ -727,14 +737,6 @@ button {
     font-weight: 600;
 }
 
-
-.image_1 {
-    width: 100%;
-    text-align: center;
-    margin: 20px 0px;
-    padding: 0px 20px;
-    height: 200px;
-}
 
 .btn_main {
     width: 100%;
@@ -778,7 +780,7 @@ button {
 .price_text {
     font-size: 16px;
     color: #fefefd;
-    width: 42%;
+    width: 20%;
     padding-top: 5px;
     text-align: right;
 }

@@ -53,7 +53,7 @@
                 <div class="logcontrol-group">
                     <label class="logcontrol-label" for="inputUsername"></label>
                     <div class="logcontrols">
-                        <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
+                        <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="10" required>
                     </div>
                 </div>
                 <div class="logcontrol-group">

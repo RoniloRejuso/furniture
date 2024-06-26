@@ -87,27 +87,20 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
             </a>
 
             <div class="dropdown-menu menu-drop-user">
-              <div class="profilename">
-                <div class="profileset">
-                  <span class="user-img">
-                    <img src="assets/img/profiles/avator1.jpg" alt="">
-                    <span class="status online">
-                    </span>
-                  </span>
-                  <div class="profilesets">
-                  <?php
-                    $query = mysqli_query($conn, "select * from admin where admin_id='$session_id'") or die(mysqli_error($conn));
-                    $row = mysqli_fetch_array($query);
-                    ?>
-                  <h6><?php echo $row['username'];?></h6>
-                  <h5>Admin</h5>
-                  </div>
-                </div>
-                <hr class="m-0">
-                <a class="dropdown-item logout pb-0" href="logout1.php">
-                  <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
-                </a>
-              </div>
+    <div class="profilename">
+        <div class="profileset">
+            <span class="user-img">
+                <img src="assets/img/profiles/avator1.jpg" alt="">
+                <span class="status online"></span>
+            </span>
+            <div class="profilesets">
+            <?php if ($row): ?>
+                <h6><?php echo htmlspecialchars($row['username']); ?></h6>
+                <h5>Admin</h5>
+            <?php else: ?>
+                <h6>Unknown User</h6>
+                <h5>Unknown Role</h5>
+            <?php endif; ?>
             </div>
         </div>
         <hr class="m-0">

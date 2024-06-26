@@ -23,7 +23,7 @@ if (isset($_POST["reset"])) {
         $mail->Password = 'ecae dvfi mhpi aozw';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
-        $mail->setFrom('rejusocute101@gmail.com', 'Our Home');
+        $mail->setFrom('rejusocute101@gmail.com', 'BADBUNNY');
         $mail->addAddress($email);
         $mail->isHTML(true);
 

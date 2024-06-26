@@ -86,7 +86,7 @@ if(isset($_POST['submit1'])) {
                 <div class="logcontrol-group">
                     <label class="logcontrol-label" for="inputUsername"></label>
                     <div class="logcontrols">
-                        <input type="text" name="username" placeholder="Enter Username" maxlength="10" required>
+                        <input type="text" name="username" placeholder="Enter Username" maxlength="50" required>
                     </div>
                 </div>
                 <div class="logcontrol-group">
@@ -97,21 +97,21 @@ if(isset($_POST['submit1'])) {
                 </div>
                 
                 <div class="logcontrol-group">
-                    <label class="logcontrol-label" for="inputPassword"></label>
-                    <div class="logcontrols">
-                    <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
-                    </div>
-                </div>
+    <label class="logcontrol-label" for="inputPassword"></label>
+    <div class="logcontrols">
+    <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+    </div>
+</div>
 
-                <div class="logcontrol-group">
-                    <label class="logcontrol-label" for="confirmPassword"></label>
-                    <div class="logcontrols">
-                    <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" maxlength="10" required>
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword')"></i>
-                        <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
-                    </div>
-                </div>
+<div class="logcontrol-group">
+    <label class="logcontrol-label" for="confirmPassword"></label>
+    <div class="logcontrols">
+    <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" maxlength="10" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword')"></i>
+        <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
+    </div>
+</div>
                 
                 <?php if(isset($error)): ?>
                     <div class="alert alert-danger" style="color: red;"><strong>Error:</strong> <?php echo $error; ?></div>

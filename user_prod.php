@@ -69,7 +69,7 @@ include 'user_body1.php';
                         <div class="product_box">
                             <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                             <div class="product-info">
-                                <h4 class="product-name" style="margin-left: 20px;">
+                                <h4 class="product-name" style="margin-left: 5px;">
                                     <b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b>
                                 </h4>
                                 <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>

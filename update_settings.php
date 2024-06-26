@@ -4,6 +4,15 @@ include 'dbcon.php';
 
 $user_id = 1; // Adjust this as needed
 
+// Fetch existing user data
+$result = mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id");
+$user = mysqli_fetch_assoc($result);
+
+if (!$user) {
+    echo "User not found.";
+    exit();
+}
+
 // Validate and sanitize input
 $username = mysqli_real_escape_string($conn, $_POST['username']);
 $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -46,7 +55,7 @@ if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 
 $query = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', email = '$email', phone_number = '$contact', address = '$address', profile_picture = '$profile_picture' WHERE user_id = $user_id";
 
 if (mysqli_query($conn, $query)) {
-    header("Location: user_settings.php");
+    header("Location: user.php");
     exit();
 } else {
     echo "Error updating record: " . mysqli_error($conn);

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markerless AR with Three.js and WebXR</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            height: 100vh;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+            background: white;
+            padding: 5px;
+        }
+        #sidebar {
+            width: 200px;
+            background: white;
+            padding: 10px;
+            overflow-y: auto;
+            z-index: 1;
+            height: 100vh; /* Ensure the sidebar takes the full height */
+        }
+        #sidebar img {
+            width: 100%;
+            height: auto;
+            cursor: grab;
+            display: block;
+            margin-bottom: 10px;
+        }
+        #ar-container {
+            flex-grow: 1;
+            position: relative;
+            cursor: crosshair;
+        }
+        #controls {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            top: 250px;
+        }
+        .control-button {
+            font-size: 24px;
+            margin: -5px;
+            padding: 10px;
+            background: white;
+            border: 1px solid black;
+            cursor: pointer;
+            
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/webxr/ARButton.js"></script>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <div id="ar-container">
+        <div id="info">Drag an image to place a 3D object.</div>
+        <div id="controls" >
+            <!-- Buttons for adjusting object size -->
+            <button id="increase-size" class="control-button">image +</button>
+            <button id="decrease-size" class="control-button">image -</button>
+            <button id="rotate-left" class="control-button">&#8634;</button>
+            <button id="rotate-right" class="control-button">&#8635;</button>
+            
+            <!-- Buttons for adjusting camera size (FOV) -->
+            <button id="increase-camera-size" class="control-button">Camera -</button>
+            <button id="decrease-camera-size" class="control-button">Camera +</button>
+        </div>
+    </div>
+    <script>
+        fetch('indexing.php')
+            .then(response => response.json())
+            .then(data => {
+                const sidebar = document.getElementById('sidebar');
+                data.forEach(product => {
+                    const productDiv = document.createElement('div');
+                    const productImg = document.createElement('img');
+                    productImg.src = product.product_image;
+                    productImg.alt = product.product_name;
+                    productImg.draggable = true;
+                    productImg.dataset.name = product.product_name;
+                    productImg.dataset.image = product.product_image;
+
+                    const productName = document.createElement('h3');
+                    productName.textContent = product.product_name;
+                    const productQuantity = document.createElement('p');
+                    productQuantity.textContent = `Quantity: ${product.quantity}`;
+
+                    productDiv.appendChild(productName);
+                    productDiv.appendChild(productImg);
+                    productDiv.appendChild(productQuantity);
+                    sidebar.appendChild(productDiv);
+
+                    productImg.addEventListener('dragstart', function (event) {
+                        event.dataTransfer.setData('text/plain', JSON.stringify({
+                            name: product.product_name,
+                            image: product.product_image
+                        }));
+                    });
+                });
+            });
+
+        let scene, camera, renderer;
+        let video, videoTexture;
+        let objects = [];
+        let selectedObject = null;
+        let draggingObject = false;
+        let mouse = new THREE.Vector2();
+        let raycaster = new THREE.Raycaster();
+
+        let rotateInterval;
+
+        init();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, (window.innerWidth - 200) / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth - 200, window.innerHeight); // Adjust width for sidebar
+            document.getElementById('ar-container').appendChild(renderer.domElement);
+
+            video = document.createElement('video');
+            video.autoplay = true;
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                });
+
+            videoTexture = new THREE.VideoTexture(video);
+            const videoMaterial = new THREE.MeshBasicMaterial({ map: videoTexture });
+
+            const planeGeometry = new THREE.PlaneGeometry(16, 9);
+            planeGeometry.scale(0.5, 0.5, 0.5);
+            const plane = new THREE.Mesh(planeGeometry, videoMaterial);
+            scene.add(plane);
+
+            document.addEventListener('dragover', onDocumentDragOver, false);
+            document.addEventListener('drop', onDocumentDrop, false);
+            document.addEventListener('mousedown', onDocumentMouseDown, false);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            document.addEventListener('mouseup', onDocumentMouseUp, false);
+
+            document.getElementById('increase-size').addEventListener('click', () => adjustObjectSize(1.1));
+            document.getElementById('decrease-size').addEventListener('click', () => adjustObjectSize(0.9));
+            document.getElementById('rotate-left').addEventListener('mousedown', () => startRotateObject(-0.1));
+            document.getElementById('rotate-left').addEventListener('mouseup', stopRotateObject);
+            document.getElementById('rotate-left').addEventListener('mouseleave', stopRotateObject);
+            document.getElementById('rotate-right').addEventListener('mousedown', () => startRotateObject(0.1));
+            document.getElementById('rotate-right').addEventListener('mouseup', stopRotateObject);
+            document.getElementById('rotate-right').addEventListener('mouseleave', stopRotateObject);
+
+            // Event listeners for camera size adjustments
+            document.getElementById('increase-camera-size').addEventListener('click', () => adjustCameraSize(1.1));
+            document.getElementById('decrease-camera-size').addEventListener('click', () => adjustCameraSize(0.9));
+        }
+
+        function onDocumentDragOver(event) {
+            event.preventDefault();
+        }
+
+        function onDocumentDrop(event) {
+            event.preventDefault();
+
+            const productData = JSON.parse(event.dataTransfer.getData('text/plain'));
+            const textureLoader = new THREE.TextureLoader();
+            
+            textureLoader.load(productData.image, function(texture) {
+                const geometry = new THREE.PlaneGeometry(1, 1);
+                const material = new THREE.MeshBasicMaterial({ map: texture });
+                const imagePlane = new THREE.Mesh(geometry, material);
+
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = (event.clientX - rect.left) / rect.width * 2 - 1;
+                mouse.y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(scene.children, true);
+
+                if (intersects.length > 0) {
+                    const intersect = intersects[0];
+                    imagePlane.position.copy(intersect.point);
+                    imagePlane.position.z = 0; 
+                } else {
+                    imagePlane.position.set(mouse.x * 5, mouse.y * 5, 0);
+                }
+
+                imagePlane.userData.isSelectable = true;
+                scene.add(imagePlane);
+                objects.push(imagePlane);
+                selectObject(imagePlane);
+            });
+        }
+
+        function onDocumentMouseDown(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = (event.clientX - rect.left) / rect.width * 2 - 1;
+            mouse.y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(objects);
+
+            if (intersects.length > 0) {
+                const intersect = intersects[0];
+                selectObject(intersect.object);
+                draggingObject = true;
+            }
+        }
+
+        function onDocumentMouseMove(event) {
+            if (!draggingObject) return;
+
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = (event.clientX - rect.left) / rect.width * 2 - 1;
+            mouse.y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+
+            if (intersects.length > 0) {
+                const intersect = intersects[0];
+                selectedObject.position.copy(intersect.point);
+                selectedObject.position.z = 0;
+            } else {
+                selectedObject.position.set(mouse.x * 5, mouse.y * 5, 0);
+            }
+        }
+
+        function onDocumentMouseUp(event) {
+            draggingObject = false;
+        }
+
+        function selectObject(object) {
+            selectedObject = object;
+        }
+
+        function adjustObjectSize(scaleFactor) {
+            if (selectedObject) {
+                selectedObject.scale.multiplyScalar(scaleFactor);
+            }
+        }
+
+        function rotateObject(angle) {
+            if (selectedObject) {
+                selectedObject.rotation.z += angle;
+            }
+        }
+
+        function startRotateObject(angle) {
+            if (rotateInterval) clearInterval(rotateInterval);
+            rotateInterval = setInterval(() => rotateObject(angle), 50);
+        }
+
+        function stopRotateObject() {
+            if (rotateInterval) clearInterval(rotateInterval);
+        }
+
+        function adjustCameraSize(scaleFactor) {
+            camera.fov *= scaleFactor;
+            camera.updateProjectionMatrix();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (video.readyState >= video.HAVE_CURRENT_DATA) {
+                videoTexture.needsUpdate = true;
+            }
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const width = window.innerWidth - 200; // Adjust width for sidebar and controls
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        }
+
+        window.addEventListener('resize', onWindowResize);
+    </script>
+</body>
+</html>

@@ -1,16 +1,10 @@
 <?php
-// Assuming your database connection details
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "furniture";
-
-// Create connection
-$db = new mysqli($servername, $username, $password, $dbname);
+include ('dbcon.php');
+$conn = mysqli_connect($servername, $username, $password, $database);
 
 // Check connection
-if ($db->connect_error) {
-    die("Connection failed: " . $db->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -24,9 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssss", $firstname, $lastname, $email, $hashed_password);
 
     if ($stmt->execute()) {
-        // Redirect to login.php after successful registration
         header("Location: user_login.php");
-        exit(); // Make sure to exit after sending the header to prevent further script execution
+        exit();
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -34,5 +27,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 
-$db->close();
+$conn->close();
 ?>

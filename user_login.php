@@ -3,31 +3,39 @@
 <?php
 include 'user_header.php';
 ?>
-<style>
-    .error {
-        border-color: red;
-    }
-    .form-text.text-danger {
-        color: red;
-    }
-    input[type="password"].password-input.invalid {
-        border-color: red !important;
-    }
-    input[type="password"].password-input.valid {
-        border-color: green !important;
-    }
-    .form-group {
-        position: relative;
-    }
-    .toggle-password {
-        position: absolute;
-        top: 75%;
-        right: 15px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        display: none; /* Initially hide the icon */
-    }
-</style>
+<head>
+    <style>
+        .error {
+            border-color: red;
+        }
+        .form-text.text-danger {
+            color: red;
+        }
+        input[type="password"].password-input.invalid {
+            border-color: red !important;
+        }
+        input[type="password"].password-input.valid {
+            border-color: green !important;
+        }
+        .form-group {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 75%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            display: none;
+        }
+        .validation-message {
+            color: red;
+            font-size: 0.875em;
+            display: none;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
 <body>
 <?php
 include 'user_body.php';
@@ -45,11 +53,11 @@ include 'user_body.php';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                     <form id="loginForm" method="POST" action="user_dex.php">
                         <div class="form-group">
                             <label for="email">Email:</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
+                            <div class="validation-message">Please enter a valid email address.</div>
                         </div>
 
                         <div class="form-group">
@@ -78,159 +86,47 @@ include 'user_body.php';
                 </div>
                 <h3 class="signup-modal-title" style="text-align: center;" id="signupModalLabel"><big>Create Account</big></h3>
                 <div class="modal-body">
-
                     <form id="signupForm" method="POST" action="user_dex.php" onsubmit="return validateForm()">
                         <div class="form-group">
                             <label for="firstname">First name:</label>
-                            <input type="text" class="form-control" id="firstname" pattern="[A-Z a-z ]+" name="firstname" placeholder="Enter first name" maxlength="50">
+                            <input type="text" class="form-control" id="firstname" pattern="[A-Z a-z ]+" name="firstname" placeholder="Enter first name" maxlength="20" required>
+                            <div class="validation-message">Please enter a valid first name.</div>
                         </div>
 
                         <div class="form-group">
                             <label for="lastname">Last name:</label>
-                            <input type="text" class="form-control" id="lastname" pattern="[A-Z a-z ]+" name="lastname" placeholder="Enter last name" maxlength="50">
+                            <input type="text" class="form-control" id="lastname" pattern="[A-Z a-z ]+" name="lastname" placeholder="Enter last name" maxlength="20" required>
+                            <div class="validation-message">Please enter a valid last name.</div>
                         </div>
-                        <script>
-                            function validateInput(inputElement) {
-                                var inputValue = inputElement.value.trim();
-                                var parts = inputValue.split(/\s+/);
-                                for (var i = 0; i < parts.length; i++) {
-                                    parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1).toLowerCase();
-                                }
-                                var capitalizedValue = parts.join(' ');
 
-                                inputElement.value = capitalizedValue;
-                            }
-
-                            document.getElementById("firstname").addEventListener("input", function () {
-                                validateInput(this);
-                            });
-
-                            document.getElementById("lastname").addEventListener("input", function () {
-                                validateInput(this);
-                            });
-                        </script>
                         <div class="form-group">
                             <label for="signupEmail">Email:</label>
-                            <input type="email" class="form-control" id="signupEmail" name="email" placeholder="Enter your email" maxlength="50">
+                            <input type="email" class="form-control" id="signupEmail" name="email" placeholder="Enter your email" maxlength="50" required>
+                            <div class="validation-message">Please enter a valid email address.</div>
                         </div>
 
                         <div class="form-group">
                             <label for="signupPassword">Password:</label>
                             <input type="password" class="form-control" id="npassword" name="password" placeholder="Enter your password" maxlength="10" required>
                             <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('npassword')"></i>
+                            <div class="validation-message">Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character.</div>
                         </div>
 
                         <div class="form-group">
                             <label for="signupCPassword">Confirm Password:</label>
                             <input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
                             <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('cpassword')"></i>
+                            <div class="validation-message">Passwords do not match.</div>
                         </div>
 
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
                             <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
+                            <div class="validation-message">You must accept the terms and conditions.</div>
                         </div>
 
                         <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
                     </form>
-
-                    <script>
-                        // Password Validation
-                        function validatePassword(inputElement) {
-                            const passwordValue = inputElement.value;
-                            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*_)[A-Za-z\d_]{8,}$/;
-
-                            if (!passwordRegex.test(passwordValue)) {
-                                inputElement.classList.add('error');
-                            } else {
-                                inputElement.classList.remove('error');
-                            }
-                        }
-
-                        document.getElementById('npassword').addEventListener('input', function () {
-                            validatePassword(this);
-                        });
-
-                        document.getElementById('cpassword').addEventListener('input', function () {
-                            validatePasswords();
-                        });
-
-                        function validatePasswords() {
-                            const password = document.getElementById('npassword').value;
-                            const confirmPassword = document.getElementById('cpassword').value;
-
-                            if (password !== confirmPassword) {
-                                document.getElementById('cpassword').classList.add('error');
-                            } else {
-                                document.getElementById('cpassword').classList.remove('error');
-                            }
-                        }
-
-                        // Email Validation
-                        function validateEmail(inputElement) {
-                            const emailValue = inputElement.value;
-                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                            if (!emailRegex.test(emailValue)) {
-                                inputElement.classList.add('error');
-                            } else {
-                                inputElement.classList.remove('error');
-                            }
-                        }
-
-                        document.getElementById('signupEmail').addEventListener('input', function () {
-                            validateEmail(this);
-                        });
-
-                        function togglePassword(id) {
-                            const passwordField = document.getElementById(id);
-                            const eyeIcon = passwordField.nextElementSibling;
-                            if (passwordField.type === 'password') {
-                                passwordField.type = 'text';
-                                eyeIcon.classList.remove('fa-eye');
-                                eyeIcon.classList.add('fa-eye-slash');
-                            } else {
-                                passwordField.type = 'password';
-                                eyeIcon.classList.remove('fa-eye-slash');
-                                eyeIcon.classList.add('fa-eye');
-                            }
-                        }
-
-                        document.querySelectorAll('input[type="password"]').forEach((passwordField) => {
-                            passwordField.addEventListener('input', function() {
-                                const toggleIcon = passwordField.nextElementSibling;
-                                if (passwordField.value.trim() === '') {
-                                    toggleIcon.style.display = 'none';
-                                } else {
-                                    toggleIcon.style.display = 'block';
-                                }
-                            });
-                        });
-
-                        function validateForm() {
-                            var acceptTermsCheckbox = document.getElementById("acceptTerms");
-                            if (!acceptTermsCheckbox.checked) {
-                                alert("Please accept the terms and privacy policies.");
-                                return false;
-                            }
-
-                            const email = document.getElementById('signupEmail');
-                            const password = document.getElementById('npassword');
-                            const confirmPassword = document.getElementById('cpassword');
-
-                            // Validate email and password before submitting
-                            validateEmail(email);
-                            validatePassword(password);
-
-                            // Check if any field has error class
-                            if (document.querySelectorAll('.error').length > 0) {
-                                alert("Please fix the errors before submitting.");
-                                return false;
-                            }
-
-                            return true;
-                        }
-                    </script>
                 </div>
             </div>
         </div>
@@ -248,32 +144,89 @@ include 'user_body.php';
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 
     <script>
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "360px";
+        function validateInput(inputElement) {
+            // Remove leading spaces
+            inputElement.value = inputElement.value.replace(/^\s+/g, '');
+
+            // Allow only single spaces between words and capitalize each word
+            let inputValue = inputElement.value.trim();
+            let parts = inputValue.split(/\s+/);
+
+            for (let i = 0; i < parts.length; i++) {
+                parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1).toLowerCase();
+            }
+
+            inputElement.value = parts.join(' ');
         }
 
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-        }
+        document.getElementById("firstname").addEventListener("input", function () {
+            validateInput(this);
+        });
 
-        function toggleDropdown() {
-            var dropdownMenu = document.getElementById("furnitureMenu");
-            if (dropdownMenu.style.display === "block") {
-                dropdownMenu.style.display = "none";
+        document.getElementById("lastname").addEventListener("input", function () {
+            validateInput(this);
+        });
+
+        function validatePassword(inputElement) {
+            const passwordValue = inputElement.value;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            const validationMessage = inputElement.nextElementSibling;
+            if (passwordRegex.test(passwordValue)) {
+                inputElement.classList.remove("invalid");
+                inputElement.classList.add("valid");
+                validationMessage.style.display = "none";
             } else {
-                dropdownMenu.style.display = "block";
+                inputElement.classList.remove("valid");
+                inputElement.classList.add("invalid");
+                validationMessage.style.display = "block";
             }
         }
 
-        document.getElementById("password").addEventListener('input', function() {
-            const password = document.getElementById("password").value;
-            const toggleIcon = document.querySelector('.toggle-password');
-            if (password.trim() === '') {
-                toggleIcon.style.display = 'none';
+        document.getElementById("npassword").addEventListener("input", function () {
+            validatePassword(this);
+        });
+
+        document.getElementById("cpassword").addEventListener("input", function () {
+            const npassword = document.getElementById("npassword").value;
+            const cpassword = this.value;
+
+            const validationMessage = this.nextElementSibling;
+            if (npassword === cpassword) {
+                this.classList.remove("invalid");
+                this.classList.add("valid");
+                validationMessage.style.display = "none";
             } else {
-                toggleIcon.style.display = 'block';
+                this.classList.remove("valid");
+                this.classList.add("invalid");
+                validationMessage.style.display = "block";
             }
         });
+
+        function togglePassword(elementId) {
+            const passwordInput = document.getElementById(elementId);
+            const passwordToggle = passwordInput.nextElementSibling;
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                passwordToggle.classList.remove("fa-eye");
+                passwordToggle.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                passwordToggle.classList.remove("fa-eye-slash");
+                passwordToggle.classList.add("fa-eye");
+            }
+        }
+
+        function validateForm() {
+            const acceptTerms = document.getElementById("acceptTerms").checked;
+            if (!acceptTerms) {
+                const validationMessage = document.querySelector("#acceptTerms + .validation-message");
+                validationMessage.style.display = "block";
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>

@@ -29,8 +29,11 @@ include 'user_body1.php';
                <option value="price_desc">Price: High to Low</option>
             </select>
             <select name="filter_by_category" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
-               <option value="all">All Categories</option>
-               <!-- Add other categories dynamically if needed -->
+                    <option value="all">All Categories</option>
+                    <option value="bedroom">Bedroom</option>
+                    <option value="dining_room">Dining Room</option>
+                    <option value="living_room">Living Room</option>
+                    <option value="office">Office</option>
             </select>
          </form>
       </div>

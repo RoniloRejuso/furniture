@@ -28,10 +28,12 @@ if (!isset($_SESSION['admin_id'])) {
     <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
         .error {
             color: red;
-            font-size: 0.9em;
-            margin-top: 5px;
+            font-size: 12px;
         }
     </style>
   </head>
@@ -45,7 +47,6 @@ if (!isset($_SESSION['admin_id'])) {
               <h6>Create new product</h6>
             </div>
           </div>
-          
           <form action="add_prod.php" method="POST" enctype="multipart/form-data">
           <div class="card">
             <div class="card-body">
@@ -151,46 +152,40 @@ if (!isset($_SESSION['admin_id'])) {
                   <div class="col-lg-3 col-sm-6 col-12">
         <div class="form-group">
             <label for="product-image">Product Image</label>
-            <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;" accept="image/png, image/jpeg, image/webp">
-            <div class="error" id="file-error"></div>
+            <input type="file" id="product-image" name="product-image" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
+            <span id="product-image-error" class="error"></span>
         </div>
     </div>
-
-    <script>
-        document.getElementById('product-image').addEventListener('change', function () {
-            const fileInput = document.getElementById('product-image');
-            const errorDiv = document.getElementById('file-error');
-            const allowedExtensions = ['image/png', 'image/jpeg', 'image/webp'];
-            const file = fileInput.files[0];
-
-            if (file && !allowedExtensions.includes(file.type)) {
-                errorDiv.textContent = 'Invalid file type. Only PNG, JPEG, and WEBP files are allowed.';
-                fileInput.value = ''; // Clear the input
-            } else {
-                errorDiv.textContent = ''; // Clear the error message
-            }
-        });
-    </script>
-
-<div class="col-lg-3 col-sm-6 col-12">
+    <div class="col-lg-3 col-sm-6 col-12">
         <div class="form-group">
             <label for="glb-file">Product Model</label>
-            <input type="file" id="glb-file" name="glb-file" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;" accept=".glb">
-            <div class="error" id="file-error"></div>
+            <input type="file" id="glb-file" name="glb-file" style="border: 1px solid #ced4da; border-radius: 4px; padding: 6px 12px;">
+            <span id="glb-file-error" class="error"></span>
         </div>
     </div>
 
-    <script>
-        document.getElementById('glb-file').addEventListener('change', function () {
-            const fileInput = document.getElementById('glb-file');
-            const errorDiv = document.getElementById('file-error');
-            const file = fileInput.files[0];
-
-            if (file && file.name.split('.').pop().toLowerCase() !== 'glb') {
-                errorDiv.textContent = 'Invalid file type. Only .glb files are allowed.';
-                fileInput.value = ''; // Clear the input
+                  <script>
+        document.getElementById('product-image').addEventListener('change', function() {
+            const file = this.files[0];
+            const validImageTypes = ['image/png', 'image/jpeg', 'image/webp'];
+            const errorElement = document.getElementById('product-image-error');
+            if (file && !validImageTypes.includes(file.type)) {
+                errorElement.textContent = 'Invalid file type. Please select a PNG, JPEG, or WebP image.';
+                this.value = '';
             } else {
-                errorDiv.textContent = ''; // Clear the error message
+                errorElement.textContent = '';
+            }
+        });
+
+        document.getElementById('glb-file').addEventListener('change', function() {
+            const file = this.files[0];
+            const validGlbType = 'model/gltf-binary';
+            const errorElement = document.getElementById('glb-file-error');
+            if (file && file.type !== validGlbType) {
+                errorElement.textContent = 'Invalid file type. Please select a GLB file.';
+                this.value = '';
+            } else {
+                errorElement.textContent = '';
             }
         });
     </script>
@@ -198,10 +193,9 @@ if (!isset($_SESSION['admin_id'])) {
                   <div class="col-lg-3 col-sm-6 col-12">
                     <div class="form-group">
                       <label for="description">Product Description</label>
-                      <textarea class="form-control" id="description" name="description" placeholder="Enter product description" maxlength="200" rows="4"></textarea>
+                      <textarea class="form-control" id="description" name="description" placeholder="Enter product description" rows="4"></textarea>
                     </div>
                   </div>        
-
                   <div class="col-lg-12">
                     <button type="submit" class="btn btn-submit me-2" name="submit">Submit</button>
                     <a href="productlist.html" class="btn btn-cancel">Cancel</a>
@@ -213,7 +207,6 @@ if (!isset($_SESSION['admin_id'])) {
         </div>
       </div>
     </div>
-    
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/feather.min.js"></script>
     <script src="assets/js/jquery.slimscroll.min.js"></script>

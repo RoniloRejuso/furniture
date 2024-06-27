@@ -70,11 +70,18 @@ if(isset($_POST['submit1'])) {
         .toggle-password {
             position: absolute;
             top: 43%;
-            right: 50px;
+            right: 100px;
             transform: translateY(-50%);
             cursor: pointer;
         }
 
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
 </style>
 <body>    
     <div class="logcontainer">
@@ -82,84 +89,111 @@ if(isset($_POST['submit1'])) {
             <div class="logo">
                 <h1 class="m-0 text-primary" style="color: #ffd698;">Sign up</h1>
             </div>
-            <form method="post" class="form-horizontal"  action="signup.php">
-                <div class="logcontrol-group">
-                    <label class="logcontrol-label" for="inputUsername"></label>
-                    <div class="logcontrols">
-                        <input type="text" name="username" placeholder="Enter Username" maxlength="50" required>
-                    </div>
-                </div>
-                <div class="logcontrol-group">
-                    <label class="logcontrol-label" for="inputEmail"></label>
-                    <div class="logcontrols">
-                        <input type="email" name="email" placeholder="Enter Email" placeholder="example@email.com" required>
-                    </div>
-                </div>
-                
-                <div class="logcontrol-group">
-    <label class="logcontrol-label" for="inputPassword"></label>
-    <div class="logcontrols">
-    <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
-            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
-    </div>
-</div>
 
-<div class="logcontrol-group">
-    <label class="logcontrol-label" for="confirmPassword"></label>
-    <div class="logcontrols">
-    <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" maxlength="10" required>
-            <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword')"></i>
-        <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
-    </div>
-</div>
-                
-                <?php if(isset($error)): ?>
-                    <div class="alert alert-danger" style="color: red;"><strong>Error:</strong> <?php echo $error; ?></div>
-                <?php endif; ?>
-                <div class="logcontrol-group">
-                    <div class="logcontrols">
-                        <button name="submit1" type="submit" style="text-align: left;" class="btn btn-info">
-                            <span style="float: right; margin-right:10px;">&#9654;</span>
-                            <b style="margin-left:15px;"><big>Sign Up</big></b>
-                        </button>                   
-                    </div>
-                    <a href="login.php" style="color: #ffd698;"><small>Log In</small></a>
-                </div>
-                <img src="assets/img/our home.png" alt="" style="width: 200px; height: auto; margin-top: 5px; margin-left: 30px;">
-            </form>
+            <form method="post" class="form-horizontal" action="signup.php" onsubmit="return validateForm()">
+        <div class="logcontrol-group">
+            <label class="logcontrol-label" for="username"></label>
+            <div class="logcontrols">
+                <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
+            </div>
+        </div>
+        <div class="logcontrol-group">
+            <label class="logcontrol-label" for="email"></label>
+            <div class="logcontrols">
+                <input type="email" name="email" id="email" placeholder="Enter Email" required>
+            </div>
+        </div>
+        <div class="logcontrol-group">
+            <label class="logcontrol-label" for="password"></label>
+            <div class="logcontrols">
+                <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+                <small id="passwordStrengthError" class="form-text text-danger" style="display:none;">Password must be at least 6 characters long and include at least one uppercase letter or special character.</small>
+            </div>
+        </div>
+        <div class="logcontrol-group">
+            <label class="logcontrol-label" for="confirmPassword"></label>
+            <div class="logcontrols">
+                <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" maxlength="10" required>
+                <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword')"></i>
+                <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
+            </div>
+        </div>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger" style="color: red;"><strong>Error:</strong> <?php echo $error; ?></div>
+        <?php endif; ?>
+        <div class="logcontrol-group">
+            <div class="logcontrols">
+                <button name="submit1" type="submit" style="text-align: left;" class="btn btn-info">
+                    <span style="float: right; margin-right:10px;">&#9654;</span>
+                    <b style="margin-left:15px;"><big>Sign Up</big></b>
+                </button>                   
+            </div>
+            <a href="login.php" style="color: #ffd698;"><small>Log In</small></a>
+        </div>
+        <img src="assets/img/our home.png" alt="" style="width: 200px; height: auto; margin-top: 5px; margin-left: 30px;">
+    </form>
 
+        <script>
+        document.getElementById('username').addEventListener('input', function () {
+            this.value = this.value.replace(/\s/g, '');
+        });
+        
+        document.getElementById('email').addEventListener('input', function () {
+            this.value = this.value.replace(/\s/g, '');
+        });
 
-            <script>
-    document.getElementById('password').addEventListener('input', validatePasswords);
-    document.getElementById('confirmPassword').addEventListener('input', validatePasswords);
+        document.getElementById('password').addEventListener('input', function () {
+            this.value = this.value.replace(/\s/g, '');
+            validatePassword();
+        });
 
-    function validatePasswords() {
-        var password = document.getElementById('password').value;
-        var confirmPassword = document.getElementById('confirmPassword').value;
-        var passwordError = document.getElementById('passwordError');
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            this.value = this.value.replace(/\s/g, '');
+            validatePasswordMatch();
+        });
 
-        if (password !== confirmPassword) {
-            document.getElementById('confirmPassword').classList.add('error');
-            passwordError.style.display = 'block';
-        } else {
-            document.getElementById('confirmPassword').classList.remove('error');
-            passwordError.style.display = 'none';
-        }
-    }
-</script>
-<script>
-        function togglePassword(id) {
-            const passwordField = document.getElementById(id);
-            const eyeIcon = passwordField.nextElementSibling;
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const passwordStrengthError = document.getElementById('passwordStrengthError');
+            // Regex to ensure password has at least one uppercase letter or special character
+            const regex = /^(?=.*[A-Z!@#$%^&*(),.?":{}|<>]).{6,}$/;
+            if (!regex.test(password)) {
+                passwordStrengthError.style.display = 'block';
             } else {
-                passwordField.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
+                passwordStrengthError.style.display = 'none';
             }
+        }
+
+        function validatePasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordError = document.getElementById('passwordError');
+            if (password !== confirmPassword) {
+                passwordError.style.display = 'block';
+            } else {
+                passwordError.style.display = 'none';
+            }
+        }
+
+        function validateForm() {
+            validatePassword();
+            validatePasswordMatch();
+
+            const passwordStrengthError = document.getElementById('passwordStrengthError');
+            const passwordError = document.getElementById('passwordError');
+
+            if (passwordStrengthError.style.display === 'block' || passwordError.style.display === 'block') {
+                return false;
+            }
+
+            return true;
+        }
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const fieldType = field.getAttribute('type') === 'password' ? 'text' : 'password';
+            field.setAttribute('type', fieldType);
         }
     </script>
 

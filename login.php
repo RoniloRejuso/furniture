@@ -49,11 +49,12 @@
             <div class="logo">
                 <h1 class="m-0 text-primary" style="color: #ffd698;">Log in</h1>
             </div>
+
             <form method="post" class="form-horizontal" action="dex.php">
                 <div class="logcontrol-group">
                     <label class="logcontrol-label" for="inputUsername"></label>
                     <div class="logcontrols">
-                        <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="10" required>
+                        <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
                     </div>
                 </div>
                 <div class="logcontrol-group">
@@ -71,6 +72,16 @@
                             <b style="margin-left:15px;"><big>LOG IN</big></b>
                         </button>
                     </div>
+
+                    <script>
+        document.getElementById('username').addEventListener('input', function (e) {
+            this.value = this.value.replace(/\s/g, '');
+        });
+        document.getElementById('password').addEventListener('input', function (e) {
+            this.value = this.value.replace(/\s/g, '');
+        });
+
+    </script>
                     <a href="signup.php" style="color: #ffd698;"><small>Sign-Up</small></a>
                 </div>
                 <img src="assets/img/our home.png" alt="" style="width: 200px; height: auto; margin-top: 5px;">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2024 at 10:05 PM
+-- Generation Time: Jun 27, 2024 at 08:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -40,8 +40,8 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_id`, `email`, `username`, `password`, `is_admin`) VALUES
-(1, 'ronilorejuso21@gmail.com', 'username01', 'abcde', 1),
-(2, 'rejusocute101@gmail.com', 'username03', '$2y$10$BwpLy5WhC6AlnGizI.c.a.0YV7kONE/XZd4Is2mBPzOZbJodZkq8a', NULL);
+(4, 'ronilorejuso21@gmail.com', 'username03', '$2y$10$lcWJmYqy9cFCGWl/4e5GBORTsT2FKnDyfiIkjopcIoU8uXeEGsgNy', NULL),
+(10, 'rejusocute101@gmail.com', 'username02', '$2y$10$4rkUM1J.QiRAxgOiUaD2WuXD1o8vfgSOhki5C2VbZzMudKcrXhM5.', NULL);
 
 -- --------------------------------------------------------
 
@@ -193,7 +193,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `cart`

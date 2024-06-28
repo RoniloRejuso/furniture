@@ -82,6 +82,15 @@ if(isset($_POST['submit1'])) {
             color: red;
             font-size: 12px;
         }
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+        .red-border {
+            border-color: red;
+            background-color: #ffcccc; /* Light red background color */
+        }
 </style>
 <body>    
     <div class="logcontainer">
@@ -91,26 +100,33 @@ if(isset($_POST['submit1'])) {
             </div>
 
             <form method="post" class="form-horizontal" action="signup.php" onsubmit="return validateForm()">
-        <div class="logcontrol-group">
-            <label class="logcontrol-label" for="username"></label>
-            <div class="logcontrols">
-                <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
-            </div>
+
+            <div class="logcontrol-group">
+        <label class="logcontrol-label" for="inputUsername"></label>
+        <div class="logcontrols">
+            <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
+            <span id="username-error" class="error">Username cannot be purely numerical.</span>
         </div>
-        <div class="logcontrol-group">
-            <label class="logcontrol-label" for="email"></label>
-            <div class="logcontrols">
-                <input type="email" name="email" id="email" placeholder="Enter Email" required>
-            </div>
+    </div>
+
+
+    <div class="logcontrol-group">
+        <label class="logcontrol-label" for="email"></label>
+        <div class="logcontrols">
+            <input type="email" name="email" id="email" placeholder="Enter Email" required>
+            <small id="emailValidationError" class="form-text text-danger" style="display:none;">Invalid email format or domain does not exist.</small>
         </div>
+    </div>
+
         <div class="logcontrol-group">
-            <label class="logcontrol-label" for="password"></label>
-            <div class="logcontrols">
-                <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
-                <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
-                <small id="passwordStrengthError" class="form-text text-danger" style="display:none;">Password must be at least 6 characters long and include at least one uppercase letter or special character.</small>
-            </div>
+        <label class="logcontrol-label" for="inputPassword"></label>
+        <div class="logcontrols">
+            <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+            <span id="password-error" class="error">Password cannot be purely numerical or purely lowercase letters.</span>
         </div>
+    </div>
+
         <div class="logcontrol-group">
             <label class="logcontrol-label" for="confirmPassword"></label>
             <div class="logcontrols">
@@ -119,6 +135,7 @@ if(isset($_POST['submit1'])) {
                 <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
             </div>
         </div>
+
         <?php if (isset($error)): ?>
             <div class="alert alert-danger" style="color: red;"><strong>Error:</strong> <?php echo $error; ?></div>
         <?php endif; ?>
@@ -195,6 +212,63 @@ if(isset($_POST['submit1'])) {
             const fieldType = field.getAttribute('type') === 'password' ? 'text' : 'password';
             field.setAttribute('type', fieldType);
         }
+
+        document.getElementById('username').addEventListener('input', function () {
+            var usernameInput = document.getElementById('username');
+            var usernameError = document.getElementById('username-error');
+            var usernameValue = usernameInput.value;
+
+            if (/^\d+$/.test(usernameValue)) {  // Check if the input is purely numerical
+                usernameInput.classList.add('red-border');
+                usernameError.style.display = 'block';
+            } else {
+                usernameInput.classList.remove('red-border');
+                usernameError.style.display = 'none';
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function () {
+            var passwordInput = document.getElementById('password');
+            var passwordError = document.getElementById('password-error');
+            var passwordValue = passwordInput.value;
+
+            if (/^\d+$/.test(passwordValue) || /^[a-z]+$/.test(passwordValue)) {  // Check if the input is purely numerical or purely lowercase letters
+                passwordInput.classList.add('red-border');
+                passwordError.style.display = 'block';
+            } else {
+                passwordInput.classList.remove('red-border');
+                passwordError.style.display = 'none';
+            }
+        });
+
+        function togglePassword(fieldId) {
+            var field = document.getElementById(fieldId);
+            if (field.type === "password") {
+                field.type = "text";
+            } else {
+                field.type = "password";
+            }
+        }
+        document.getElementById('email').addEventListener('input', function () {
+            var emailInput = document.getElementById('email');
+            var emailError = document.getElementById('emailValidationError');
+            var emailValue = emailInput.value;
+            
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"]; // Example list of known domains
+
+            var emailParts = emailValue.split("@");
+            var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
+
+            if (!emailPattern.test(emailValue) || !domainExists) {
+                emailInput.classList.add('red-border');
+                emailError.style.display = 'block';
+            } else {
+                emailInput.classList.remove('red-border');
+                emailError.style.display = 'none';
+            }
+        });
+
     </script>
 
         </div>

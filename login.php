@@ -41,7 +41,15 @@
         cursor: pointer;
         display: none; /* Initially hidden */
     }
-
+    .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+        .red-border {
+            border-color: red;
+            background-color: #ffcccc; /* Light red background color */
+        }
 </style>
 <body>    
     <div class="logcontainer">
@@ -51,18 +59,25 @@
             </div>
 
             <form method="post" class="form-horizontal" action="dex.php">
-                <div class="logcontrol-group">
-                    <label class="logcontrol-label" for="inputUsername"></label>
-                    <div class="logcontrols">
-                        <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
-                    </div>
-                </div>
-                <div class="logcontrol-group">
-                    <label class="logcontrol-label" for="inputPassword"></label>
-                    <div class="logcontrols">
-                        <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
-                        <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>
-                    </div>
+
+            <div class="logcontrol-group">
+        <label class="logcontrol-label" for="inputUsername"></label>
+        <div class="logcontrols">
+            <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
+            <span id="username-error" class="error">Username cannot be purely numerical.</span>
+        </div>
+    </div>
+
+    <div class="logcontrol-group">
+        <label class="logcontrol-label" for="inputPassword"></label>
+        <div class="logcontrols">
+            <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
+            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>
+            <span id="password-error" class="error">Password cannot be purely numerical or purely lowercase letters.</span>
+        </div>
+
+
+                    
                     <a href="change_pass.php" style="margin-left: 250px; color: #ffd698;">Forgot Password?</a>
                 </div>
                 <div class="logcontrol-group">
@@ -116,6 +131,43 @@
                 eyeIcon.style.display = 'none'; // Hide eye icon
             }
         }
+        document.getElementById('username').addEventListener('input', function () {
+            var usernameInput = document.getElementById('username');
+            var usernameError = document.getElementById('username-error');
+            var usernameValue = usernameInput.value;
+
+            if (/^\d+$/.test(usernameValue)) {  // Check if the input is purely numerical
+                usernameInput.classList.add('red-border');
+                usernameError.style.display = 'block';
+            } else {
+                usernameInput.classList.remove('red-border');
+                usernameError.style.display = 'none';
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function () {
+            var passwordInput = document.getElementById('password');
+            var passwordError = document.getElementById('password-error');
+            var passwordValue = passwordInput.value;
+
+            if (/^\d+$/.test(passwordValue) || /^[a-z]+$/.test(passwordValue)) {  // Check if the input is purely numerical or purely lowercase letters
+                passwordInput.classList.add('red-border');
+                passwordError.style.display = 'block';
+            } else {
+                passwordInput.classList.remove('red-border');
+                passwordError.style.display = 'none';
+            }
+        });
+
+        function togglePassword(fieldId) {
+            var field = document.getElementById(fieldId);
+            if (field.type === "password") {
+                field.type = "text";
+            } else {
+                field.type = "password";
+            }
+        }
+
     </script>
 </body>
 </html>

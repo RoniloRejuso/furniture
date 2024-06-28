@@ -55,6 +55,16 @@
     width: 200px;
   }
 
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+        .red-border {
+            border: 1px solid red;
+            background-color: #ffcccc; /* Light red background color */
+        }
+
 </style>
 </head>
 <body>
@@ -129,15 +139,60 @@ if (isset($_POST["reset"])) {
 <div class="form-container" style="background-color: lightgray; padding: 20px; width: 600px; height: 200px;">
     <h1 style="color: black;">RESET PASSWORD</h1>
     
-    <form method="POST" style="width: 250px; height: 50px; text-align: center;">
-    <input type="email" id="email" maxlength="60" name="email" placeholder="Enter email" required class="short-email-input" />
-    <input type="submit" name="reset" value="Reset" style="background-color: red; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 60px;">
-</form>
+    <form method="POST" style="width: 250px; height: 100px; text-align: center;">
+        <input type="email" id="email" maxlength="60" name="email" placeholder="Enter email" required class="short-email-input" />
+        <small id="emailValidationError" class="form-text text-danger" style="display:none;">Invalid email format or domain does not exist.</small>
+        <br>
+        <input type="submit" name="reset" value="Reset" style="background-color: red; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 60px;">
+    </form>
+
 
 <script>
     document.getElementById('email').addEventListener('input', function (e) {
         this.value = this.value.replace(/\s/g, '');
     });
+
+    document.getElementById('email').addEventListener('input', function () {
+            var emailInput = document.getElementById('email');
+            var emailError = document.getElementById('emailValidationError');
+            var emailValue = emailInput.value;
+            
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"]; // Example list of known domains
+
+            var emailParts = emailValue.split("@");
+            var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
+
+            if (!emailPattern.test(emailValue) || !domainExists) {
+                emailInput.classList.add('red-border');
+                emailError.style.display = 'block';
+            } else {
+                emailInput.classList.remove('red-border');
+                emailError.style.display = 'none';
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function (event) {
+            var emailInput = document.getElementById('email');
+            var emailError = document.getElementById('emailValidationError');
+            var emailValue = emailInput.value;
+
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"]; // Example list of known domains
+
+            var emailParts = emailValue.split("@");
+            var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
+
+            if (!emailPattern.test(emailValue) || !domainExists) {
+                emailInput.classList.add('red-border');
+                emailError.style.display = 'block';
+                event.preventDefault(); // Prevent form submission
+            } else {
+                emailInput.classList.remove('red-border');
+                emailError.style.display = 'none';
+            }
+        });
+
 </script>
 
 

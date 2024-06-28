@@ -18,8 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $new_password = $_POST['new_password'];
 
+    // Hash the new password
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
     $changeQuery = $conn->prepare("UPDATE admin SET password = ? WHERE username = ?");
-    $changeQuery->bind_param('ss', $new_password, $username);
+    $changeQuery->bind_param('ss', $hashed_password, $username);
     $changeQuery->execute();
 
     if ($changeQuery->affected_rows > 0) {
@@ -41,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
-
 ?>
+
 
 
 <script src='sweetalert.min.js'></script>

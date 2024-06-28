@@ -6,11 +6,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if product_id parameter exists in the URL
 if (isset($_GET['product_id'])) {
     $product_id = $_GET['product_id'];
 
-    // Fetch the model file path from the database based on product_id
     $sql = "SELECT file_path FROM products WHERE product_id = $product_id";
     $result = $conn->query($sql);
 
@@ -18,7 +16,6 @@ if (isset($_GET['product_id'])) {
         $row = $result->fetch_assoc();
         $model_path = $row['file_path'];
 
-        // Proceed with rendering the AR viewer with the fetched model_path
 ?>
 <!DOCTYPE html>
 <html lang="en">

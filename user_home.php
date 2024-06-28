@@ -13,14 +13,15 @@ if (!isset($_SESSION['user_id'])) {
 <head>
 <?php include 'user_header.php'; ?>
 <style>
-        .btn {
-             display: flex;
-            justify-content: center;       
-        }
-
-    .product-name {
-        float: left;
-        margin-right: 20px;
+    .btn {
+        display: flex;
+        justify-content: center;       
+    }
+    .btn:hover {
+        opacity: 0.8;
+    }
+    .row{
+        margin: 0 -12px;
     }
 </style>
 </head>
@@ -43,7 +44,7 @@ if (!isset($_SESSION['user_id'])) {
                     <?php
                     include "dbcon.php";
 
-                    $sql = "SELECT * FROM products LIMIT 8";
+                    $sql = "SELECT * FROM products LIMIT 10";
                     $result = mysqli_query($conn, $sql);
                     $products = [];
 
@@ -60,13 +61,15 @@ if (!isset($_SESSION['user_id'])) {
                     mysqli_close($conn);
                     ?>
                     <?php foreach ($products as $product) { ?>
-                        <div class="col-lg-3 col-sm-6">
-                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
+                        <div style="margin-left:18px;">
+                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
                                 <div class="product_box">
                                     <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                                     <div class="product-info">
-                                        <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
-                                        <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>
+                                        <h4 class="product-name">
+                                            <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                        </h4>
+                                        <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
                                     </div>
                                 </div>
                             </a>
@@ -80,7 +83,7 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
             <div class="recommended_products"><br><br>
-            <h2><small><b>Suggested Picks</b></small></h2>
+            <h2></small><span class="divider-line"></span><small><b> Suggested Picks </b></small><span class="divider-line"></span></h2>
                 <div class="row">
                     <?php
                     include 'config.php';

@@ -316,6 +316,7 @@ button {
     transition: 0.5s;
     padding-top: 60px;
     text-align: center;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.3);
 }
 
 .sidenav a {
@@ -743,39 +744,197 @@ button {
     width: 100%;
 }
 
-.product_box {
-    width: 100%;
-    background-color: #fff6eb;
-    height: 350px;
-    border-radius: 5px;
-    border: 1px solid #fff6eb;
-    padding: 0px 0px 20px 0px;
-    margin-top: 30px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+.row {
+    margin: 0 -17px;
 }
 
-@media (max-width: 760px) {
-    .product_box {
-        width: 300px; /* Adjust width for mobile view (50% of viewport width minus margins) */
-        height: 350px;
-        margin: 10px 0px 10px 15px;/* Add margin to create space between boxes */
+.product_box {
+    width: 200px;
+    background-color: #fff6eb;
+    height: 230px;
+    border-radius: 10px;
+    border: 1px solid #fff6eb;
+    padding: 5px;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.3s;
+}
+
+.product_box:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.image_1 {
+    width: 100%;
+    border-radius: 10px;
+    text-align: center;
+    margin: 5px 0;
+    padding: 0 5px;
+    height: 100px;
+}
+.product-name {
+    float: left;
+    height: 42px;
+    margin-right: 5px;
+    width: 170px;
+    font-size: 17px;
+}
+.product-price {
+    color: black;
+    float: right;
+    margin:20px 0 0 0;
+    font-size: 17px;
+}
+.divider-line {
+    display: inline-block;
+    width: 42%;
+    height: 2px;
+    background-color: #000;
+    vertical-align: middle;
+}
+
+@media (max-width: 1080px) {
+    .divider-line {
+        width: 41%;
     }
 }
+
+@media (max-width: 768px) {
+    .divider-line {
+        width: 38%;
+    }
+}
+
+@media (max-width: 576px) {
+    .divider-line {
+        width: 30%;
+    }
+}
+@media (max-width: 400px) {
+    .divider-line {
+        width: 27%;
+    }
+}
+@media (max-width: 320px) {
+    .divider-line {
+        width: 23%;
+    }
+}
+@media (max-width: 1080px) {
+    .product_box {
+        width: 170px;
+        margin: 20px 0 0 0;
+        height: 200px;
+    }
+    .image_1 {
+        height: 80px;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 140px;
+        font-size: 15px;
+    }
+    .product-price {
+        font-size: 15px;
+        margin:20px 0 0 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .product_box {
+        width: 120px;
+        margin: 20px 0 0 0;
+        height: 190px;
+    }
+    .image_1 {
+        height: 80px;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 100px;
+        font-size: 13px;
+    }
+    .product-price {
+        font-size: 13px;
+        margin:20px 0 0 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .product_box {
+        width: 170px;
+        height: 200px;
+        margin: 10px 5px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 140px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin:0 0 0 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .product_box {
+        width: 150px;
+        padding: 5px;
+        margin: 20px 0 0 5px;
+    }
+    .image_1 {
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 120px;
+        font-size: 12px;
+    }
+    .product-price {
+        font-size: 13px;
+        margin:0 0 0 20px;
+    }
+}
+
+@media (max-width: 320px) {
+    .product_box {
+        width: 130px;
+        height: 170px;
+        padding: 3px;
+        margin: 20px 0 0 0;
+    }
+    .image_1 {
+        height: 70px;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 100px;
+        font-size: 12px;
+    }
+    .product-price {
+        right: 30px;
+        font-size: 13px;
+        margin:0 0 0 20px;
+    }
+}
+
 .bursh_text {
     width: 100%;
     font-size: 20px;
     text-align: center;
     color: #1a1c1b;
     font-weight: 600;
-}
-
-
-.image_1 {
-    width: 100%;
-    text-align: center;
-    margin: 20px 0px;
-    padding: 0px 20px;
-    height: 200px;
 }
 
 .btn_main {

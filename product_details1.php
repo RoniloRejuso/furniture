@@ -90,16 +90,18 @@ if(isset($_GET['product_id'])) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 10px;
     background-color: #FFF6EB;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     max-width: 100%;
 }
+
 .product_image {
-    width: 100%;
+    width: 300px;
+    border-radius: 10px;
     height: auto;
-    margin-bottom: 20px;
+    margin: 0 0 0 5px;
 }
 .product-info {
     text-align: center;
@@ -116,7 +118,7 @@ if(isset($_GET['product_id'])) {
     display: inline-block;
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 10px 10px;
     border-radius: 30px;
     margin: 0 10px;
 }
@@ -125,7 +127,7 @@ if(isset($_GET['product_id'])) {
     background-color: #964B33;
     border-radius: 5px !important;
     color: #fff;
-    margin-left: 25px;
+    margin-left: 60px;
 }
 .btn-add-to-cart:hover {
     background-color: #964B33;
@@ -136,6 +138,8 @@ if(isset($_GET['product_id'])) {
     background-color: #493A2D;
     color: #fff;
     border-radius: 30px;
+    margin-right: 60px;
+
 }
 .btn-view-ar:hover {
     background-color: #493A2D;
@@ -158,7 +162,10 @@ if(isset($_GET['product_id'])) {
     }
     .product_image {
         margin-bottom: 0;
-        max-width: auto;
+        max-width: 100%;
+    }
+    .btn-add-to-cart {
+        margin-left: 30px;
     }
 }
 </style>
@@ -167,7 +174,7 @@ if(isset($_GET['product_id'])) {
     <div class="container">
         <div class="row product-details">
             <div class="product-container1">
-                <div class="col-md-6">
+                <div style="margin: 0 auto;">
                     <img src="<?php echo $product['product_image']; ?>" class="product_image" alt="Product Image">
                 </div>
                 <div class="col-md-6">

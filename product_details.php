@@ -106,7 +106,7 @@ if(isset($_GET['product_id'])) {
 .product_image {
     width: 100%;
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .product-info {
     text-align: center;

@@ -26,7 +26,8 @@ include 'user_body.php';
             </div>
             <div class="search-section" style="text-align: center;">
          <form method="GET" action="">
-            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;">
+            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;border: 1px solid gray;"
+>
             <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
             </form>
       </div>
@@ -57,17 +58,19 @@ include 'user_body.php';
             // Loop through the fetched products
             while ($product = $result->fetch_assoc()) {
             ?>
-                        <div class="col-lg-3 col-sm-6">
-                            <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
-                                <div class="product_box">
-                                    <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
-                                    <div class="product-info">
-                                        <h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
-                                        <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>
-                                    </div>
-                                </div>
-                            </a>
+                <div style="margin-left:18px;">
+                    <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                        <div class="product_box">
+                            <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                            <div class="product-info">
+                                <h4 class="product-name">
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                </h4>
+                                <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
+                            </div>
                         </div>
+                    </a>
+                </div>
             <?php
             }
             // Close database connection
@@ -99,7 +102,7 @@ include 'user_body.php';
       <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
       <script>
          function openNav() {
-           document.getElementById("mySidenav").style.width = "100%";
+            document.getElementById("mySidenav").style.width = "360px";
          }
          
          function closeNav() {

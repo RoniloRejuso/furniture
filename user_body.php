@@ -19,7 +19,7 @@
                   </div>
                </div>                          
                <span class="toggle_icon" onclick="openNav()"><img src="images/toggle-icon.png"></span>
-               <a class="logo" href="user_index.php"><img src="images/logo.png" width="150px" height="50px"></a>
+               <a class="logo" href="user_home.php"><img src="images/logo.png" width="150px" height="50px"></a>
                <form class="form-inline ">
                      <div class="login_text">
                      </div>

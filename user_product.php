@@ -15,8 +15,25 @@ if (!isset($_SESSION['user_id'])) {
 <?php
 include 'user_header.php';
 ?>
-   <body>
-   <?php
+<style>
+.sorting_filtering_section{
+    text-align: center;
+    margin-top: 10px;
+}
+@media (max-width: 320px) {
+    .sorting_filtering_section form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sorting_filtering_section select {
+        width: 130px;
+        font-size: 12px;
+    }
+}
+</style>
+<body>
+<?php
 include 'user_body1.php';
 ?>
 <div class="product_section layout_padding">
@@ -30,16 +47,16 @@ include 'user_body1.php';
                 <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
             </form>
         </div>
-        <div class="sorting_filtering_section" style="text-align: center; margin-top: 10px;">
+        <div class="sorting_filtering_section">
             <form method="GET" action="" id="filterForm">
-                <select name="sort_by" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
+                <select name="sort_by" style="padding:5px;" onchange="document.getElementById('filterForm').submit();">
                 <option value="default">Default Sorting</option>
                 <option value="name_asc">Name: A to Z</option>
                 <option value="name_desc">Name: Z to A</option>
                 <option value="price_asc">Price: Low to High</option>
                 <option value="price_desc">Price: High to Low</option>
                 </select>
-                <select name="filter_by_category" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
+                <select name="filter_by_category" style="padding:5px;" onchange="document.getElementById('filterForm').submit();">
                     <option value="all">All Categories</option>
                     <option value="bedroom">Bedroom</option>
                     <option value="dining_room">Dining Room</option>
@@ -72,15 +89,15 @@ include 'user_body1.php';
             ?>
 
             <?php foreach ($products as $product) { ?>
-                <div class="col-lg-3 col-sm-6">
-                    <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
+                <div style="margin-left:18px;">
+                    <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
                         <div class="product_box">
                             <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                             <div class="product-info">
-                                <h4 class="product-name" style="margin-left: 20px;">
-                                    <b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b>
+                                <h4 class="product-name">
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
                                 </h4>
-                                <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>
+                                <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
                             </div>
                         </div>
                     </a>
@@ -173,8 +190,8 @@ include 'user_body1.php';
     </div>
 </div>
 <div class="floating-navbar">
-    <a href="user_index.php"><i class="fas fa-home"></i></a>
-    <a href="user_prod.php"><i class="fas fa-couch"></i></a>
+    <a href="user_home.php"><i class="fas fa-home"></i></a>
+    <a href="#" class="active"><i class="fas fa-couch"></i></a>
     <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
     <a href="user.php"><i class="fas fa-user"></i></a>
 </div>
@@ -192,7 +209,7 @@ include 'user_body1.php';
       <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
       <script>
          function openNav() {
-           document.getElementById("mySidenav").style.width = "100%";
+            document.getElementById("mySidenav").style.width = "360px";
          }
          
          function closeNav() {

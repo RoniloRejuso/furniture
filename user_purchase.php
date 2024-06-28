@@ -12,17 +12,21 @@ if (!isset($_SESSION['user_id'])) {
 // Function to fetch user's purchased items
 function fetchUserPurchases($conn, $user_id) {
     $purchases = [];
-    $select_purchases = mysqli_query($conn, "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, ci.quantity
-                                             FROM orders o
-                                             JOIN cart c ON o.cart_id = c.cart_id
-                                             JOIN cart_items ci ON c.cart_id = ci.cart_id
-                                             JOIN products p ON ci.product_id = p.product_id
-                                             WHERE o.user_id = '$user_id'");
+    $query = "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, ci.quantity
+              FROM orders o
+              JOIN cart c ON o.cart_id = c.cart_id
+              JOIN cart_items ci ON c.cart_id = ci.cart_id
+              JOIN products p ON ci.product_id = p.product_id
+              WHERE o.user_id = '$user_id'";
+              
+    $select_purchases = mysqli_query($conn, $query);
     
     if ($select_purchases) {
         while ($fetch_purchase = mysqli_fetch_assoc($select_purchases)) {
             $purchases[] = $fetch_purchase;
         }
+    } else {
+        error_log("Error fetching purchases: " . mysqli_error($conn));
     }
 
     return $purchases;
@@ -31,11 +35,13 @@ function fetchUserPurchases($conn, $user_id) {
 // Cancel order functionality
 if (isset($_GET['cancel'])) {
     $cart_item_id = $_GET['cancel'];
-    mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$cart_item_id'");
-    header('Location: user_purchase.php');
+    if (mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$cart_item_id'")) {
+        header('Location: user_purchase.php');
+    } else {
+        error_log("Error canceling order: " . mysqli_error($conn));
+    }
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -90,14 +96,14 @@ if (isset($_GET['cancel'])) {
                         ?>
                         <div class="purchase-item">
                             <div class="product-image">
-                                <img src="<?php echo $purchase['product_image']; ?>" alt="Product Image">
+                                <img src="<?php echo htmlspecialchars($purchase['product_image']); ?>" alt="Product Image">
                             </div>
                             <div class="product-details">
-                                <h3><?php echo $purchase['product_name']; ?></h3>
+                                <h3><?php echo htmlspecialchars($purchase['product_name']); ?></h3>
                                 <p>Price: ₱<?php echo number_format($purchase['price'], 2); ?></p>
-                                <p>Quantity: <?php echo $purchase['quantity']; ?></p>
+                                <p>Quantity: <?php echo htmlspecialchars($purchase['quantity']); ?></p>
                                 <!-- Cancel order button -->
-                                <button type="button" class="btn btn-danger" onclick="cancelOrder(<?php echo $purchase['cart_item_id']; ?>)">Cancel Order</button>
+                                <button type="button" class="btn btn-danger" onclick="cancelOrder(<?php echo htmlspecialchars($purchase['cart_item_id']); ?>)">Cancel Order</button>
                             </div>
                         </div>
                         <?php

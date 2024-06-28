@@ -7,17 +7,11 @@
         display: flex;
         justify-content: center;       
     }
-
-    .product-name {
-        float: left;
-        margin-right: 20px;
+    .btn:hover {
+        opacity: 0.8;
     }
-    .divider-line {
-        display: inline-block;
-        width: 25%;
-        height: 1px;
-        background-color: #000;
-        vertical-align: middle;
+    .row{
+        margin: 0 -12px;
     }
 </style>
 </head>
@@ -39,7 +33,7 @@
                     <?php
                     include ('dbcon.php');
 
-                    $sql = "SELECT * FROM products LIMIT 8";
+                    $sql = "SELECT * FROM products LIMIT 10";
                     $result = mysqli_query($conn, $sql);
                     $products = [];
 
@@ -56,17 +50,19 @@
                     mysqli_close($conn);
                     ?>
                     <?php foreach ($products as $product) { ?>
-                        <div class="col-lg-3 col-sm-1">
-                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
-                                <div class="product_box">
-                                    <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
-                                    <div class="product-info">
-                                        <h4 class="product-name" style="margin-left: 5px;"><b><big>Our Home</big></b>&nbsp;<b><big><?php echo $product['product_name']; ?></big></b></h4>
-                                        <h3 class="product-price" style="color: black; float: right;">₱<?php echo $product['price']; ?></h3><br><br>
-                                    </div>
-                                </div>
-                            </a>
+                        <div style="margin-left:18px;">
+                    <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                        <div class="product_box">
+                            <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                            <div class="product-info">
+                                <h4 class="product-name">
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                </h4>
+                                <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
+                            </div>
                         </div>
+                    </a>
+                </div>
                     <?php } ?>
                 </div><br>
                 <div class="row">
@@ -76,7 +72,7 @@
                 </div>
             </div>
             <div class="recommended_products"><br><br>
-            <h2><small><b>Suggested Picks</b></small></h2>
+            <h2></small><span class="divider-line"></span><small><b> Suggested Picks </b></small><span class="divider-line"></span></h2>
                 <div class="row">
                     <?php
                     include 'config.php';

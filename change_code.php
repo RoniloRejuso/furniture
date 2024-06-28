@@ -1,36 +1,4 @@
-<?php
-$email = isset($_GET['email']) ? $_GET['email'] : '';
-$verification_code = isset($_GET['code']) ? $_GET['code'] : '';
 
-// Check if the form is submitted for email verification
-if (isset($_POST['verify_email'])) {
-    $entered_code = $_POST['verification_code'];
-
-    // Check if the entered code matches the verification code
-    if ($entered_code === $verification_code) {
-        // Verification successful, redirect to the change password page
-        header("Location: change_password.php");
-        exit(); // Ensure no further code is executed after redirection
-    }  else {
-        // Display an error message using SweetAlert
-        echo '<script>
-                // Include SweetAlert library
-                const script = document.createElement("script");
-                script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@10";
-                document.head.appendChild(script);
-
-                // Trigger SweetAlert for verification failure
-                document.addEventListener("DOMContentLoaded", function() {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Verification Failed",
-                        text: "Verification code is incorrect. Please try again."
-                    });
-                });
-              </script>';
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,9 +14,10 @@ if (isset($_POST['verify_email'])) {
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
-    /* Form container style */
+
     .verification-form {
         max-width: 300px;
         margin: 0 auto;
@@ -57,8 +26,6 @@ if (isset($_POST['verify_email'])) {
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
-    /* Input field style */
     .verification-form input[type="text"],
     .verification-form input[type="submit"] {
         width: 100%;
@@ -69,8 +36,6 @@ if (isset($_POST['verify_email'])) {
         font-size: 16px;
         box-sizing: border-box;
     }
-
-    /* Submit button style */
     .verification-form input[type="submit"] {
         background-color: #007bff;
         color: white;
@@ -100,6 +65,104 @@ if (isset($_POST['verify_email'])) {
 </style>
 
 <body>
+
+<?php
+include 'dbcon.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'mail/Exception.php';
+require 'mail/PHPMailer.php';
+require 'mail/SMTP.php';
+
+$email = isset($_GET['email']) ? $_GET['email'] : '';
+$verification_code = isset($_GET['code']) ? $_GET['code'] : '';
+
+if (isset($_POST['verify_email'])) {
+    $entered_code = $_POST['verification_code'];
+    if ($entered_code === $verification_code) {
+        header("Location: change_password.php");
+        exit();
+    } else {
+        echo '<script>
+                // Include SweetAlert library
+                const script = document.createElement("script");
+                script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+                document.head.appendChild(script);
+
+                // Trigger SweetAlert for verification failure
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Verification Failed",
+                        text: "Verification code is incorrect. What would you like to do?",
+                        showCancelButton: true,
+                        confirmButtonText: "Resend Email",
+                        cancelButtonText: "Cancel",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Resend email
+                            resendEmail("' . $email . '");
+                        } else {
+                            // Cancel and go back to the page
+                            window.location.href = "change_code.php?email=' . $email . '";
+                        }
+                    });
+                });
+
+                function resendEmail(email) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "resend_verification.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            Swal.fire("Resent!", "A new verification code has been sent to your email.", "success")
+                                .then(() => {
+                                    window.location.href = "change_code.php?email=' . $email . '";
+                                });
+                        }
+                    };
+                    xhr.send("email=" + email);
+                }
+              </script>';
+    }
+}
+
+if (isset($_POST['resend_verification'])) {
+    $email = $_POST['email'];
+
+    // Generate new verification code
+    $new_verification_code = substr(number_format(time() * rand(), 0, '', ''), 0, 6);
+
+    // Send the new verification code via email
+    $mail = new PHPMailer(true);
+    try {
+        $mail->SMTPDebug = 0;
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'rejusocute101@gmail.com';
+        $mail->Password = 'ecae dvfi mhpi aozw';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+        $mail->setFrom('rejusocute101@gmail.com', 'Our Home');
+        $mail->addAddress($email);
+        $mail->isHTML(true);
+
+        $mail->Subject = 'Email verification';
+        $mail->Body = '<p>Your new verification code is: <b style="font-size: 30px;">' . $new_verification_code . '</b></p>';
+
+        $mail->send();
+
+        // Update the verification code in the URL
+        header("Location: current_page.php?email=" . $email . "&code=" . $new_verification_code);
+        exit();
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+}
+?>
     <div class="image-container" margin-right: 100px;>
         <img src="assets/img/our home.png" alt="Pic" class="text-img">
     </div>
@@ -140,68 +203,6 @@ if (isset($_POST['verify_email'])) {
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
-
-<div id="timerDisplay"></div>
-
-<!-- Resend button -->
-<button id="resendButton" onclick="resendEmail()" disabled>Resend</button>
-
-<script>
-    let timer;
-    let timeLeft = 60;
-
-    function startTimer() {
-        timer = setInterval(() => {
-            timeLeft--;
-            if (timeLeft === 0) {
-                clearInterval(timer);
-                document.getElementById('resendButton').disabled = false;
-                document.getElementById('timerDisplay').innerText = 'Timer expired';
-            } else {
-                document.getElementById('timerDisplay').innerText = `Time left: ${timeLeft} seconds`;
-            }
-        }, 1000);
-    }
-
-    function resendEmail() {
-        document.getElementById('resendButton').disabled = true;
-        timeLeft = 60;
-        startTimer();
-
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status === 200) {
-                    Swal.fire({
-                        title: 'Send another!',
-                        text: this.responseText,
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = 'change_pass.php';
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Email could not be resent!',
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            }
-        };
-        xhr.open('POST', 'resend.php', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send('resend=true');
-    }
-
-    window.onload = function() {
-        startTimer();
-    };
-</script>
 
                     </div>
                     <div class="card-body bg-light-alt text-center" >

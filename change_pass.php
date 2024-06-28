@@ -148,50 +148,60 @@ if (isset($_POST["reset"])) {
 
 
 <script>
-    document.getElementById('email').addEventListener('input', function (e) {
-        this.value = this.value.replace(/\s/g, '');
-    });
+    var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"];
 
-    document.getElementById('email').addEventListener('input', function () {
-            var emailInput = document.getElementById('email');
-            var emailError = document.getElementById('emailValidationError');
-            var emailValue = emailInput.value;
-            
-            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"]; // Example list of known domains
+function validateEmail(input, errorElement) {
+    var emailValue = input.value.trim();
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    var emailParts = emailValue.split("@");
+    var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
+    var firstChar = emailValue.charAt(0);
 
-            var emailParts = emailValue.split("@");
-            var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
+    if (emailValue === "") {
+        input.classList.remove('red-border');
+        errorElement.style.display = 'none';
+    } else if (!isNaN(firstChar)) {
+        input.classList.add('red-border');
+        errorElement.style.display = 'none'; // Do not show error message for first character check
+    } else if (emailValue.includes("@") && emailValue.includes(".") && (!emailPattern.test(emailValue) || !domainExists)) {
+        input.classList.add('red-border');
+        errorElement.style.display = 'block';
+    } else {
+        input.classList.remove('red-border');
+        errorElement.style.display = 'none';
+    }
+}
 
-            if (!emailPattern.test(emailValue) || !domainExists) {
-                emailInput.classList.add('red-border');
-                emailError.style.display = 'block';
-            } else {
-                emailInput.classList.remove('red-border');
-                emailError.style.display = 'none';
-            }
-        });
+document.getElementById('email').addEventListener('input', function () {
+    var emailInput = document.getElementById('email');
+    var emailError = document.getElementById('emailValidationError');
+    validateEmail(emailInput, emailError);
+});
 
-        document.querySelector('form').addEventListener('submit', function (event) {
-            var emailInput = document.getElementById('email');
-            var emailError = document.getElementById('emailValidationError');
-            var emailValue = emailInput.value;
+document.getElementById('email-form').addEventListener('input', function () {
+    var emailInput = document.getElementById('email-form');
+    var emailError = document.getElementById('emailValidationError-form');
+    validateEmail(emailInput, emailError);
+});
 
-            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"]; // Example list of known domains
+document.querySelector('form').addEventListener('submit', function (event) {
+    var emailInput = document.getElementById('email-form');
+    var emailError = document.getElementById('emailValidationError-form');
+    var emailValue = emailInput.value.trim();
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    var emailParts = emailValue.split("@");
+    var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
 
-            var emailParts = emailValue.split("@");
-            var domainExists = emailParts.length === 2 && knownDomains.includes(emailParts[1]);
+    if (!emailPattern.test(emailValue) || !domainExists) {
+        emailInput.classList.add('red-border');
+        emailError.style.display = 'block';
+        event.preventDefault(); // Prevent form submission
+    } else {
+        emailInput.classList.remove('red-border');
+        emailError.style.display = 'none';
+    }
+});
 
-            if (!emailPattern.test(emailValue) || !domainExists) {
-                emailInput.classList.add('red-border');
-                emailError.style.display = 'block';
-                event.preventDefault(); // Prevent form submission
-            } else {
-                emailInput.classList.remove('red-border');
-                emailError.style.display = 'none';
-            }
-        });
 
 </script>
 

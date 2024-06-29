@@ -16,17 +16,8 @@ include 'user_header.php';
     input[type="password"].password-input.valid {
         border-color: green !important;
     }
-    .form-group {
-        position: relative;
-    }
-    .toggle-password {
-        position: absolute;
-        top: 75%;
-        right: 15px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        display: none; /* Initially hide the icon */
-    }
+
+
     .red-border {
             border-color: red;
         }
@@ -48,7 +39,21 @@ include 'user_header.php';
         .form-control.error {
             border-color: red !important; /* Ensure red border for form-control elements */
         }
-    </style>
+
+
+
+    .form-group {
+        position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        top: 70%; /* Adjust as needed to center vertically */
+        right: 10px; /* Adjust as needed to position */
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+</style>
+
 
 
 <body>
@@ -72,21 +77,15 @@ include 'user_body.php';
                     <form id="loginForm" method="POST" action="user_dex.php">
 
                     <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
-            <div id="emailNumberError" class="error-message">Email should not start with a number.</div>
-            <div id="emailFormatError" class="error-message">Invalid email format.</div>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
-            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>
-            <div id="passwordError" class="error-message">Password should not be only numbers.</div>
-        </div>
-
-
-
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
+                        </div>
+                        
+                        <div class="form-group">
+    <label for="password">Password:</label>
+    <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
+</div>
 
 
                         <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
@@ -99,6 +98,24 @@ include 'user_body.php';
             </div>
         </div>
     </div>
+
+    <script>
+    function togglePassword(fieldId) {
+        const passwordField = document.getElementById(fieldId);
+        const toggleBtn = document.querySelector(`#${fieldId} + .toggle-password`);
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleBtn.classList.add('fa-eye-slash');
+            toggleBtn.classList.remove('fa-eye');
+        } else {
+            passwordField.type = 'password';
+            toggleBtn.classList.remove('fa-eye-slash');
+            toggleBtn.classList.add('fa-eye');
+        }
+    }
+</script>
+
 
     <script>
         document.getElementById('email').addEventListener('input', function () {
@@ -190,7 +207,10 @@ include 'user_body.php';
                     </button>
                 </div>
                 <h3 class="signup-modal-title" style="text-align: center;" id="signupModalLabel"><big>Create Account</big></h3>
-                <div class="modal-body">
+  
+
+
+               <div class="modal-body">
 
                     <form id="signupForm" method="POST" action="user_dex.php" onsubmit="return validateForm()">
                        
@@ -246,11 +266,215 @@ include 'user_body.php';
                         </div>
 
                         <div class="form-group">
-                            <label for="password2">Password:</label>
-                            <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
-                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
-                            <div id="passwordError2" class="error-message">Password should not be only numbers.</div>
-                        </div>
+    <label for="password2">Password:</label>
+    <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
+    <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
+    <div id="passwordError2" class="error-message" style="display:none;">Password should not be only numbers.</div>
+    <div id="passwordStrengthError" class="error-message" style="display:none;">Password should have at least one uppercase letter or special character.</div>
+</div>
+
+<div class="form-group">
+    <label for="cpassword">Confirm Password:</label>
+    <input type="password" class="form-control password-input" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
+    <i class="fas fa-eye toggle-password" onclick="togglePassword('cpassword')"></i>
+    <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
+</div>
+
+<script>
+    document.getElementById('password2').addEventListener('input', validatePasswords);
+    document.getElementById('cpassword').addEventListener('input', validatePasswords);
+
+    function validatePasswords() {
+        var password = document.getElementById('password2').value;
+        var confirmPassword = document.getElementById('cpassword').value;
+        var passwordError = document.getElementById('passwordError');
+
+        if (password !== confirmPassword) {
+            document.getElementById('cpassword').classList.add('error');
+            passwordError.style.display = 'block';
+        } else {
+            document.getElementById('cpassword').classList.remove('error');
+            passwordError.style.display = 'none';
+        }
+    }
+</script>
+
+<script>
+        function togglePassword(id) {
+            const passwordField = document.getElementById(id);
+            const eyeIcon = passwordField.nextElementSibling;
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+<script>
+
+    // Add event listeners to validate passwords and toggle password visibility
+    document.getElementById('password2').addEventListener('input', function () {
+        this.value = this.value.replace(/\s/g, '');
+        validatePassword();
+        validatePasswordMatch(); // Validate password match on input change
+    });
+
+    document.getElementById('cpassword').addEventListener('input', function () {
+        this.value = this.value.replace(/\s/g, '');
+        validatePasswordMatch();
+    });
+
+    // Function to validate password strength (uppercase or special character)
+    function validatePassword() {
+        const password = document.getElementById('password2').value;
+        const passwordStrengthError = document.getElementById('passwordStrengthError');
+        // Regex to ensure password has at least one uppercase letter or special character
+        const regex = /^(?=.*[A-Z!@#$%^&*(),.?":{}|<>]).{6,}$/;
+        if (!regex.test(password)) {
+            passwordStrengthError.style.display = 'block';
+        } else {
+            passwordStrengthError.style.display = 'none';
+        }
+    }
+
+    // Function to validate password match
+    function validatePasswordMatch() {
+        const password = document.getElementById('password2').value;
+        const confirmPassword = document.getElementById('cpassword').value;
+        const passwordError = document.getElementById('passwordError');
+        if (password !== confirmPassword) {
+            passwordError.style.display = 'block';
+        } else {
+            passwordError.style.display = 'none';
+        }
+    }
+
+    // Function to validate the entire form before submission
+    function validateForm() {
+        validatePassword(); // Check password strength
+        validatePasswordMatch(); // Check password match
+
+        const passwordStrengthError = document.getElementById('passwordStrengthError');
+        const passwordError = document.getElementById('passwordError');
+
+        // If any error message is displayed, prevent form submission
+        if (passwordStrengthError.style.display === 'block' || passwordError.style.display === 'block') {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Function to toggle password visibility
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field.type === "password") {
+            field.type = "text";
+        } else {
+            field.type = "password";
+        }
+    }
+
+
+</script>
+
+
+                        
+<script>
+    // Function to prevent spaces in the input fields
+    function preventSpaces(event) {
+        if (event.keyCode === 32) {
+            event.preventDefault();
+        }
+    }
+
+    // Select all password inputs and add event listeners to prevent spaces
+    document.querySelectorAll('.password-input').forEach(function(input) {
+        input.addEventListener('keydown', preventSpaces);
+    });
+
+    // Function to validate password fields
+    function validatePassword() {
+        const password = document.getElementById('password').value.trim();
+        const cpassword = document.getElementById('cpassword').value.trim();
+        const passwordError = document.getElementById('passwordError');
+
+        if (password === '' || cpassword === '') {
+            passwordError.style.display = 'none';
+        } else if (password !== cpassword) {
+            passwordError.style.display = 'block';
+        } else {
+            passwordError.style.display = 'none';
+        }
+    }
+
+    // Add event listeners to password fields for validation
+    document.getElementById('password').addEventListener('input', validatePassword);
+    document.getElementById('cpassword').addEventListener('input', validatePassword);
+
+    // Function to validate all email fields
+    function validateEmail() {
+        document.querySelectorAll('.email-input').forEach(function(emailInput) {
+            const emailNumberError = document.getElementById(emailInput.id.replace('email', 'emailNumberError'));
+            const emailFormatError = document.getElementById(emailInput.id.replace('email', 'emailFormatError'));
+            const emailValue = emailInput.value.trim();
+            const startsWithNumber = /^[0-9]/.test(emailValue);
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+            if (emailValue === '') {
+                emailInput.classList.remove('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'none';
+            } else if (startsWithNumber) {
+                emailInput.classList.add('error');
+                emailNumberError.style.display = 'block';
+                emailFormatError.style.display = 'none';
+            } else if (emailValue && !isValidEmail) {
+                emailInput.classList.add('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'block';
+            } else {
+                emailInput.classList.remove('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'none';
+            }
+
+            // Toggle error class based on error message display
+            emailInput.classList.toggle('error', emailNumberError.style.display === 'block' || emailFormatError.style.display === 'block');
+        });
+    }
+
+    // Add event listeners to all email fields for validation
+    document.querySelectorAll('.email-input').forEach(function(emailInput) {
+        emailInput.addEventListener('blur', validateEmail);
+    });
+
+    // Function to validate the form before submission
+    function validateForm() {
+        validateEmail();
+        validatePassword();
+    }
+
+    // Function to toggle password visibility
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        const icon = input.nextElementSibling;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+
 
                         <script>
     // Function to prevent spaces in the input fields

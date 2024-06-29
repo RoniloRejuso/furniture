@@ -193,15 +193,29 @@ include 'user_body.php';
                 <div class="modal-body">
 
                     <form id="signupForm" method="POST" action="user_dex.php" onsubmit="return validateForm()">
-                        <div class="form-group">
+                       
+                            <div class="form-group">
                             <label for="firstname">First name:</label>
-                            <input type="text" class="form-control" id="firstname" pattern="[A-Z a-z ]+" name="firstname" placeholder="Enter first name" maxlength="50">
+                            <input type="text" class="form-control" id="firstname" pattern="[A-Za-z ]+" name="firstname" placeholder="Enter first name" maxlength="50" required>
                         </div>
 
                         <div class="form-group">
                             <label for="lastname">Last name:</label>
-                            <input type="text" class="form-control" id="lastname" pattern="[A-Z a-z ]+" name="lastname" placeholder="Enter last name" maxlength="50">
+                            <input type="text" class="form-control" id="lastname" pattern="[A-Za-z ]+" name="lastname" placeholder="Enter last name" maxlength="50" required>
                         </div>
+
+                        <script>
+        document.getElementById('firstname').addEventListener('input', function (event) {
+            const pattern = /^[A-Za-z ]+$/;
+            event.target.value = event.target.value.replace(/[^A-Za-z ]/g, '');
+        });
+
+        document.getElementById('lastname').addEventListener('input', function (event) {
+            const pattern = /^[A-Za-z ]+$/;
+            event.target.value = event.target.value.replace(/[^A-Za-z ]/g, '');
+        });
+    </script>
+
                         
                         <script>
                             function validateInput(inputElement) {

@@ -3,39 +3,54 @@
 <?php
 include 'user_header.php';
 ?>
-<head>
-    <style>
-        .error {
+<style>
+    .error {
+        border-color: red;
+    }
+    .form-text.text-danger {
+        color: red;
+    }
+    input[type="password"].password-input.invalid {
+        border-color: red !important;
+    }
+    input[type="password"].password-input.valid {
+        border-color: green !important;
+    }
+    .form-group {
+        position: relative;
+    }
+    .toggle-password {
+        position: absolute;
+        top: 75%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        display: none; /* Initially hide the icon */
+    }
+    .red-border {
             border-color: red;
         }
         .form-text.text-danger {
+            display: none;
             color: red;
         }
-        input[type="password"].password-input.invalid {
-            border-color: red !important;
-        }
-        input[type="password"].password-input.valid {
-            border-color: green !important;
-        }
-        .form-group {
-            position: relative;
-        }
-        .toggle-password {
-            position: absolute;
-            top: 75%;
-            right: 15px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            display: none;
-        }
-        .validation-message {
+        .error-message {
             color: red;
-            font-size: 0.875em;
+            display: none; /* Ensure error messages are hidden by default */
+        }
+        .error {
+            border-color: red !important; /* Ensure red border takes precedence */
+        }
+        .error-message {
+            color: red;
             display: none;
+        }
+        .form-control.error {
+            border-color: red !important; /* Ensure red border for form-control elements */
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-</head>
+
+
 <body>
 <?php
 include 'user_body.php';
@@ -53,18 +68,27 @@ include 'user_body.php';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                     <form id="loginForm" method="POST" action="user_dex.php">
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
-                            <div class="validation-message">Please enter a valid email address.</div>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
-                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>
-                        </div>
+                    <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
+            <div id="emailNumberError" class="error-message">Email should not start with a number.</div>
+            <div id="emailFormatError" class="error-message">Invalid email format.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
+            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>
+            <div id="passwordError" class="error-message">Password should not be only numbers.</div>
+        </div>
+
+
+
+
+
                         <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
                         <div class="or-divider">
                             <span class="divider-line"></span> OR <span class="divider-line"></span>
@@ -76,6 +100,87 @@ include 'user_body.php';
         </div>
     </div>
 
+    <script>
+        document.getElementById('email').addEventListener('input', function () {
+            this.value = this.value.replace(/\s/g, '');
+        });
+        
+        document.getElementById('password').addEventListener('input', function () {
+            this.value = this.value.replace(/\s/g, '');
+        });
+
+        document.getElementById('email').addEventListener('blur', validateEmail);
+        document.getElementById('password').addEventListener('input', validatePassword);
+
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const emailNumberError = document.getElementById('emailNumberError');
+            const emailFormatError = document.getElementById('emailFormatError');
+            const emailValue = emailInput.value.trim();
+            const startsWithNumber = /^[0-9]/.test(emailValue);
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+            if (emailValue === '') {
+                emailInput.classList.remove('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'none';
+            } else if (startsWithNumber) {
+                emailInput.classList.add('error');
+                emailNumberError.style.display = 'block';
+                emailFormatError.style.display = 'none';
+            } else if (emailValue && !isValidEmail) {
+                emailInput.classList.add('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'block';
+            } else {
+                emailInput.classList.remove('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'none';
+            }
+
+            // Toggle error class based on error message display
+            emailInput.classList.toggle('error', emailNumberError.style.display === 'block' || emailFormatError.style.display === 'block');
+        }
+
+        function validatePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const passwordValue = passwordInput.value.trim();
+            const isOnlyNumbers = /^[0-9]+$/.test(passwordValue);
+
+            if (passwordValue === '') {
+                passwordInput.classList.remove('error');
+                passwordError.style.display = 'none';
+            } else if (isOnlyNumbers) {
+                passwordInput.classList.add('error');
+                passwordError.style.display = 'block';
+            } else {
+                passwordInput.classList.remove('error');
+                passwordError.style.display = 'none';
+            }
+        }
+
+        function validateForm() {
+            validateEmail();
+            validatePassword();
+        }
+
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+
+
     <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -86,47 +191,295 @@ include 'user_body.php';
                 </div>
                 <h3 class="signup-modal-title" style="text-align: center;" id="signupModalLabel"><big>Create Account</big></h3>
                 <div class="modal-body">
+
                     <form id="signupForm" method="POST" action="user_dex.php" onsubmit="return validateForm()">
                         <div class="form-group">
                             <label for="firstname">First name:</label>
-                            <input type="text" class="form-control" id="firstname" pattern="[A-Z a-z ]+" name="firstname" placeholder="Enter first name" maxlength="20" required>
-                            <div class="validation-message">Please enter a valid first name.</div>
+                            <input type="text" class="form-control" id="firstname" pattern="[A-Z a-z ]+" name="firstname" placeholder="Enter first name" maxlength="50">
                         </div>
 
                         <div class="form-group">
                             <label for="lastname">Last name:</label>
-                            <input type="text" class="form-control" id="lastname" pattern="[A-Z a-z ]+" name="lastname" placeholder="Enter last name" maxlength="20" required>
-                            <div class="validation-message">Please enter a valid last name.</div>
+                            <input type="text" class="form-control" id="lastname" pattern="[A-Z a-z ]+" name="lastname" placeholder="Enter last name" maxlength="50">
+                        </div>
+                        
+                        <script>
+                            function validateInput(inputElement) {
+                                var inputValue = inputElement.value.trim();
+                                var parts = inputValue.split(/\s+/);
+                                for (var i = 0; i < parts.length; i++) {
+                                    parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1).toLowerCase();
+                                }
+                                var capitalizedValue = parts.join(' ');
+
+                                inputElement.value = capitalizedValue;
+                            }
+
+                            document.getElementById("firstname").addEventListener("input", function () {
+                                validateInput(this);
+                            });
+
+                            document.getElementById("lastname").addEventListener("input", function () {
+                                validateInput(this);
+                            });
+                        </script>
+
+                        <div class="form-group">
+                            <label for="email2">Email:</label>
+                            <input type="text" class="form-control email-input" id="email2" name="email2" placeholder="Enter your email" maxlength="50" required>
+                            <div id="emailNumberError2" class="error-message">Email should not start with a number.</div>
+                            <div id="emailFormatError2" class="error-message">Invalid email format.</div>
                         </div>
 
                         <div class="form-group">
-                            <label for="signupEmail">Email:</label>
-                            <input type="email" class="form-control" id="signupEmail" name="email" placeholder="Enter your email" maxlength="50" required>
-                            <div class="validation-message">Please enter a valid email address.</div>
+                            <label for="password2">Password:</label>
+                            <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
+                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
+                            <div id="passwordError2" class="error-message">Password should not be only numbers.</div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="signupPassword">Password:</label>
-                            <input type="password" class="form-control" id="npassword" name="password" placeholder="Enter your password" maxlength="10" required>
-                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('npassword')"></i>
-                            <div class="validation-message">Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character.</div>
-                        </div>
+                        <script>
+    // Function to prevent spaces in the input fields
+    function preventSpaces(event) {
+        if (event.keyCode === 32) {
+            event.preventDefault();
+        }
+    }
 
-                        <div class="form-group">
-                            <label for="signupCPassword">Confirm Password:</label>
-                            <input type="password" class="form-control" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
-                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('cpassword')"></i>
-                            <div class="validation-message">Passwords do not match.</div>
-                        </div>
+    // Select all email and password inputs and add event listeners
+    document.querySelectorAll('.email-input, .password-input').forEach(function(input) {
+        input.addEventListener('keydown', preventSpaces);
+    });
+
+    // Validate all email fields
+    function validateEmail() {
+        document.querySelectorAll('.email-input').forEach(function(emailInput) {
+            const emailNumberError = document.getElementById(emailInput.id.replace('email', 'emailNumberError'));
+            const emailFormatError = document.getElementById(emailInput.id.replace('email', 'emailFormatError'));
+            const emailValue = emailInput.value.trim();
+            const startsWithNumber = /^[0-9]/.test(emailValue);
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+            if (emailValue === '') {
+                emailInput.classList.remove('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'none';
+            } else if (startsWithNumber) {
+                emailInput.classList.add('error');
+                emailNumberError.style.display = 'block';
+                emailFormatError.style.display = 'none';
+            } else if (emailValue && !isValidEmail) {
+                emailInput.classList.add('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'block';
+            } else {
+                emailInput.classList.remove('error');
+                emailNumberError.style.display = 'none';
+                emailFormatError.style.display = 'none';
+            }
+
+            // Toggle error class based on error message display
+            emailInput.classList.toggle('error', emailNumberError.style.display === 'block' || emailFormatError.style.display === 'block');
+        });
+    }
+
+    // Validate all password fields
+    function validatePassword() {
+        document.querySelectorAll('.password-input').forEach(function(passwordInput) {
+            const passwordError = document.getElementById(passwordInput.id.replace('password', 'passwordError'));
+            const passwordValue = passwordInput.value.trim();
+            const isOnlyNumbers = /^[0-9]+$/.test(passwordValue);
+
+            if (passwordValue === '') {
+                passwordInput.classList.remove('error');
+                passwordError.style.display = 'none';
+            } else if (isOnlyNumbers) {
+                passwordInput.classList.add('error');
+                passwordError.style.display = 'block';
+            } else {
+                passwordInput.classList.remove('error');
+                passwordError.style.display = 'none';
+            }
+        });
+    }
+
+    // Add event listeners to all email and password fields for validation
+    document.querySelectorAll('.email-input').forEach(function(emailInput) {
+        emailInput.addEventListener('blur', validateEmail);
+    });
+    document.querySelectorAll('.password-input').forEach(function(passwordInput) {
+        passwordInput.addEventListener('input', validatePassword);
+    });
+
+    function validateForm() {
+        validateEmail();
+        validatePassword();
+    }
+
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        const icon = input.nextElementSibling;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
                             <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
-                            <div class="validation-message">You must accept the terms and conditions.</div>
                         </div>
 
                         <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
                     </form>
+
+                    <script>
+        function validateForm() {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailValue = emailInput.value;
+            const passwordValue = passwordInput.value;
+
+            // Reset error classes
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+
+            // Email validation
+            if (emailValue.match(/^[0-9]/) || !validateEmail(emailValue)) {
+                emailInput.classList.add('error');
+            }
+
+            // Password validation
+            if (passwordValue.match(/^[0-9]+$/)) {
+                passwordInput.classList.add('error');
+            }
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+
+                    <script>
+            
+                        function validatePassword(inputElement) {
+                            const passwordValue = inputElement.value;
+                            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*_)[A-Za-z\d_]{8,}$/;
+
+                            if (!passwordRegex.test(passwordValue)) {
+                                inputElement.classList.add('error');
+                            } else {
+                                inputElement.classList.remove('error');
+                            }
+                        }
+
+                        document.getElementById('npassword').addEventListener('input', function () {
+                            validatePassword(this);
+                        });
+
+                        document.getElementById('cpassword').addEventListener('input', function () {
+                            validatePasswords();
+                        });
+
+                        function validatePasswords() {
+                            const password = document.getElementById('npassword').value;
+                            const confirmPassword = document.getElementById('cpassword').value;
+
+                            if (password !== confirmPassword) {
+                                document.getElementById('cpassword').classList.add('error');
+                            } else {
+                                document.getElementById('cpassword').classList.remove('error');
+                            }
+                        }
+
+                        // Email Validation
+                        function validateEmail(inputElement) {
+                            const emailValue = inputElement.value;
+                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                            if (!emailRegex.test(emailValue)) {
+                                inputElement.classList.add('error');
+                            } else {
+                                inputElement.classList.remove('error');
+                            }
+                        }
+
+                        document.getElementById('signupEmail').addEventListener('input', function () {
+                            validateEmail(this);
+                        });
+
+                        function togglePassword(id) {
+                            const passwordField = document.getElementById(id);
+                            const eyeIcon = passwordField.nextElementSibling;
+                            if (passwordField.type === 'password') {
+                                passwordField.type = 'text';
+                                eyeIcon.classList.remove('fa-eye');
+                                eyeIcon.classList.add('fa-eye-slash');
+                            } else {
+                                passwordField.type = 'password';
+                                eyeIcon.classList.remove('fa-eye-slash');
+                                eyeIcon.classList.add('fa-eye');
+                            }
+                        }
+
+                        document.querySelectorAll('input[type="password"]').forEach((passwordField) => {
+                            passwordField.addEventListener('input', function() {
+                                const toggleIcon = passwordField.nextElementSibling;
+                                if (passwordField.value.trim() === '') {
+                                    toggleIcon.style.display = 'none';
+                                } else {
+                                    toggleIcon.style.display = 'block';
+                                }
+                            });
+                        });
+
+                        function validateForm() {
+                            var acceptTermsCheckbox = document.getElementById("acceptTerms");
+                            if (!acceptTermsCheckbox.checked) {
+                                alert("Please accept the terms and privacy policies.");
+                                return false;
+                            }
+
+                            const email = document.getElementById('signupEmail');
+                            const password = document.getElementById('npassword');
+                            const confirmPassword = document.getElementById('cpassword');
+
+                            // Validate email and password before submitting
+                            validateEmail(email);
+                            validatePassword(password);
+
+                            // Check if any field has error class
+                            if (document.querySelectorAll('.error').length > 0) {
+                                alert("Please fix the errors before submitting.");
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    </script>
+
+
                 </div>
             </div>
         </div>
@@ -144,89 +497,32 @@ include 'user_body.php';
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 
     <script>
-        function validateInput(inputElement) {
-            // Remove leading spaces
-            inputElement.value = inputElement.value.replace(/^\s+/g, '');
-
-            // Allow only single spaces between words and capitalize each word
-            let inputValue = inputElement.value.trim();
-            let parts = inputValue.split(/\s+/);
-
-            for (let i = 0; i < parts.length; i++) {
-                parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1).toLowerCase();
-            }
-
-            inputElement.value = parts.join(' ');
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "100%";
         }
 
-        document.getElementById("firstname").addEventListener("input", function () {
-            validateInput(this);
-        });
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
 
-        document.getElementById("lastname").addEventListener("input", function () {
-            validateInput(this);
-        });
-
-        function validatePassword(inputElement) {
-            const passwordValue = inputElement.value;
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-            const validationMessage = inputElement.nextElementSibling;
-            if (passwordRegex.test(passwordValue)) {
-                inputElement.classList.remove("invalid");
-                inputElement.classList.add("valid");
-                validationMessage.style.display = "none";
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById("furnitureMenu");
+            if (dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
             } else {
-                inputElement.classList.remove("valid");
-                inputElement.classList.add("invalid");
-                validationMessage.style.display = "block";
+                dropdownMenu.style.display = "block";
             }
         }
 
-        document.getElementById("npassword").addEventListener("input", function () {
-            validatePassword(this);
-        });
-
-        document.getElementById("cpassword").addEventListener("input", function () {
-            const npassword = document.getElementById("npassword").value;
-            const cpassword = this.value;
-
-            const validationMessage = this.nextElementSibling;
-            if (npassword === cpassword) {
-                this.classList.remove("invalid");
-                this.classList.add("valid");
-                validationMessage.style.display = "none";
+        document.getElementById("password").addEventListener('input', function() {
+            const password = document.getElementById("password").value;
+            const toggleIcon = document.querySelector('.toggle-password');
+            if (password.trim() === '') {
+                toggleIcon.style.display = 'none';
             } else {
-                this.classList.remove("valid");
-                this.classList.add("invalid");
-                validationMessage.style.display = "block";
+                toggleIcon.style.display = 'block';
             }
         });
-
-        function togglePassword(elementId) {
-            const passwordInput = document.getElementById(elementId);
-            const passwordToggle = passwordInput.nextElementSibling;
-
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                passwordToggle.classList.remove("fa-eye");
-                passwordToggle.classList.add("fa-eye-slash");
-            } else {
-                passwordInput.type = "password";
-                passwordToggle.classList.remove("fa-eye-slash");
-                passwordToggle.classList.add("fa-eye");
-            }
-        }
-
-        function validateForm() {
-            const acceptTerms = document.getElementById("acceptTerms").checked;
-            if (!acceptTerms) {
-                const validationMessage = document.querySelector("#acceptTerms + .validation-message");
-                validationMessage.style.display = "block";
-                return false;
-            }
-            return true;
-        }
     </script>
 </body>
 </html>

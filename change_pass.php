@@ -146,6 +146,27 @@ if (isset($_POST["reset"])) {
         <input type="submit" name="reset" value="Reset" style="background-color: red; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 60px;">
     </form>
 
+    <script>
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailValidationError');
+            const emailValue = emailInput.value;
+
+            if (/\s/.test(emailValue)) {
+                emailError.style.display = 'block';
+                emailError.textContent = 'Email should not contain spaces or whitespace.';
+                return false;
+            } else {
+                emailError.style.display = 'none';
+                return true;
+            }
+        }
+
+        document.getElementById('email').addEventListener('input', function(event) {
+            const emailInput = event.target;
+            emailInput.value = emailInput.value.replace(/\s/g, '');
+        });
+    </script>
 
 <script>
     var knownDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"];

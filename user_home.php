@@ -59,6 +59,8 @@ if (!isset($_SESSION['user_id'])) {
                     }
 
                     mysqli_close($conn);
+
+                    shuffle($products);
                     ?>
                     <?php foreach ($products as $product) { ?>
                         <div style="margin-left:18px;">

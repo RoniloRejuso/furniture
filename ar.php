@@ -2,6 +2,12 @@
 session_start();
 include 'dbcon.php';
 
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['message'] = "You must log in first";
+    header("Location: user_login.php");
+    exit();
+}
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -15,7 +21,6 @@ if (isset($_GET['product_id'])) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $model_path = $row['file_path'];
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +37,7 @@ if (isset($_GET['product_id'])) {
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: black;
         }
         #canvas {
             width: 100vw;
@@ -42,21 +48,25 @@ if (isset($_GET['product_id'])) {
             top: 20px;
             left: 20px;
             padding: 10px;
-            opacity: 0.5;
-            background-color: #964B33;
-            border-radius: 5px;
-            color: #fff;
-            border: none;
+            background-color: transparent;
+            border: 4px solid gray;
+            border-radius: 10px;
+            color: gray;
+            font-weight: bold;
             cursor: pointer;
         }
         #backButton:hover {
-            background-color: #964B33;
+            border: 4px solid white;
+            color: white;
+            opacity: 0.6;
         }
-        
     </style>
+
+    <!-- Include SweetAlert CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <button id="backButton">Back</button>
+    <button id="backButton">BACK</button>
 
     <canvas id="canvas"></canvas>
 
@@ -78,13 +88,28 @@ if (isset($_GET['product_id'])) {
         let modelPath = "<?php echo $model_path; ?>";
         let modelScaleFactor = 0.01;
         let controller;
-        let modelLoaded = false; // Track if the model is loaded
+        let modelLoaded = false;
+        let model;
+
+        let raycaster, touchPosition, pointerDown = false, pointerPrevious = { x: 0, y: 0 };
 
         init();
         animate();
 
         function init() {
             let myCanvas = document.getElementById("canvas");
+
+            // Check if user is on a desktop
+            if (!isMobileDevice()) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Looks like you\'re using the desktop device.',
+                    text: 'Open the web app on any mobile device to use the AR experience.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = 'product_details.php?product_id=<?php echo $product_id; ?>';
+            });
+            }
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(
@@ -139,15 +164,22 @@ if (isset($_GET['product_id'])) {
             reticle.matrixAutoUpdate = false;
             reticle.visible = false;
             scene.add(reticle);
+
+            raycaster = new THREE.Raycaster();
+            touchPosition = new THREE.Vector2();
+
+            window.addEventListener('touchstart', onTouchStart, { passive: false });
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
+            window.addEventListener('touchend', onTouchEnd, false);
         }
 
         function onSelect() {
-            if (reticle.visible && !modelLoaded) { // Ensure model is not already loaded
-                modelLoaded = true; // Set flag to true once model is loaded to prevent re-loading
+            if (reticle.visible && !modelLoaded) {
+                modelLoaded = true;
 
                 const loader = new GLTFLoader();
                 loader.load(modelPath, function (glb) {
-                    let model = glb.scene;
+                    model = glb.scene;
                     model.position.setFromMatrixPosition(reticle.matrix);
                     model.scale.set(modelScaleFactor, modelScaleFactor, modelScaleFactor);
                     scene.add(model);
@@ -158,6 +190,53 @@ if (isset($_GET['product_id'])) {
             } else {
                 console.log("Reticle not visible or model already loaded, cannot place model");
             }
+        }
+
+        function onTouchStart(event) {
+            if (model && event.touches.length === 1) {
+                touchPosition.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+                touchPosition.y = - (event.touches[0].clientY / window.innerHeight) * 2 + 1;
+
+                raycaster.setFromCamera(touchPosition, camera);
+
+                const intersects = raycaster.intersectObject(model, true);
+
+                if (intersects.length > 0) {
+                    pointerDown = true;
+                    pointerPrevious.x = event.touches[0].clientX;
+                    pointerPrevious.y = event.touches[0].clientY;
+                }
+            }
+        }
+
+        function onTouchMove(event) {
+            if (pointerDown && model && event.touches.length === 1) {
+                let deltaMove = {
+                    x: event.touches[0].clientX - pointerPrevious.x,
+                    y: event.touches[0].clientY - pointerPrevious.y
+                };
+
+                let deltaRotationQuaternion = new THREE.Quaternion()
+                    .setFromEuler(new THREE.Euler(
+                        toRadians(deltaMove.y * 1),
+                        toRadians(deltaMove.x * 1),
+                        0,
+                        'XYZ'
+                    ));
+
+                model.quaternion.multiplyQuaternions(deltaRotationQuaternion, model.quaternion);
+
+                pointerPrevious.x = event.touches[0].clientX;
+                pointerPrevious.y = event.touches[0].clientY;
+            }
+        }
+
+        function onTouchEnd(event) {
+            pointerDown = false;
+        }
+
+        function toRadians(angle) {
+            return angle * (Math.PI / 180);
         }
 
         function animate() {
@@ -196,9 +275,15 @@ if (isset($_GET['product_id'])) {
             }
             renderer.render(scene, camera);
         }
+
+        // Function to detect if the user is on a mobile device
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
         document.getElementById('backButton').addEventListener('click', function() {
-        window.history.back();
-    });
+            window.history.back();
+        });
     </script>
 </body>
 </html>

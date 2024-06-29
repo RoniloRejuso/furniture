@@ -296,7 +296,7 @@ function combineNames() {
 function previewImage(input) {
     var preview = document.getElementById('profile-image-preview');
     var file = input.files[0];
-    var allowedTypes = ['image/jpeg', 'image/png'];
+    var allowedTypes = ['image/jpeg'];
 
     if (file && allowedTypes.includes(file.type)) {
         var reader = new FileReader();
@@ -307,7 +307,7 @@ function previewImage(input) {
 
         reader.readAsDataURL(file);
     } else {
-        alert('Only JPEG and PNG formats are allowed.');
+        alert('Only JPEG formats are allowed.');
         input.value = '';
         preview.src = "images/profile-pic.jpg";
     }

@@ -47,7 +47,7 @@ class ARButton {
                 await renderer.xr.setSession(session);
 
                 button.textContent = 'STOP AR';
-                button.style.background = '#493A2D';
+                button.style.background = '#tranparent';
                 sessionInit.domOverlay.root.style.display = '';
 
                 currentSession = session;
@@ -58,41 +58,26 @@ class ARButton {
                 currentSession.removeEventListener('end', onSessionEnded);
 
                 button.textContent = 'START AR';
-                button.style.background = '#964B33';
+                button.style.background = '#transparent';
                 sessionInit.domOverlay.root.style.display = 'none';
 
                 currentSession = null;
                 isARSessionActive = false;
 
-                // Automatically refresh the page after stopping AR
                 setTimeout(() => {
                     window.location.reload();
-                }, 1000); // Refresh after 1 second (adjust timing as needed)
-            }
-
-            function createBackButton() {
-                const backButton = document.createElement('button');
-                backButton.textContent = 'Back';
-                backButton.style.position = 'absolute';
-                backButton.style.bottom = '20px';
-                backButton.style.left = '20px';
-                backButton.style.padding = '10px';
-                backButton.style.background = '#333';
-                backButton.style.color = '#fff';
-                backButton.style.border = 'none';
-                backButton.style.cursor = 'pointer';
-                backButton.addEventListener('click', function () {
-                    window.history.back(); // Navigate back in history
-                });
-                document.body.appendChild(backButton);
+                }, 500);
             }
 
             button.style.display = '';
             button.style.cursor = 'pointer';
             button.style.left = 'calc(50% - 50px)';
             button.style.width = '100px';
-            button.style.background = '#964B33';
-            button.style.color = '#FFFFFF';
+            button.style.background = 'transparent';
+            button.style.color = 'gray';
+            button.style.fontWeight = 'bold';
+            button.style.border = '4px solid gray';
+            button.style.borderRadius = '10px';
 
             button.textContent = 'START AR';
 
@@ -138,13 +123,12 @@ class ARButton {
             element.style.position = 'absolute';
             element.style.bottom = '20px';
             element.style.padding = '12px 6px';
-            element.style.border = 'transparent';
-            element.style.borderRadius = '5px';
-            element.style.background = '#964B33';
+            button.style.border = '4px solid white';
+            element.style.borderRadius = '10px';
+            element.style.background = 'transparent';
             element.style.color = '#fff';
             element.style.font = 'normal 13px sans-serif';
             element.style.textAlign = 'center';
-            element.style.opacity = '0.5';
             element.style.outline = 'none';
             element.style.zIndex = '999';
         }

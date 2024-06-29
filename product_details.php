@@ -53,12 +53,10 @@ if(isset($_POST['add_to_cart'])) {
         exit;
     }
 
-    // Redirect to cart page after processing
     header("Location: user_carts.php");
     exit();
 }
 
-// Handle GET request to display product details
 if(isset($_GET['product_id'])) {
     $productId = mysqli_real_escape_string($conn, $_GET['product_id']);
 
@@ -83,117 +81,37 @@ if(isset($_GET['product_id'])) {
 <head>
     <?php include 'user_header.php'; ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/prod.css">
 </head>
-<style>
-.product-details {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    flex-wrap: wrap;
-}
-.product-container1 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #FFF6EB;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    max-width: 100%;
-}
-.product_image {
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
-.product-info {
-    text-align: center;
-}
-.product-price {
-    color: black;
-    font-size: 18px;
-}
-.buttons {
-    text-align: center;
-    margin-top: 20px;
-}
-.buttons a {
-    display: inline-block;
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 30px;
-    margin: 0 10px;
-}
-.btn-add-to-cart {
-    padding: 10px;
-    background-color: #964B33;
-    border-radius: 5px !important;
-    color: #fff;
-    margin-left: 25px;
-}
-.btn-add-to-cart:hover {
-    background-color: #964B33;
-    color: #fff;
-}
-.btn-view-ar {
-    padding: 10px;
-    background-color: #493A2D;
-    color: #fff;
-    border-radius: 30px;
-}
-.btn-view-ar:hover {
-    background-color: #493A2D;
-    color: #fff;
-}
-.recommended-products {
-    margin-top: 50px;
-}
-.recommended-products .row {
-    margin: 0 -15px;
-}
-
-@media (min-width: 768px) {
-    .product-details {
-        flex-wrap: nowrap;
-    }
-    .product-container1 {
-        flex-direction: row;
-        max-width: 800px;
-    }
-    .product_image {
-        margin-bottom: 0;
-        max-width: auto;
-    }
-}
-</style>
 <body>
     <?php include 'user_body.php'; ?>
     <div class="container">
         <div class="row product-details">
             <div class="product-container1">
-                <div class="col-md-6">
-                    <img src="<?php echo $product['product_image']; ?>" class="product_image" alt="Product Image">
+                <div class="product_image">
+                    <img src="<?php echo $product['product_image']; ?>" alt="Our Home">
                 </div>
-                <div class="col-md-6">
-                    <h2 class="product-name" style="text-align: center;"><b>Our Home <?php echo $product['product_name']; ?></b></h2>
-                    <h3 class="product-price" style="font-size: 20px;">₱<?php echo $product['price']; ?></h3>
-                    <p><?php echo $product['description']; ?></p>
-                    <p>Size: <?php echo $product['size']; ?></p>
-                    <p>Weight capacity: <?php echo $product['weight_capacity']; ?></p>
-                    <p>Color: <?php echo $product['color']; ?></p>
+                <div class="product-info">
+                    <h2 class="product-name"><b>Our Home <?php echo $product['product_name']; ?></b></h2>
+                    <h3 class="product-price">₱<?php echo $product['price']; ?></h3>
+                    <div class="product-description">
+                        <p>Description: <?php echo $product['description']; ?></p>
+                    </div>
+                    <div class="product-specs">
+                        <p>Size: <?php echo $product['size']; ?></p>
+                        <p>Weight: <?php echo $product['weight_capacity']; ?></p>
+                        <p>Color: <?php echo $product['color']; ?></p>
+                    </div><br>
                     <div class="buttons">
                         <form id="add-to-cart-form" action="" method="POST">
                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                             <input type="hidden" name="product_name" value="<?php echo $product['product_name']; ?>">
                             <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
                             <input type="hidden" name="product_image" value="<?php echo $product['product_image']; ?>">
-                            <div class="button-container">
-                            <input type="button" class="btn btn-view-ar" value="View in AR" onclick="viewInAR(<?php echo $product['product_id']; ?>)">
-                            <input type="submit" class="btn btn-add-to-cart" value="Add to cart" name="add_to_cart" onclick="checkStock(event)">
-                            </div>
+                            <button type="button" class="btn btn-view-ar" onclick="viewInAR(<?php echo $product['product_id']; ?>)">
+                            <i class="fas fa-cube"></i> View in AR</button>
+                            <button type="submit" class="btn btn-add-to-cart" name="add_to_cart" onclick="checkStock(event)">
+                            <i class="fas fa-shopping-cart"></i> Add to cart</button>
                         </form>
                     </div>
                 </div>
@@ -212,73 +130,73 @@ if(isset($_GET['product_id'])) {
                         $allProducts = array_merge($allProducts, $products);
                     }
                     return array_unique($allProducts);
+                }
+
+                $conn = mysqli_connect($servername, $username, $password, $database);
+
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image FROM orders o
+                JOIN cart c ON o.cart_id = c.cart_id
+                JOIN cart_items ci ON c.cart_id = ci.cart_id
+                JOIN products p ON ci.product_id = p.product_id
+                WHERE o.orders_id = ?;";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $_GET['order_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    $transactions = [];
+                    while ($row = $result->fetch_assoc()) {
+                        $transactions[] = $row;
                     }
 
-                    $conn = mysqli_connect($servername, $username, $password, $database);
+                    $minSupport = 0.1;
+                    $recommendations = generateRecommendations($transactions, $minSupport);
 
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
+                    shuffle($recommendations);
 
-                    $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image FROM orders o
-                    JOIN cart c ON o.cart_id = c.cart_id
-                    JOIN cart_items ci ON c.cart_id = ci.cart_id
-                    JOIN products p ON ci.product_id = p.product_id
-                    WHERE o.orders_id = ?;";
+                    $displayLimit = 4;
+                    $count = 0;
 
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("i", $_GET['order_id']);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-
-                    if ($result->num_rows > 0) {
-                        $transactions = [];
-                        while ($row = $result->fetch_assoc()) {
-                            $transactions[] = $row;
-                        }
-
-                        $minSupport = 0.1;
-                        $recommendations = generateRecommendations($transactions, $minSupport);
-
-                        shuffle($recommendations);
-
-                        $displayLimit = 4;
-                        $count = 0;
-
-                        foreach ($recommendations as $product) {
-                            foreach ($transactions as $transaction) {
-                                if ($product == $transaction["product_name"]) {
-                                    $product_id = $transaction["product_id"];
-                                    $price = $transaction["price"];
-                                    $product_image = $transaction["product_image"];
-                                    break;
-                                }
-                            }
-
-                            echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
-                            echo '<a href="product_details.php?product_id=' . $product_id . '">';
-                            echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
-                            echo '<div class="product-info">';
-                            echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
-                            echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
-                            echo '</div>';
-                            echo '</a>';
-                            echo '</div>';
-
-                            $count++;
-                            if ($count >= $displayLimit) {
+                    foreach ($recommendations as $product) {
+                        foreach ($transactions as $transaction) {
+                            if ($product == $transaction["product_name"]) {
+                                $product_id = $transaction["product_id"];
+                                $price = $transaction["price"];
+                                $product_image = $transaction["product_image"];
                                 break;
                             }
                         }
-                    } else {
-                        echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
-                        echo '<b>No Products available.<b>';
-                        echo '</div>';
-                    }
 
-                    $conn->close();
-                    ?>
-                </div>
+                        echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
+                        echo '<a href="product_details.php?product_id=' . $product_id . '">';
+                        echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
+                        echo '<div class="product-info">';
+                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
+                        echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
+                        echo '</div>';
+                        echo '</a>';
+                        echo '</div>';
+
+                        $count++;
+                        if ($count >= $displayLimit) {
+                            break;
+                        }
+                    }
+                } else {
+                    echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                    echo '<b>No Products available.<b>';
+                    echo '</div>';
+                }
+
+                $conn->close();
+                ?>
+            </div>
         </div>
     </div><br><br><br>
     <div class="floating-navbar">
@@ -319,9 +237,8 @@ if(isset($_GET['product_id'])) {
         }
 
         function viewInAR(productId) {
-        window.location.href = 'ar1.php?product_id=' + encodeURIComponent(productId);
-    }
-
+            window.location.href = 'ar1.php?product_id=' + encodeURIComponent(productId);
+        }
 
         function checkStock(event) {
             var quantity = document.getElementById('product_quantity').value;

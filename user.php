@@ -8,7 +8,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_id =  $_GET['user_id'];
+if (isset($_GET['user_id'])) {
+$user_id = $_GET['user_id'];
 $query = "SELECT * FROM users WHERE user_id = $user_id";
 $result = mysqli_query($conn, $query);
 
@@ -17,6 +18,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 } else {
     echo "User data not found.";
     exit();
+    }   
 }
 ?>
 

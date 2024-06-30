@@ -25,6 +25,11 @@
     border-radius: 10px;
     height: auto;
 }
+.product_image img {
+    width: 400px;
+    border-radius: 10px;
+    height: 300px;
+}
 
 .product-info {
     text-align: center;

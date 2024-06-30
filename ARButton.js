@@ -1,14 +1,11 @@
 class ARButton {
-
     static createButton(renderer, sessionInit = {}) {
-
         const button = document.createElement('button');
         let currentSession = null;
         let isARSessionActive = false;
 
         function showStartAR() {
             if (sessionInit.domOverlay === undefined) {
-                // Create overlay and SVG icon
                 var overlay = document.createElement('div');
                 overlay.style.display = 'none';
                 document.body.appendChild(overlay);
@@ -47,7 +44,7 @@ class ARButton {
                 await renderer.xr.setSession(session);
 
                 button.textContent = 'STOP AR';
-                button.style.background = '#tranparent';
+                button.style.background = 'transparent';
                 sessionInit.domOverlay.root.style.display = '';
 
                 currentSession = session;
@@ -58,7 +55,7 @@ class ARButton {
                 currentSession.removeEventListener('end', onSessionEnded);
 
                 button.textContent = 'START AR';
-                button.style.background = '#transparent';
+                button.style.background = 'transparent';
                 sessionInit.domOverlay.root.style.display = 'none';
 
                 currentSession = null;
@@ -71,13 +68,15 @@ class ARButton {
 
             button.style.display = '';
             button.style.cursor = 'pointer';
-            button.style.left = 'calc(50% - 50px)';
+            button.style.left = '20px';  // Position button horizontally from the left
+            button.style.top = '20px';   // Position button vertically from the top
             button.style.width = '100px';
             button.style.background = 'transparent';
             button.style.color = 'gray';
             button.style.fontWeight = 'bold';
             button.style.border = '4px solid gray';
             button.style.borderRadius = '10px';
+            button.style.position = 'absolute'; // Ensure the button is positioned absolutely
 
             button.textContent = 'START AR';
 

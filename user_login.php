@@ -27,10 +27,10 @@ include 'user_header.php';
         }
         .error-message {
             color: red;
-            display: none; /* Ensure error messages are hidden by default */
+            display: none;
         }
         .error {
-            border-color: red !important; /* Ensure red border takes precedence */
+            border-color: red !important;
         }
         .error-message {
             color: red;
@@ -82,13 +82,12 @@ include 'user_body.php';
                         </div>
                         
                         <div class="form-group">
-    <label for="password">Password:</label>
-    <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
-    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
-</div>
-
-
+                            <label for="password">Password:</label>
+                            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
+                        </div>
                         <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
+                        <a href="forgot_pass.php">Forgot Password?</a>
                         <div class="or-divider">
                             <span class="divider-line"></span> OR <span class="divider-line"></span>
                         </div>

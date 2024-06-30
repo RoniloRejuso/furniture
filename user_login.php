@@ -77,9 +77,12 @@ include 'user_body.php';
                     <form id="loginForm" method="POST" action="user_dex.php">
 
                     <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
-                        </div>
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" maxlength="50" required>
+                        <div id="emailNumberError1" class="error-message">Email should not start with a number.</div>
+                        <div id="emailFormatError1" class="error-message">Invalid email format.</div>
+                    </div>
+
                         
                         <div class="form-group">
                             <label for="password">Password:</label>
@@ -93,6 +96,7 @@ include 'user_body.php';
                         </div>
                         <button type="button" class="btn btn-custom-color" data-toggle="modal" data-target="#signupModal">Create Account</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -113,89 +117,85 @@ include 'user_body.php';
             toggleBtn.classList.add('fa-eye');
         }
     }
+
+    document.getElementById('email').addEventListener('input', function () {
+        this.value = this.value.replace(/\s/g, '');
+    });
+
+    document.getElementById('password').addEventListener('input', function () {
+        this.value = this.value.replace(/\s/g, '');
+    });
+
+    document.getElementById('email').addEventListener('blur', validateEmail);
+    document.getElementById('password').addEventListener('input', validatePassword);
+
+    function validateEmail() {
+        const emailInput = document.getElementById('email');
+        const emailNumberError = document.getElementById('emailNumberError1');
+        const emailFormatError = document.getElementById('emailFormatError1');
+        const emailValue = emailInput.value.trim();
+        const startsWithNumber = /^[0-9]/.test(emailValue);
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+        if (emailValue === '') {
+            emailInput.classList.remove('error');
+            emailNumberError.style.display = 'none';
+            emailFormatError.style.display = 'none';
+        } else if (startsWithNumber) {
+            emailInput.classList.add('error');
+            emailNumberError.style.display = 'block';
+            emailFormatError.style.display = 'none';
+        } else if (emailValue && !isValidEmail) {
+            emailInput.classList.add('error');
+            emailNumberError.style.display = 'none';
+            emailFormatError.style.display = 'block';
+        } else {
+            emailInput.classList.remove('error');
+            emailNumberError.style.display = 'none';
+            emailFormatError.style.display = 'none';
+        }
+
+        // Toggle error class based on error message display
+        emailInput.classList.toggle('error', emailNumberError.style.display === 'block' || emailFormatError.style.display === 'block');
+    }
+
+    function validatePassword() {
+        const passwordInput = document.getElementById('password');
+        const passwordError = document.getElementById('passwordError');
+        const passwordValue = passwordInput.value.trim();
+        const isOnlyNumbers = /^[0-9]+$/.test(passwordValue);
+
+        if (passwordValue === '') {
+            passwordInput.classList.remove('error');
+            passwordError.style.display = 'none';
+        } else if (isOnlyNumbers) {
+            passwordInput.classList.add('error');
+            passwordError.style.display = 'block';
+        } else {
+            passwordInput.classList.remove('error');
+            passwordError.style.display = 'none';
+        }
+    }
+
+    function validateForm() {
+        validateEmail();
+        validatePassword();
+    }
+
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        const icon = input.nextElementSibling;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
 </script>
-
-
-    <script>
-        document.getElementById('email').addEventListener('input', function () {
-            this.value = this.value.replace(/\s/g, '');
-        });
-        
-        document.getElementById('password').addEventListener('input', function () {
-            this.value = this.value.replace(/\s/g, '');
-        });
-
-        document.getElementById('email').addEventListener('blur', validateEmail);
-        document.getElementById('password').addEventListener('input', validatePassword);
-
-        function validateEmail() {
-            const emailInput = document.getElementById('email');
-            const emailNumberError = document.getElementById('emailNumberError');
-            const emailFormatError = document.getElementById('emailFormatError');
-            const emailValue = emailInput.value.trim();
-            const startsWithNumber = /^[0-9]/.test(emailValue);
-            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
-
-            if (emailValue === '') {
-                emailInput.classList.remove('error');
-                emailNumberError.style.display = 'none';
-                emailFormatError.style.display = 'none';
-            } else if (startsWithNumber) {
-                emailInput.classList.add('error');
-                emailNumberError.style.display = 'block';
-                emailFormatError.style.display = 'none';
-            } else if (emailValue && !isValidEmail) {
-                emailInput.classList.add('error');
-                emailNumberError.style.display = 'none';
-                emailFormatError.style.display = 'block';
-            } else {
-                emailInput.classList.remove('error');
-                emailNumberError.style.display = 'none';
-                emailFormatError.style.display = 'none';
-            }
-
-            // Toggle error class based on error message display
-            emailInput.classList.toggle('error', emailNumberError.style.display === 'block' || emailFormatError.style.display === 'block');
-        }
-
-        function validatePassword() {
-            const passwordInput = document.getElementById('password');
-            const passwordError = document.getElementById('passwordError');
-            const passwordValue = passwordInput.value.trim();
-            const isOnlyNumbers = /^[0-9]+$/.test(passwordValue);
-
-            if (passwordValue === '') {
-                passwordInput.classList.remove('error');
-                passwordError.style.display = 'none';
-            } else if (isOnlyNumbers) {
-                passwordInput.classList.add('error');
-                passwordError.style.display = 'block';
-            } else {
-                passwordInput.classList.remove('error');
-                passwordError.style.display = 'none';
-            }
-        }
-
-        function validateForm() {
-            validateEmail();
-            validatePassword();
-        }
-
-        function togglePassword(id) {
-            const input = document.getElementById(id);
-            const icon = input.nextElementSibling;
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-    </script>
-
 
     <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -265,37 +265,109 @@ include 'user_body.php';
                         </div>
 
                         <div class="form-group">
-    <label for="password2">Password:</label>
-    <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
-    <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
-    <div id="passwordError2" class="error-message" style="display:none;">Password should not be only numbers.</div>
-    <div id="passwordStrengthError" class="error-message" style="display:none;">Password should have at least one uppercase letter or special character.</div>
-</div>
+                        <label for="password2">Password:</label>
+                        <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
+                        <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
+                        <div id="passwordError2" class="error-message" style="display:none;">Password should not be only numbers.</div>
+                        <div id="passwordStrengthError" class="error-message" style="display:none;">Password is too weak. It should have at least one uppercase letter or special character.</div>
+                    </div>
 
-<div class="form-group">
-    <label for="cpassword">Confirm Password:</label>
-    <input type="password" class="form-control password-input" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
-    <i class="fas fa-eye toggle-password" onclick="togglePassword('cpassword')"></i>
-    <small id="passwordError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
-</div>
+                    <div class="form-group">
+                        <label for="cpassword">Confirm Password:</label>
+                        <input type="password" class="form-control password-input" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword('cpassword')"></i>
+                        <small id="passwordMismatchError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
+                    </div>
 
-<script>
-    document.getElementById('password2').addEventListener('input', validatePasswords);
-    document.getElementById('cpassword').addEventListener('input', validatePasswords);
+                    <script>
+function validatePassword() {
+    const passwordField = document.getElementById('password2');
+    const passwordStrengthError = document.getElementById('passwordStrengthError');
+    const passwordError2 = document.getElementById('passwordError2');
+    const password = passwordField.value;
 
-    function validatePasswords() {
-        var password = document.getElementById('password2').value;
-        var confirmPassword = document.getElementById('cpassword').value;
-        var passwordError = document.getElementById('passwordError');
+    // Hide all error messages initially
+    passwordStrengthError.style.display = 'none';
+    passwordError2.style.display = 'none';
 
-        if (password !== confirmPassword) {
-            document.getElementById('cpassword').classList.add('error');
-            passwordError.style.display = 'block';
-        } else {
-            document.getElementById('cpassword').classList.remove('error');
-            passwordError.style.display = 'none';
-        }
+    // Check for password length
+    if (password.length < 4) {
+        return true; // Do not show any error if password is less than 4 characters
     }
+
+    // Check for password strength: all lowercase and no special characters
+    if (/^[a-z]+$/.test(password)) {
+        passwordStrengthError.style.display = 'block';
+        return false;
+    }
+    
+    return true;
+}
+
+function checkPasswordMatch() {
+    const passwordField = document.getElementById('password2');
+    const confirmPasswordField = document.getElementById('cpassword');
+    const passwordMismatchError = document.getElementById('passwordMismatchError');
+
+    // Hide error message initially
+    passwordMismatchError.style.display = 'none';
+
+    // Check if passwords match
+    if (passwordField.value !== confirmPasswordField.value) {
+        passwordMismatchError.style.display = 'block';
+        return false;
+    }
+
+    return true;
+}
+
+document.getElementById('password2').addEventListener('input', validatePassword);
+document.getElementById('cpassword').addEventListener('input', checkPasswordMatch);
+
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (field.type === "password") {
+        field.type = "text";
+    } else {
+        field.type = "password";
+    }
+}
+</script>
+                    <script>
+function validatePassword() {
+    const passwordField = document.getElementById('password2');
+    const passwordStrengthError = document.getElementById('passwordStrengthError');
+    const passwordError2 = document.getElementById('passwordError2');
+    const password = passwordField.value;
+
+    // Hide all error messages initially
+    passwordStrengthError.style.display = 'none';
+    passwordError2.style.display = 'none';
+
+    // Check for password length
+    if (password.length < 4) {
+        return true; // Do not show any error if password is less than 4 characters
+    }
+
+    // Check for password strength: all lowercase and no special characters
+    if (/^[a-z]+$/.test(password)) {
+        passwordStrengthError.style.display = 'block';
+        return false;
+    }
+    
+    return true;
+}
+
+document.getElementById('password2').addEventListener('input', validatePassword);
+
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (field.type === "password") {
+        field.type = "text";
+    } else {
+        field.type = "password";
+    }
+}
 </script>
 
 <script>
@@ -313,76 +385,7 @@ include 'user_body.php';
             }
         }
     </script>
-<script>
-
-    // Add event listeners to validate passwords and toggle password visibility
-    document.getElementById('password2').addEventListener('input', function () {
-        this.value = this.value.replace(/\s/g, '');
-        validatePassword();
-        validatePasswordMatch(); // Validate password match on input change
-    });
-
-    document.getElementById('cpassword').addEventListener('input', function () {
-        this.value = this.value.replace(/\s/g, '');
-        validatePasswordMatch();
-    });
-
-    // Function to validate password strength (uppercase or special character)
-    function validatePassword() {
-        const password = document.getElementById('password2').value;
-        const passwordStrengthError = document.getElementById('passwordStrengthError');
-        // Regex to ensure password has at least one uppercase letter or special character
-        const regex = /^(?=.*[A-Z!@#$%^&*(),.?":{}|<>]).{6,}$/;
-        if (!regex.test(password)) {
-            passwordStrengthError.style.display = 'block';
-        } else {
-            passwordStrengthError.style.display = 'none';
-        }
-    }
-
-    // Function to validate password match
-    function validatePasswordMatch() {
-        const password = document.getElementById('password2').value;
-        const confirmPassword = document.getElementById('cpassword').value;
-        const passwordError = document.getElementById('passwordError');
-        if (password !== confirmPassword) {
-            passwordError.style.display = 'block';
-        } else {
-            passwordError.style.display = 'none';
-        }
-    }
-
-    // Function to validate the entire form before submission
-    function validateForm() {
-        validatePassword(); // Check password strength
-        validatePasswordMatch(); // Check password match
-
-        const passwordStrengthError = document.getElementById('passwordStrengthError');
-        const passwordError = document.getElementById('passwordError');
-
-        // If any error message is displayed, prevent form submission
-        if (passwordStrengthError.style.display === 'block' || passwordError.style.display === 'block') {
-            return false;
-        }
-
-        return true;
-    }
-
-    // Function to toggle password visibility
-    function togglePassword(fieldId) {
-        const field = document.getElementById(fieldId);
-        if (field.type === "password") {
-            field.type = "text";
-        } else {
-            field.type = "password";
-        }
-    }
-
-
-</script>
-
-
-                        
+                    
 <script>
     // Function to prevent spaces in the input fields
     function preventSpaces(event) {
@@ -619,37 +622,6 @@ include 'user_body.php';
     </script>
 
                     <script>
-            
-                        function validatePassword(inputElement) {
-                            const passwordValue = inputElement.value;
-                            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*_)[A-Za-z\d_]{8,}$/;
-
-                            if (!passwordRegex.test(passwordValue)) {
-                                inputElement.classList.add('error');
-                            } else {
-                                inputElement.classList.remove('error');
-                            }
-                        }
-
-                        document.getElementById('npassword').addEventListener('input', function () {
-                            validatePassword(this);
-                        });
-
-                        document.getElementById('cpassword').addEventListener('input', function () {
-                            validatePasswords();
-                        });
-
-                        function validatePasswords() {
-                            const password = document.getElementById('npassword').value;
-                            const confirmPassword = document.getElementById('cpassword').value;
-
-                            if (password !== confirmPassword) {
-                                document.getElementById('cpassword').classList.add('error');
-                            } else {
-                                document.getElementById('cpassword').classList.remove('error');
-                            }
-                        }
-
                         // Email Validation
                         function validateEmail(inputElement) {
                             const emailValue = inputElement.value;

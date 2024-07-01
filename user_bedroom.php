@@ -16,6 +16,7 @@ include 'user_header.php';
       <?php
 include 'user_body.php';
 ?>
+
          <div class="bedroom_section">
          <div class="container" style="padding:20px;">
             <div class="col-sm-12">
@@ -72,7 +73,6 @@ include 'user_body.php';
                 </div>
             <?php
             }
-            // Close database connection
             $stmt->close();
             $conn->close();
             ?>
@@ -85,5 +85,17 @@ include 'user_body.php';
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php"><i class="fas fa-user"></i></a>
       </div>
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="js/plugin.js"></script>
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <!-- javascript --> 
+      <script src="js/owl.carousel.js"></script>
+      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>  
+      <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
    </body>
 </html>

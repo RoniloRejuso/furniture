@@ -90,7 +90,7 @@ include 'user_body.php';
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
                         </div>
                         <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
-                        <a href="forgot_pass.php">Forgot Password?</a>
+                        <a href="user_change_pass.php">Forgot Password?</a>
                         <div class="or-divider">
                             <span class="divider-line"></span> OR <span class="divider-line"></span>
                         </div>

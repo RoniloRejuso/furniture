@@ -4,7 +4,6 @@
                <div id="mySidenav" class="sidenav"><br><br><br>
                   <span href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</span>
                   <a class="user_products" href="user_new_products.php">New Products</a>
-                  <a class="user_products" href="user_products_sale.php">Products on Sale</a>
                   <div class="dropdown">
                       <a href="#" class="dropdown-toggle" id="furnitureDropdown" onclick="toggleDropdown()" aria-haspopup="true" aria-expanded="false">
                           Furniture

@@ -93,11 +93,9 @@ if (isset($_GET['product_id'])) {
         function init() {
             let myCanvas = document.getElementById("canvas");
 
-            // Check if user is on a desktop
             if (!isMobileDevice()) {
                 Swal.fire({
                     icon: 'info',
-                    title: 'Looks like you\'re using the desktop device.',
                     text: 'Open the web app on any mobile device to use the AR experience.',
                     confirmButtonText: 'OK'
                 }).then(() => {

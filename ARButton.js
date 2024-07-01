@@ -1,11 +1,12 @@
 class ARButton {
-    static createButton(renderer, sessionInit = {}) {
-        const button = document.createElement('button');
-        let currentSession = null;
-        let isARSessionActive = false;
 
-        function showStartAR() {
+    static createButton(renderer, sessionInit = {}) {
+
+        const button = document.createElement('button');
+
+        function showStartAR(/*device*/) {
             if (sessionInit.domOverlay === undefined) {
+                // Create overlay and SVG icon
                 var overlay = document.createElement('div');
                 overlay.style.display = 'none';
                 document.body.appendChild(overlay);
@@ -17,7 +18,7 @@ class ARButton {
                 svg.style.right = '20px';
                 svg.style.top = '20px';
                 svg.addEventListener('click', function () {
-                    if (currentSession && isARSessionActive) {
+                    if (currentSession) {
                         currentSession.end();
                     }
                 });
@@ -37,46 +38,41 @@ class ARButton {
                 sessionInit.domOverlay = { root: overlay };
             }
 
+            let currentSession = null;
+
             async function onSessionStarted(session) {
                 session.addEventListener('end', onSessionEnded);
 
+                // Configure renderer
                 renderer.xr.setReferenceSpaceType('local');
                 await renderer.xr.setSession(session);
 
+                // Update button state
                 button.textContent = 'STOP AR';
-                button.style.background = 'transparent';
+                button.style.background = '#4CAF50'; // Change background color for "STOP AR"
                 sessionInit.domOverlay.root.style.display = '';
 
                 currentSession = session;
-                isARSessionActive = true;
             }
 
-            function onSessionEnded() {
+            function onSessionEnded(/*event*/) {
                 currentSession.removeEventListener('end', onSessionEnded);
 
+                // Update button state
                 button.textContent = 'START AR';
-                button.style.background = 'transparent';
+                button.style.background = '#964B33'; // Revert to original background color for "START AR"
                 sessionInit.domOverlay.root.style.display = 'none';
 
                 currentSession = null;
-                isARSessionActive = false;
-
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
             }
 
+            // Configure button style and behavior
             button.style.display = '';
             button.style.cursor = 'pointer';
-            button.style.left = '20px';  // Position button horizontally from the left
-            button.style.top = '20px';   // Position button vertically from the top
+            button.style.left = 'calc(50% - 50px)';
             button.style.width = '100px';
-            button.style.background = 'transparent';
-            button.style.color = 'gray';
-            button.style.fontWeight = 'bold';
-            button.style.border = '4px solid gray';
-            button.style.borderRadius = '10px';
-            button.style.position = 'absolute'; // Ensure the button is positioned absolutely
+            button.style.background = '#964B33'; // Custom background color for "START AR"
+            button.style.color = '#FFFFFF'; // White text color
 
             button.textContent = 'START AR';
 
@@ -89,16 +85,12 @@ class ARButton {
             };
 
             button.onclick = function () {
-                if (isARSessionActive) {
-                    onSessionEnded();
-                } else {
+                if (currentSession === null) {
                     navigator.xr
                         .requestSession('immersive-ar', sessionInit)
-                        .then(onSessionStarted)
-                        .catch((error) => {
-                            console.error('Error starting AR session:', error);
-                            showARNotSupported();
-                        });
+                        .then(onSessionStarted);
+                } else {
+                    currentSession.end();
                 }
             };
         }
@@ -122,12 +114,13 @@ class ARButton {
             element.style.position = 'absolute';
             element.style.bottom = '20px';
             element.style.padding = '12px 6px';
-            button.style.border = '4px solid white';
-            element.style.borderRadius = '10px';
-            element.style.background = 'transparent';
+            element.style.border = '1px solid #fff';
+            element.style.borderRadius = '4px';
+            element.style.background = '#964B33';
             element.style.color = '#fff';
             element.style.font = 'normal 13px sans-serif';
             element.style.textAlign = 'center';
+            element.style.opacity = '0.5';
             element.style.outline = 'none';
             element.style.zIndex = '999';
         }

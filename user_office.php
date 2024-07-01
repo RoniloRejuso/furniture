@@ -86,40 +86,5 @@ include 'user_body.php';
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php"><i class="fas fa-user"></i></a>
       </div>
-      
-      <!-- Javascript files-->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <script src="js/plugin.js"></script>
-      <!-- sidebar -->
-      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="js/custom.js"></script>
-      <!-- javascript --> 
-      <script src="js/owl.carousel.js"></script>
-      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>  
-      <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-      <script>
-         function openNav() {
-            document.getElementById("mySidenav").style.width = "360px";
-         }
-         
-         function closeNav() {
-           document.getElementById("mySidenav").style.width = "0";
-         }
-         function toggleDropdown() {
-            var dropdownMenu = document.getElementById("furnitureMenu");
-            if (dropdownMenu.style.display === "block") {
-               dropdownMenu.style.display = "none";
-            } else {
-               dropdownMenu.style.display = "block";
-            }
-         }
-
-         function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-         }
-      </script>
    </body>
 </html>

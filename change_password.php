@@ -29,21 +29,21 @@
         <form action="change_password_process.php" method="post" style="background-color: gray; padding: 20px; margin-top: 20px;">
 
         <div class="row mb-3 justify-content-md-center">
-        <label for="inputUsername" class="col-4 col-form-label" style="color: white;">Username</label>
-        <div class="col-lg-auto logcontrols">
-            <input type="text" maxlength="60" name="username" id="inputUsername" class="form-control" required>
-            <small id="usernameValidationError" class="form-text text-danger" style="display:none;">Username cannot be purely numerical or purely lowercase letters.</small>
-        </div>
+    <label for="inputUsername" class="col-4 col-form-label" style="color: white;">Username</label>
+    <div class="col-lg-auto logcontrols">
+        <input type="text" maxlength="60" name="username" id="inputUsername" class="form-control" required onkeydown="preventSpace(event)">
+        <small id="usernameValidationError" class="form-text text-danger" style="display:none;">Username cannot be purely numerical or purely lowercase letters.</small>
     </div>
+</div>
 
-    <div class="row mb-3 justify-content-md-center">
-        <label for="inputPassword" class="col-4 col-form-label" style="color: white;">New Password</label>
-        <div class="col-lg-auto logcontrols">
-            <input type="password" name="new_password" id="password" placeholder="Enter Password" class="form-control" maxlength="20" required>
-            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')" style="color:grey;"></i>
-            <small id="passwordStrengthError" class="form-text text-danger" style="display:none;">Password cannot be purely numerical or purely lowercase letters.</small>
-        </div>
+<div class="row mb-3 justify-content-md-center">
+    <label for="inputPassword" class="col-4 col-form-label" style="color: white;">New Password</label>
+    <div class="col-lg-auto logcontrols">
+        <input type="password" name="new_password" id="password" placeholder="Enter Password" class="form-control" maxlength="20" required onkeydown="preventSpace(event)">
+        <i class="fas fa-eye toggle-password" onclick="togglePassword('password')" style="color:grey;"></i>
+        <small id="passwordStrengthError" class="form-text text-danger" style="display:none;">Password cannot be purely numerical or purely lowercase letters.</small>
     </div>
+</div>
 
     <div class="row mb-3 justify-content-md-center">
         <div class="col-8">
@@ -52,7 +52,13 @@
     </div>
 </form>
 
-
+<script>
+function preventSpace(event) {
+    if (event.key === ' ') {
+        event.preventDefault();
+    }
+}
+</script>
 
 <script>
     // Function to check password strength

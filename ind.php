@@ -1,11 +1,11 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
-$database = "furniture";
+$username = "u138133975_ourhome";
+$password = "7u&0t]B;uQ*";
+$database = "u138133975_furniture";
 
 // Create connection
-$conn = mysqli_connect('localhost', 'root', '', 'furniture');
+$conn = mysqli_connect('localhost', 'u138133975_ourhome', '7u&0t]B;uQ*', 'u138133975_furniture');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

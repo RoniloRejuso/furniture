@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = mysqli_connect("localhost", "root", "", "furniture");
+$conn = mysqli_connect("localhost", "u138133975_ourhome", "7u&0t]B;uQ*", "u138133975_furniture");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -56,8 +56,9 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
           <li class="nav-item dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
               <img src="assets/img/icons/notification-bing.svg" alt="img">
-              <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['Total Notification'];?></span>
+              <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
             </a>
+            
             <div class="dropdown-menu notifications">
               <div class="topnav-dropdown-header">
                 <span class="notification-title">
@@ -104,7 +105,7 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
             </div>
         </div>
         <hr class="m-0">
-        <a class="dropdown-item logout pb-0" href="logout.php">
+        <a class="dropdown-item logout pb-0" href="logout1.php">
             <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
         </a>
     </div>

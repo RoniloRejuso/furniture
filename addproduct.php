@@ -36,6 +36,44 @@ if (!isset($_SESSION['admin_id'])) {
             font-size: 12px;
         }
     </style>
+    
+        <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: .5rem;
+        }
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 6px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group .error {
+            color: red;
+            font-size: .875rem;
+            margin-top: .5rem;
+        }
+        .product-image-preview,
+        .glb-file-preview {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-top: .5rem;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 6px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+
   </head>
   <body>
   <?php include 'header.php';?>
@@ -156,6 +194,7 @@ if (!isset($_SESSION['admin_id'])) {
             <span id="product-image-error" class="error"></span>
         </div>
     </div>
+    
     <div class="col-lg-3 col-sm-6 col-12">
         <div class="form-group">
             <label for="glb-file">Product Model</label>
@@ -196,6 +235,7 @@ if (!isset($_SESSION['admin_id'])) {
                       <textarea class="form-control" id="description" name="description" placeholder="Enter product description" rows="4"></textarea>
                     </div>
                   </div>        
+                  
                   <div class="col-lg-12">
                     <button type="submit" class="btn btn-submit me-2" name="submit">Submit</button>
                     <a href="productlist.html" class="btn btn-cancel">Cancel</a>

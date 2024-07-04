@@ -54,6 +54,8 @@ if (isset($_POST['checkout'])) {
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,63 +128,36 @@ if (isset($_POST['checkout'])) {
 </style>
 <body>
 <?php include 'user_body.php'; ?>
+    <div class="cart-page">
 
-<div class="second_header_section">
-    <div class="container-fluid">
-        <nav class="navbar navbar-light bg-light">
-            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
-        </nav>
-    </div>
-</div>
-<div class="user_settings_section text-center">
-    <div class="container">
-        <section class="cart-container">
-            <form method="post" action="">
-                <?php
-                // Query to fetch cart items with product details
-                $user_id = $_SESSION['user_id'];
-                $select_cart = mysqli_query($conn, "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, p.quantity AS available_quantity, ci.quantity
-                                                    FROM cart_items ci
-                                                    JOIN products p ON ci.product_id = p.product_id
-                                                    WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
-                
-                $grand_total = 0;
-                $item_count = mysqli_num_rows($select_cart);
+ <form method="post" action="delete_from_cart.php">
+        <?php
+        include 'dbcon.php';
+        $user_id = 1; 
 
-                if ($item_count > 0) {
-                    while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
-                        ?>
-                        <div class="cart-item">
-                            <div class="product-image">
-                                <img src="<?php echo $fetch_cart['product_image']; ?>" alt="Product Image">
-                            </div>
-                            <div class="product-details">
-                                <h3>Our Home <?php echo $fetch_cart['product_name']; ?></h3>
-                                <p>Sub Total: <span id="subtotal_<?php echo $fetch_cart['cart_item_id']; ?>">₱<?php echo number_format($sub_total = $fetch_cart['price'] * $fetch_cart['quantity'], 2); ?></span></p>
-                                <input type="hidden" name="update_quantity_id" value="<?php echo $fetch_cart['cart_item_id']; ?>">
-                                <input type="hidden" id="price_<?php echo $fetch_cart['cart_item_id']; ?>" value="<?php echo $fetch_cart['price']; ?>">
-                                <div class="quantity-input">
-                                    <button type="button" class="quantity-btn minus" onclick="updateQuantity(<?php echo $fetch_cart['cart_item_id']; ?>, -1)">-</button>
-                                    <input type="number" id="quantity_<?php echo $fetch_cart['cart_item_id']; ?>" name="update_quantity" pattern="\d*" 
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9); updateSubtotal(<?php echo $fetch_cart['cart_item_id']; ?>)" 
-                                        value="<?php echo $fetch_cart['quantity']; ?>" min="1" max="<?php echo $fetch_cart['available_quantity']; ?>" step="1">
-                                    <button type="button" class="quantity-btn plus" onclick="updateQuantity(<?php echo $fetch_cart['cart_item_id']; ?>, 1)">+</button>
-                                </div>
-                                <a href="#" onclick="removeCartItem(<?php echo $fetch_cart['cart_item_id']; ?>)" class="remove-btn"><i class="fas fa-times"></i></a>
-                                <label class="custom-checkbox"><input type="checkbox" name="selected_items[]" value="<?php echo $fetch_cart['cart_item_id']; ?>"></label>
-                            </div>
-                        </div>
-                        <?php
-                        $grand_total += $sub_total;
-                    }
-                    ?>
-                    <div class="cart-total">
-                        <p><b>Total Amount: ₱ <span id="total_amount"><?php echo number_format($grand_total, 2); ?></span></b></p>
-                        <div class="checkout-btn">
-                            <button type="button" class="btn" name="checkout" onclick="confirmCheckout()" <?php echo $item_count == 0 ? 'disabled' : ''; ?>>Checkout</button>
-                        </div>
+        $fetch_cart_query = "SELECT ci.quantity, ci.amount, p.product_name, p.product_image
+                             FROM cart_items ci
+                             JOIN products p ON ci.product_id = p.product_id
+                             JOIN cart c ON ci.cart_id = c.cart_id
+                             WHERE c.user_id = '$user_id'";
+
+        $result = mysqli_query($conn, $fetch_cart_query);
+
+        if(mysqli_num_rows($result) > 0) {
+            while($cart_item = mysqli_fetch_assoc($result)) {
+                ?>
+                <div class="cart-item">
+                    <div class="cart-item-image">
+                        <img src="<?php echo $cart_item['product_image']; ?>" alt="<?php echo $cart_item['product_name']; ?>">
                     </div>
-                    <?php
+                    <div class="cart-item-info">
+                        <h2><?php echo $cart_item['product_name']; ?></h2>
+                        <p>Quantity: <?php echo $cart_item['quantity']; ?></p>
+                        <p>Amount: $<?php echo $cart_item['amount']; ?></p>
+                    </div>
+                </div>
+                <?php
+            }
                 } else {
                     echo '<div class="cart-item1">';
                     echo '<div class="product-box">';
@@ -192,9 +167,13 @@ if (isset($_POST['checkout'])) {
                     echo '</div>';
                     echo '</div>';
                 }
+                mysqli_close($conn);
                 ?>
-            </form>
-        </section>
+                
+        </form>
+    </div>
+    
+</section>
 
         <div class="recommended_products"><br><br>
             <h3><small><span class="divider-line"></span><b> Interested in This? </b><span class="divider-line"></span></small></h3>
@@ -276,6 +255,9 @@ if (isset($_POST['checkout'])) {
 
                 $conn->close();
                 ?>
+                
+
+
             </div>
         </div>
     </div>
@@ -397,4 +379,5 @@ if (isset($_POST['checkout'])) {
 
 </body>
 </html>
+
 

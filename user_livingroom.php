@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('dbcon.php');
+include 'dbcon.php';
 if (!isset($_SESSION['user_id'])) {
    $_SESSION['message'] = "You must log in first";
    header("Location: user_login.php");
@@ -12,6 +12,83 @@ if (!isset($_SESSION['user_id'])) {
 <?php
 include 'user_header.php';
 ?>
+<style>
+@media (max-width: 576px) {
+    .divider-line {
+        width: 30%;
+    }
+    .product_box {
+        width: 170px;
+        height: 200px;
+        margin: 10px 5px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 140px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .divider-line {
+        width: 27%;
+    }
+    .product_box {
+        width: 150px;
+        padding: 5px;
+        margin: 20px 0 0 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 120px;
+        font-size: 12px;
+    }
+    .product-price {
+        font-size: 13px;
+        margin: 0 0 0 20px;
+    }
+}
+
+@media (max-width:320px) {
+    .divider-line {
+        width: 21%;
+    }
+    .product_box {
+        width: 130px;
+        height: 170px;
+        margin: 20px 0 0 0;
+    }
+    .image_1 {
+        height: 70px;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 100px;
+        font-size: 12px;
+    }
+    .product-price {
+        float: right;
+        font-size: 11px;
+        margin: 0 0 0 20px;
+    }
+}
+</style>
    <body>
 
       <?php
@@ -44,7 +121,7 @@ include 'user_body.php';
          <div class="row">
                <?php
             
-               $conn= mysqli_connect('localhost', 'root', '', 'furniture');
+                include 'dbcon.php';
 
                // Check connection
                if ($conn->connect_error) {
@@ -85,7 +162,7 @@ include 'user_body.php';
             <a href="user_index.php"><i class="fas fa-home"></i></a>
             <a href="user_prod.php"><i class="fas fa-couch"></i></a>
             <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-            <a href="user.php"><i class="fas fa-user"></i></a>
+            <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
       </div>
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>

@@ -4,7 +4,7 @@ class ARButton {
 
         const button = document.createElement('button');
 
-        function showStartAR(/*device*/) {
+        function showStartAR() {
             if (sessionInit.domOverlay === undefined) {
                 // Create overlay and SVG icon
                 var overlay = document.createElement('div');
@@ -47,32 +47,63 @@ class ARButton {
                 renderer.xr.setReferenceSpaceType('local');
                 await renderer.xr.setSession(session);
 
-                // Update button state
-                button.textContent = 'STOP AR';
-                button.style.background = '#4CAF50'; // Change background color for "STOP AR"
+                // Update button state to Capture Image button
+                button.innerHTML = ''; // Clear text
+                button.style.background = 'transparent';
+                button.style.border = '4px solid #fff';
+                button.style.borderRadius = '50%';
+                button.style.width = '70px'; // Adjust size
+                button.style.height = '70px'; // Adjust size
+                button.style.position = 'fixed';
+                button.style.bottom = '30px';
+                button.style.left = '50%';
+                button.style.transform = 'translateX(-50%)';
+                button.style.display = ''; // Make sure the button is visible
+                button.style.cursor = 'pointer';
+
                 sessionInit.domOverlay.root.style.display = '';
 
                 currentSession = session;
             }
 
-            function onSessionEnded(/*event*/) {
+            function onSessionEnded() {
                 currentSession.removeEventListener('end', onSessionEnded);
 
                 // Update button state
                 button.textContent = 'START AR';
-                button.style.background = '#964B33'; // Revert to original background color for "START AR"
+                button.style.background = 'transparent';
+                button.style.border = '4px solid #fff';
+                button.style.borderRadius = '10px';
+                button.style.width = '120px';
+                button.style.height = 'auto';
+                button.style.position = 'fixed';
+                button.style.bottom = '20px';
+                button.style.left = '50%';
+                button.style.transform = 'translateX(-50%)';
+                button.style.display = ''; // Make sure the button is visible
+
                 sessionInit.domOverlay.root.style.display = 'none';
 
                 currentSession = null;
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
             }
 
             // Configure button style and behavior
             button.style.display = '';
             button.style.cursor = 'pointer';
-            button.style.left = 'calc(50% - 50px)';
-            button.style.width = '100px';
-            button.style.background = '#964B33'; // Custom background color for "START AR"
-            button.style.color = '#FFFFFF'; // White text color
+            button.style.width = '120px';
+            button.style.height = 'auto';
+            button.style.background = 'transparent';
+            button.style.color = '#FFFFFF';
+            button.style.border = '4px solid #fff';
+            button.style.borderRadius = '10px';
+            button.style.font = 'normal 13px sans-serif';
+            button.style.textAlign = 'center';
+            button.style.opacity = '0.5';
+            button.style.outline = 'none';
+            button.style.zIndex = '999';
 
             button.textContent = 'START AR';
 
@@ -90,7 +121,7 @@ class ARButton {
                         .requestSession('immersive-ar', sessionInit)
                         .then(onSessionStarted);
                 } else {
-                    currentSession.end();
+                    captureImage();
                 }
             };
         }
@@ -114,15 +145,29 @@ class ARButton {
             element.style.position = 'absolute';
             element.style.bottom = '20px';
             element.style.padding = '12px 6px';
-            element.style.border = '1px solid #fff';
-            element.style.borderRadius = '4px';
-            element.style.background = '#964B33';
+            element.style.border = '4px solid #fff';
+            element.style.borderRadius = '10px';
+            element.style.background = 'transparent';
             element.style.color = '#fff';
             element.style.font = 'normal 13px sans-serif';
             element.style.textAlign = 'center';
             element.style.opacity = '0.5';
             element.style.outline = 'none';
             element.style.zIndex = '999';
+        }
+
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = renderer.domElement.width;
+            canvas.height = renderer.domElement.height;
+            const context = canvas.getContext('2d');
+            context.drawImage(renderer.domElement, 0, 0);
+            const dataURL = canvas.toDataURL('image/jpeg'); // Change to JPEG
+
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'Our_Home_AR.jpg';
+            link.click();
         }
 
         if ('xr' in navigator) {

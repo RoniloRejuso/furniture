@@ -64,7 +64,7 @@ include 'user_body.php';
     <div class="second_header_section">
         <div class="container-fluid">
             <nav class="navbar navbar-light bg-light">
-                <a href="user_index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+                <a href="user_index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
             </nav>
         </div>
     </div>
@@ -90,7 +90,7 @@ include 'user_body.php';
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
                         </div>
                         <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
-                        <a href="forgot_pass.php">Forgot Password?</a>
+                        <a href="user_change_pass.php">Forgot Password?</a>
                         <div class="or-divider">
                             <span class="divider-line"></span> OR <span class="divider-line"></span>
                         </div>
@@ -266,7 +266,7 @@ include 'user_body.php';
 
                         <div class="form-group">
                         <label for="password2">Password:</label>
-                        <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
+                        <input type="password" class="form-control password-input" id="password" name="password2" placeholder="Enter your password" maxlength="10" required>
                         <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
                         <div id="passwordError2" class="error-message" style="display:none;">Password should not be only numbers.</div>
                         <div id="passwordStrengthError" class="error-message" style="display:none;">Password is too weak. It should have at least one uppercase letter or special character.</div>

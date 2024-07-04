@@ -71,6 +71,7 @@ if(isset($_GET['product_id'])) {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

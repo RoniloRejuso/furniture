@@ -107,7 +107,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
-            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
         </nav>
     </div>
 </div>
@@ -124,6 +124,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                             </label>
                         </div>
                     </div>
+                    
                     <form id="user-settings-form" action="update_settings.php" method="POST" enctype="multipart/form-data" onsubmit="return confirmSaveChanges(event)">
                         <div class="form-group position-relative" id="name-group">
                             <label for="username" class="d-none">Name:</label>

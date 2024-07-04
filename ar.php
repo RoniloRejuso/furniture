@@ -29,7 +29,12 @@ if (isset($_GET['product_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********************" crossorigin="anonymous" />
     <title>Our Home</title>
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<?php
+    include 'user_header.php';
+?>
+<style>
         body, html {
             margin: 0;
             padding: 0;
@@ -61,10 +66,6 @@ if (isset($_GET['product_id'])) {
             opacity: 0.6;
         }
     </style>
-
-    <!-- Include SweetAlert CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
 <body>
     <button id="backButton">BACK</button>
 
@@ -99,15 +100,13 @@ if (isset($_GET['product_id'])) {
         function init() {
             let myCanvas = document.getElementById("canvas");
 
-            // Check if user is on a desktop
             if (!isMobileDevice()) {
                 Swal.fire({
                     icon: 'info',
-                    title: 'Looks like you\'re using the desktop device.',
                     text: 'Open the web app on any mobile device to use the AR experience.',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    window.location.href = 'product_details.php?product_id=<?php echo $product_id; ?>';
+                    window.location.href = 'product_details1.php?product_id=<?php echo $product_id; ?>';
             });
             }
 
@@ -212,13 +211,12 @@ if (isset($_GET['product_id'])) {
         function onTouchMove(event) {
             if (pointerDown && model && event.touches.length === 1) {
                 let deltaMove = {
-                    x: event.touches[0].clientX - pointerPrevious.x,
-                    y: event.touches[0].clientY - pointerPrevious.y
+                    x: event.touches[0].clientX - pointerPrevious.x
                 };
 
                 let deltaRotationQuaternion = new THREE.Quaternion()
                     .setFromEuler(new THREE.Euler(
-                        toRadians(deltaMove.y * 1),
+                        0,
                         toRadians(deltaMove.x * 1),
                         0,
                         'XYZ'

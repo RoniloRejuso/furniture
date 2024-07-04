@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('dbcon.php');
-@include 'config.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = "You must log in first";
@@ -29,6 +28,81 @@ include 'user_header.php';
     .sorting_filtering_section select {
         width: 130px;
         font-size: 12px;
+    }
+}
+@media (max-width: 576px) {
+    .divider-line {
+        width: 30%;
+    }
+    .product_box {
+        width: 170px;
+        height: 200px;
+        margin: 10px 5px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 140px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .divider-line {
+        width: 27%;
+    }
+    .product_box {
+        width: 150px;
+        padding: 5px;
+        margin: 20px 0 0 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 120px;
+        font-size: 12px;
+    }
+    .product-price {
+        font-size: 13px;
+        margin: 0 0 0 20px;
+    }
+}
+
+@media (max-width:320px) {
+    .divider-line {
+        width: 21%;
+    }
+    .product_box {
+        width: 130px;
+        height: 170px;
+        margin: 20px 0 0 0;
+    }
+    .image_1 {
+        height: 70px;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 100px;
+        font-size: 12px;
+    }
+    .product-price {
+        float: right;
+        font-size: 11px;
+        margin: 0 0 0 20px;
     }
 }
 </style>
@@ -108,7 +182,7 @@ include 'user_body1.php';
             <h2><small><b>Recommended for You</b></small></h2>
                 <div class="row">
                     <?php
-                    include 'config.php';
+                    include 'dbcon.php';
 
                     function generateRecommendations($transactions, $minSupport) {
                         $allProducts = [];
@@ -193,7 +267,7 @@ include 'user_body1.php';
     <a href="user_home.php"><i class="fas fa-home"></i></a>
     <a href="#" class="active"><i class="fas fa-couch"></i></a>
     <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-    <a href="user.php"><i class="fas fa-user"></i></a>
+    <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
 </div>
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>

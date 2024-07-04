@@ -1,8 +1,7 @@
 <?php
-session_start();
 include 'dbcon.php';
 
-$conn = mysqli_connect('localhost', 'root', '', 'furniture');
+$conn = mysqli_connect('localhost', 'u138133975_ourhome', '7u&0t]B;uQ*', 'u138133975_furniture');
 if (!$conn) {
 	echo ("Connection Failed: " . mysqli_connect_error());
 	exit;

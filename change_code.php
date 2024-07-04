@@ -9,7 +9,6 @@
 
     <title>Verification</title>
 
-    <link rel="shortcut icon" href="assets/img/our home.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
@@ -185,7 +184,7 @@ if (isset($_POST['resend_verification'])) {
                     <form method="POST" class="verification-form" id="verificationForm">
     <input type="hidden" name="email" value="<?php echo $email; ?>" required>
     <input type="text" name="verification_code" id="verificationCodeInput" placeholder="Enter verification code" required maxlength="6" pattern="[0-9]{6}" title="Please enter a 6-digit numeric verification code" oninput="this.value = this.value.replace(/\D/g, '')">
-    <input type="submit" name="verify_email" value="Verify Email">
+    <input style="background-color: #964B33;" type="submit" name="verify_email" value="Verify Email">
 </form>
 
 

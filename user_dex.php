@@ -19,8 +19,8 @@ include('dbcon.php');
 if (isset($_POST['register_btn'])) {
     $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
     $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $email = mysqli_real_escape_string($conn, $_POST['email2']);
+    $password = mysqli_real_escape_string($conn, $_POST['password2']);
     $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']);
 
     $check_email_query = "SELECT * FROM users WHERE email = '$email'";
@@ -87,7 +87,7 @@ if (isset($_POST['register_btn'])) {
                     icon: 'error',
                     confirmButtonText: 'Enter'
                 }).then(() => {
-                    window.location.href = 'signup.php';
+                    window.location.href = 'user_login.php';
                 });
             </script>";
             exit();

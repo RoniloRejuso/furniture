@@ -6,7 +6,7 @@
     <title>Our Home</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
-    <link rel="stylesheet" href="css/changepass.css"> <!-- Link to the new CSS file -->
+    <link rel="stylesheet" href="css/changepass.css">
 </head>
 <body>
 

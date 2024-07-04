@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password</title>
+    <title>Our Home</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="css/changepass.css"> <!-- Link to the new CSS file -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" href="css/changepass.css">
 </head>
 <body>
 
@@ -24,7 +25,7 @@ if (isset($_POST["reset"])) {
     $email = $_POST["email"];
 
     // Check if the email is registered in the database
-    $query = "SELECT * FROM admin WHERE email = ?";
+    $query = "SELECT * FROM users WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -54,8 +55,8 @@ if (isset($_POST["reset"])) {
 
             $mail->send();
 
-            // Redirect to change_code.php passing email and verification code
-            header("Location: change_code.php?email=" . $email . "&code=" . $verification_code);
+            // Redirect to email_verify.php passing email and verification code
+            header("Location: user_change_code.php?email=" . $email . "&code=" . $verification_code);
             exit();
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -76,14 +77,14 @@ if (isset($_POST["reset"])) {
 }
 ?> 
 
-<div class="form-container" style="background-color: lightgray; padding: 20px; width: 600px; height: 200px;">
-    <h1 style="color: black;">RESET PASSWORD</h1>
-    
-    <form method="POST" style="width: 250px; height: 100px; text-align: center;">
+<div class="form-container">
+    <img src="images/logo.png" alt="Logo" class="logo">    
+    <h3>RESET PASSWORD</h3>
+    <form method="POST">
         <input type="email" id="email" maxlength="60" name="email" placeholder="Enter email" required class="short-email-input" />
-        <small id="emailValidationError" class="form-text text-danger" style="display:none;">Invalid email format or domain does not exist.</small>
+        <small id="emailValidationError" class="form-text text-danger">Invalid email format or domain does not exist.</small>
         <br>
-        <input type="submit" name="reset" value="Reset" style="background-color: red; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; width: 60px;">
+        <input type="submit" name="reset" value="Reset">
     </form>
 
     <script>

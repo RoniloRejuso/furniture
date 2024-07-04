@@ -6,19 +6,19 @@ body {
 }
 
 .form-container {
-    max-width: 400px;
+    width: 400px;
     padding: 20px;
     background-color: #fff6eb;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin: 200px auto 0;
+    margin: 150px auto 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 .form-container .logo {
-    max-width: 300px; /* Adjust as needed */
+    max-width: 300px;
 }
 
 .form-container h1 {
@@ -75,4 +75,16 @@ body {
 .form-text.text-danger {
     display: none;
     color: red;
+}
+@media (max-width: 568px) {
+    .form-container {
+        width: 250px;
+        height:300px; 
+    }
+    .form-container .logo {
+        width: 100%;
+    }
+    .form-container h1 {
+        font-size: 1rem; /* Smaller font size for very small screens */
+    }
 }

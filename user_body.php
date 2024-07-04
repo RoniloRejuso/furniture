@@ -16,26 +16,26 @@
                         <i style="margin-left:80px;" class="fas fa-chair"></i>  Furniture
                       </a>
                       <div class="dropdown-menu" id="furnitureMenu" aria-labelledby="furnitureDropdown">
-                        <a class="dropdown-item" href="user_livingroom1.php">
+                        <a class="dropdown-item" href="user_livingroom.php">
                             <i style="margin-left:70px;" class="fas fa-couch"></i>  Living Room
                         </a>
-                        <a class="dropdown-item" href="user_diningroom1.php">
+                        <a class="dropdown-item" href="user_diningroom.php">
                             <i style="margin-left:70px;" class="fas fa-utensils"></i>  Dining Room
                         </a>
-                        <a class="dropdown-item" href="user_bedroom1.php">
+                        <a class="dropdown-item" href="user_bedroom.php">
                             <i style="margin-left:70px;" class="fas fa-bed"></i>  Bedroom
                         </a>
-                        <a class="dropdown-item" href="user_office1.php">
+                        <a class="dropdown-item" href="user_office.php">
                             <i style="margin-left:70px;" class="fas fa-briefcase"></i>  Office
                         </a>
-                        <a class="dropdown-item" href="user_prod.php">
+                        <a class="dropdown-item" href="user_products.php">
                             <i style="margin-left:70px;" class="fas fa-th-list"></i>  All products
                         </a>
                     </div>
                   </div>
                </div>                           
                <span class="toggle_icon" onclick="openNav()"><img src="images/toggle-icon.png"></span>
-               <a class="logo" href="user_index.php"><img src="images/logo.png" width="150px" height="50px"></a>
+               <a class="logo" href="user_home.php"><img src="images/logo.png" width="150px" height="50px"></a>
                <form class="form-inline ">
                      <div class="login_text">
                      </div>

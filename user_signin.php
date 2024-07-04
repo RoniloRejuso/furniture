@@ -3,7 +3,7 @@ session_start();
 include ('dbcon.php');
 
 if (isset($_SESSION['user_id'])) {
-    header("Location: user_index.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (password_verify($password, $stored_password)) {
             $_SESSION['user_id'] = $row['user_id'];
-            header("Location: user_index.php");
+            header("Location: index.php");
             exit();
         } else {
             $error = "Incorrect password.";

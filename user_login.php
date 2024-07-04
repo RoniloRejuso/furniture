@@ -64,7 +64,7 @@ include 'user_body.php';
     <div class="second_header_section">
         <div class="container-fluid">
             <nav class="navbar navbar-light bg-light">
-                <a href="user_index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
+                <a href="index.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
             </nav>
         </div>
     </div>

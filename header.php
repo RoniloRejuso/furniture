@@ -25,10 +25,10 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
     <div class="main-wrapper">
       <div class="header">
         <div class="header-left active">
-          <a href="index.php" class="logo">
+          <a href="admin_index.php" class="logo">
             <img src="assets/img/our home.png" alt="">
           </a>
-          <a href="index.php" class="logo-small">
+          <a href="admin_index.php" class="logo-small">
             <img src="assets/img/logo-small.png" alt="">
           </a>
           <a id="toggle_btn" href="javascript:void(0);">
@@ -130,7 +130,7 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
           <div id="sidebar-menu" class="sidebar-menu">
             <ul>
             <li>
-              <a href="index.php">
+              <a href="admin_index.php">
                 <img src="assets/img/icons/dashboard.svg" alt="img"><span>Dashboard</span>
               </a>
             </li>

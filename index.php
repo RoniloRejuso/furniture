@@ -1,473 +1,252 @@
-<?php
-session_start();
-include 'dbcon.php';
-
-if (!isset($_SESSION['admin_id'])) {
-    $_SESSION['message'] = "You must log in first";
-    header("Location: login.php");
-    exit();
-}
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="POS - Bootstrap Admin Template">
-    <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive">
-    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Our Home</title>
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-  </head>
-  <body>
-  <?php
-     include 'dbcon.php';
-     include 'header.php'
-          ?>
-      <div class="page-wrapper">
-        <div class="content">
-          <div class="row">
-
-          <div class="col-lg-4 col-sm-8 col-12">
-    <div class="dash-widget">
-        <div class="dash-widgetimg">
-            <span>
-                <img src="assets/img/icons/dash1.svg" alt="img">
-            </span>
-        </div>
-        <div class="dash-widgetcontent">
-            <h6>Total Quantity of Products</h6>
-            <h5>
-                <?php
-                $sql = "SELECT SUM(quantity) AS total_quantity FROM products";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $totalQuantity = $row['total_quantity'];
-                } else {
-                    $totalQuantity = null;
-                }
-
-                if (is_null($totalQuantity) || $totalQuantity == 0) {
-                    echo '<span class="counters" data-count="0">No data available</span>';
-                } else {
-                    echo '<span class="counters" data-count="' . $totalQuantity . '">' . $totalQuantity . '</span>';
-                }
-                ?>
-            </h5>
-        </div>
-    </div>
-</div>
-
-<div class="col-lg-4 col-sm-8 col-12">
-    <div class="dash-widget dash1">
-        <div class="dash-widgetimg">
-            <span>
-                <img src="assets/img/icons/dash2.svg" alt="img">
-            </span>
-        </div>
-        <div class="dash-widgetcontent">
-            <h6>Total Price of Products</h6>
-            <h5>
-                ₱
-                <?php
-                $sql = "SELECT SUM(price * quantity) AS total_price FROM products";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $totalPrice = $row['total_price'];
-                } else {
-                    $totalPrice = null;
-                }
-
-                if (is_null($totalPrice) || $totalPrice == 0) {
-                    echo '<span class="counters" data-count="0">No data available</span>';
-                } else {
-                    echo '<span class="counters" data-count="' . $totalPrice . '">' . $totalPrice . '</span>';
-                }
-                ?>
-            </h5>
-        </div>
-    </div>
-</div>
-
-<div class="col-lg-4 col-sm-6 col-12">
-    <div class="dash-widget dash2">
-        <div class="dash-widgetimg">
-            <span>
-                <img src="assets/img/icons/printer.svg" alt="img">
-            </span>
-        </div>
-        <div class="dash-widgetcontent">
-            <h6>Logged-in Admins</h6>
-            <h5>
-                <?php
-                $sql = "SELECT COUNT(*) AS admin_count FROM admin WHERE is_admin = 1";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $adminCount = $row['admin_count'];
-                } else {
-                    $adminCount = null;
-                }
-
-                if (is_null($adminCount) || $adminCount == 0) {
-                    echo '<span class="counters" data-count="0">No data available</span>';
-                } else {
-                    echo '<span class="counters" data-count="' . $adminCount . '">' . $adminCount . '</span>';
-                }
-                ?>
-            </h5>
-        </div>
-    </div>
-</div>
-
-
-    </div>
-</div>
-
-
-
-
-          <div class="row">
-            <div class="col-lg-7 col-sm-12 col-12 d-flex">
-              <div class="card flex-fill">
-                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                  <h5 class="card-title mb-0">
-                    Purchase & Sales
-                  </h5>
-                  <div class="graph-sets">
-                    <ul>
-                      <li>
-                        <span>
-                          Sales
-                        </span>
-                      </li>
-                      <li>
-                        <span>
-                          Purchase
-                        </span>
-                      </li>
-                    </ul>
-                    <div class="dropdown">
-                      <button class="btn btn-white btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                        2022
-                        <img src="assets/img/icons/dropdown.svg" alt="img" class="ms-2">
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li>
-                          <a href="javascript:void(0);" class="dropdown-item">
-                            2022
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="dropdown-item">
-                            2021
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="dropdown-item">
-                            2020
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card-body">
-    <div id="mixed-chart"></div>
-</div>
-</div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $.ajax({
-            url: 'ind.php',
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if ($('#mixed-chart').length > 0) {
-                    var options = {
-                        chart: {
-                            height: 350,
-                            type: 'line',
-                            toolbar: {
-                                show: false,
-                            }
-                        },
-                        series: [{
-                                name: 'Orders',
-                                type: 'column',
-                                data: response
-                            },
-                            {
-                                name: 'Products Quantity',
-                                type: 'line',
-                                data: response
-                            }
-                        ],
-                        stroke: {
-                            width: [0, 4]
-                        },
-                        title: {
-                            text: 'Products Data'
-                        },
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        xaxis: {
-                            type: 'category'
-                        },
-                        yaxis: [{
-                                title: {
-                                    text: 'Products Quantity',
-                                },
-                            },
-                            {
-                                opposite: true,
-                                title: {
-                                    text: 'Orders'
-                                }
-                            }
-                        ]
-                    }
-                    var chart = new ApexCharts(document.querySelector("#mixed-chart"), options);
-                    chart.render();
-                } else {
-                    console.error('No element found with id "mixed-chart".');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-    });
-</script>
-
-
-            <div class="col-lg-5 col-sm-12 col-12 d-flex">
-              <div class="card flex-fill">
-                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                  <h4 class="card-title mb-0">
-                    Best Sellers
-                  </h4>
-                  <div class="dropdown">
-                    <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false"
-                    class="dropset">
-                      <i class="fa fa-ellipsis-v">
-                      </i>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <li>
-                        <a href="productlist.html" class="dropdown-item">
-                          Product List
-                        </a>
-                      </li>
-                      <li>
-                        <a href="addproduct.html" class="dropdown-item">
-                          Product Add.
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div class="card-body">
-                  <div class="table-responsive dataview">
-                  <table class="table datatable">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $servername = "localhost";
-                $username = "u138133975_ourhome";
-                $password = "7u&0t]B;uQ*";
-                $database = "u138133975_furniture";
-
-                // Create connection
-                $conn= mysqli_connect('localhost', 'u138133975_ourhome', '7u&0t]B;uQ*', 'u138133975_furniture');
-
-                // Check connection
-                if (!$conn) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-
-
-                      // Query to fetch top 3 products with highest quantity from the database
-                      $query = "SELECT product_image, product_name, quantity, price FROM products ORDER BY quantity DESC LIMIT 2";
-                      $result = mysqli_query($conn, $query);
-
-                      // Check if there are any rows returned
-                      if(mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                              echo "<tr>";
-                              echo "<td><img src='".$row['product_image']."' alt='Product Image'></td>";
-                              echo "<td>".$row['product_name']."</td>";
-                              echo "<td>".$row['quantity']."</td>";
-                              echo "<td>".$row['price']."</td>";
-                              echo "</tr>";
-                          }
-                      } else {
-                          echo "<tr><td colspan='4'>No products found</td></tr>";
-                      }
-
-                ?>
-            </tbody>
-        </table>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <?php
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";     // Replace with your MySQL username
-$password = "7u&0t]B;uQ*";     // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+<head>
+<?php include 'user_header.php'; ?>
+</head>
+<style>
+    .btn {
+        display: flex;
+        justify-content: center;       
+    }
+    .btn:hover {
+        opacity: 0.8;
+    }
+    .row{
+        margin: 0 -12px;
+    }
+@media (max-width: 576px) {
+    .divider-line {
+        width: 30%;
+    }
+    .product_box {
+        width: 170px;
+        height: 200px;
+        margin: 10px 5px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 140px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
 }
 
-// Fetch recently added products query
-$query = "SELECT product_id, product_name, category, quantity, color, date
-          FROM products
-          WHERE date >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
-          ORDER BY date DESC
-          LIMIT 10";
+@media (max-width: 400px) {
+    .divider-line {
+        width: 27%;
+    }
+    .product_box {
+        width: 150px;
+        padding: 5px;
+        margin: 20px 0 0 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 120px;
+        font-size: 12px;
+    }
+    .product-price {
+        font-size: 13px;
+        margin: 0 0 0 20px;
+    }
+}
 
-$result = $conn->query($query);
-
-?>
-
-          <div class="card mb-0">
-            <div class="card-body">
-              <h4 class="card-title">Expired Products</h4>
-              <div class="table-responsive dataview">
-                <table class="table datatable">
-                  <thead>
-                    <tr>
-                      <th>SNo</th>
-                      <th>Product Code</th>
-                      <th>Product Name</th>
-                      <th>Brand Name</th>
-                      <th>Category Name</th>
-                      <th>Expiry Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td><a href="javascript:void(0);">IT0001</a></td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img
-                            src="assets/img/product/product2.jpg"
-                            alt="product"
-                          />
-                        </a>
-                        <a href="productlist.html">Orange</a>
-                      </td>
-                      <td>N/D</td>
-                      <td>Fruits</td>
-                      <td>12-12-2022</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><a href="javascript:void(0);">IT0002</a></td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img
-                            src="assets/img/product/product3.jpg"
-                            alt="product"
-                          />
-                        </a>
-                        <a href="productlist.html">Pineapple</a>
-                      </td>
-                      <td>N/D</td>
-                      <td>Fruits</td>
-                      <td>25-11-2022</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td><a href="javascript:void(0);">IT0003</a></td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img
-                            src="assets/img/product/product4.jpg"
-                            alt="product"
-                          />
-                        </a>
-                        <a href="productlist.html">Stawberry</a>
-                      </td>
-                      <td>N/D</td>
-                      <td>Fruits</td>
-                      <td>19-11-2022</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td><a href="javascript:void(0);">IT0004</a></td>
-                      <td class="productimgname">
-                        <a class="product-img" href="productlist.html">
-                          <img
-                            src="assets/img/product/product5.jpg"
-                            alt="product"
-                          />
-                        </a>
-                        <a href="productlist.html">Avocat</a>
-                      </td>
-                      <td>N/D</td>
-                      <td>Fruits</td>
-                      <td>20-11-2022</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+@media (max-width:320px) {
+    .divider-line {
+        width: 21%;
+    }
+    .product_box {
+        width: 130px;
+        height: 170px;
+        margin: 20px 0 0 0;
+    }
+    .image_1 {
+        height: 70px;
+    }
+    .product-name {
+        float: left;
+        margin-right: 5px;
+        width: 100px;
+        font-size: 12px;
+    }
+    .product-price {
+        float: right;
+        font-size: 11px;
+        margin: 0 0 0 20px;
+    }
+}
+</style>
+<body>
+<?php include 'user_body1.php'; ?>
+<div class="product_section layout_padding">
+    <div class="container">
+        <div class="col-sm-12">
+            <h1 class="product_taital">Our Products</h1>
         </div>
-      </div>
+        <div class="search-section" style="text-align: center;">
+            <form method="GET" action="">
+                <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block; border: 1px solid gray;">
+                <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="product_section_2 layout_padding">
+            <div class="row">
+                    <?php
+                    include 'dbcon.php';
+
+                    $sql = "SELECT * FROM products LIMIT 10";
+                    $result = mysqli_query($conn, $sql);
+                    $products = [];
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $products[] = $row;
+                        }
+                    } else {
+                        echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                        echo '<b>No Products available.<b>';
+                        echo '</div>';
+                    }
+
+                    mysqli_close($conn);
+
+                    shuffle($products);
+                    ?>
+                    <?php foreach ($products as $product) { ?>
+                        <div style="margin-left:18px;">
+                    <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                        <div class="product_box">
+                            <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                            <div class="product-info">
+                                <h4 class="product-name">
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                </h4>
+                                <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                    <?php } ?>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="user_prod.php" class="btn" style="background-color: #964B33;color:#fff; width: 250px; margin:0 auto;">See More</a> <!-- Linking to user_prod.php -->
+                    </div>
+                </div>
+            </div>
+            <div class="recommended_products"><br><br>
+            <h2></small><span class="divider-line"></span><small><b> Suggested Picks </b></small></h2>
+                <div class="row">
+                    <?php
+                    include 'dbcon.php';
+
+                    function generateRecommendations($transactions, $minSupport) {
+                        $allProducts = [];
+                        foreach ($transactions as $transaction) {
+                            $products = explode(', ', $transaction["product_name"]);
+                            $allProducts = array_merge($allProducts, $products);
+                        }
+                        return array_unique($allProducts);
+                    }
+
+                    $conn = mysqli_connect($servername, $username, $password, $database);
+
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image FROM orders o
+                    JOIN cart c ON o.cart_id = c.cart_id
+                    JOIN cart_items ci ON c.cart_id = ci.cart_id
+                    JOIN products p ON ci.product_id = p.product_id
+                    WHERE o.orders_id = ?;";
+
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $_GET['order_id']);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $transactions = [];
+                        while ($row = $result->fetch_assoc()) {
+                            $transactions[] = $row;
+                        }
+
+                        $minSupport = 0.1;
+                        $recommendations = generateRecommendations($transactions, $minSupport);
+
+                        shuffle($recommendations);
+
+                        $displayLimit = 4;
+                        $count = 0;
+
+                        foreach ($recommendations as $product) {
+                            foreach ($transactions as $transaction) {
+                                if ($product == $transaction["product_name"]) {
+                                    $product_id = $transaction["product_id"];
+                                    $price = $transaction["price"];
+                                    $product_image = $transaction["product_image"];
+                                    break;
+                                }
+                            }
+
+                            echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
+                            echo '<a href="product_details.php?product_id=' . $product_id . '">';
+                            echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
+                            echo '<div class="product-info">';
+                            echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
+                            echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
+                            echo '</div>';
+                            echo '</a>';
+                            echo '</div>';
+
+                            $count++;
+                            if ($count >= $displayLimit) {
+                                break;
+                            }
+                        }
+                    } else {
+                        echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                        echo '<b>No Products available.<b>';
+                        echo '</div>';
+                    }
+
+                    $conn->close();
+                    ?>
+                </div>
+            </div>
+        </div>
+    <div class="floating-navbar">
+        <a href="#" class="active"><i class="fas fa-home"></i></a>
+        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
+        <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
+        <a href="user.php"><i class="fas fa-user"></i></a>
     </div>
-
-
-          
-
-    <script src="assets/js/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/feather.min.js"> </script>
-    <script src="assets/js/jquery.slimscroll.min.js"></script>
-    <script src="assets/js/jquery.dataTables.min.js"></script>
-    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/plugins/apexchart/apexcharts.min.js"></script>
-    <script src="assets/plugins/apexchart/chart-data.js"></script>
-    <script src="assets/js/script.js"></script>
-  </body>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/plugin.js"></script>
+    <!-- sidebar -->
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/custom.js"></script>
+    <!-- javascript -->
+    <script src="js/owl.carousel.js"></script>
+    <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+</body>
 </html>

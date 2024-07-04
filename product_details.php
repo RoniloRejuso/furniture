@@ -200,8 +200,8 @@ if(isset($_GET['product_id'])) {
         </div>
     </div><br><br><br>
     <div class="floating-navbar">
-        <a href="user_index.php"><i class="fas fa-home"></i></a>
-        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
+        <a href="user_home.php"><i class="fas fa-home"></i></a>
+        <a href="user_product.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
     </div>

@@ -7,11 +7,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <?php include 'user_header.php'; ?>
+</head>
 <style>
     .btn {
         display: flex;
@@ -99,10 +99,8 @@ if (!isset($_SESSION['user_id'])) {
     }
 }
 </style>
-</head>
 <body>
-<?php include 'user_body.php'; ?>
-
+<?php include 'user_body1.php'; ?>
 <div class="product_section layout_padding">
     <div class="container">
         <div class="col-sm-12">
@@ -110,16 +108,22 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <div class="search-section" style="text-align: center;">
             <form method="GET" action="">
-                <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;border: 1px solid gray;">
+                <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block; border: 1px solid gray;">
                 <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
             </form>
         </div>
         <div class="product_section_2 layout_padding">
             <div class="row">
                     <?php
-                    include "dbcon.php";
+                    include 'dbcon.php';
 
-                    $sql = "SELECT * FROM products LIMIT 10";
+                    if (isset($_GET['search']) && !empty($_GET['search'])) {
+                        $search = $conn->real_escape_string($_GET['search']);
+                        $sql = "SELECT * FROM products WHERE product_name LIKE '%$search%' OR product_id LIKE '%$search%'";
+                    } else {
+                        $sql = "SELECT * FROM products LIMIT 10";
+                    }
+
                     $result = mysqli_query($conn, $sql);
                     $products = [];
 
@@ -139,20 +143,20 @@ if (!isset($_SESSION['user_id'])) {
                     ?>
                     <?php foreach ($products as $product) { ?>
                         <div style="margin-left:18px;">
-                            <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
-                                <div class="product_box">
-                                    <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
-                                    <div class="product-info">
-                                        <h4 class="product-name">
-                                            <b>Our Home </b><b><?php echo $product['product_name'];?></b>
-                                        </h4>
-                                        <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
-                                    </div>
-                                </div>
-                            </a>
+                    <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                        <div class="product_box">
+                            <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                            <div class="product-info">
+                                <h4 class="product-name">
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                </h4>
+                                <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
+                            </div>
                         </div>
+                    </a>
+                </div>
                     <?php } ?>
-                </div><br><br>
+                </div><br>
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <a href="user_prod.php" class="btn" style="background-color: #964B33;color:#fff; width: 250px; margin:0 auto;">See More</a> <!-- Linking to user_prod.php -->
@@ -180,8 +184,7 @@ if (!isset($_SESSION['user_id'])) {
                         die("Connection failed: " . $conn->connect_error);
                     }
 
-                    $sql = " SELECT p.product_id, p.product_name, p.price, p.product_image
-                    FROM orders o
+                    $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image FROM orders o
                     JOIN cart c ON o.cart_id = c.cart_id
                     JOIN cart_items ci ON c.cart_id = ci.cart_id
                     JOIN products p ON ci.product_id = p.product_id
@@ -244,7 +247,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     <div class="floating-navbar">
         <a href="#" class="active"><i class="fas fa-home"></i></a>
-        <a href="user_product.php"><i class="fas fa-couch"></i></a>
+        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
         <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
     </div>

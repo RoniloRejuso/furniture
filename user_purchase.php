@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Function to fetch user's purchased items
 function fetchUserPurchases($conn, $user_id) {
     $purchases = [];
     $query = "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, ci.quantity
@@ -17,8 +16,8 @@ function fetchUserPurchases($conn, $user_id) {
               JOIN cart c ON o.cart_id = c.cart_id
               JOIN cart_items ci ON c.cart_id = ci.cart_id
               JOIN products p ON ci.product_id = p.product_id
-              WHERE o.user_id = '$user_id'";
-              
+              WHERE c.user_id = '$user_id'"; // Changed from o.user_id to c.user_id
+
     $select_purchases = mysqli_query($conn, $query);
     
     if ($select_purchases) {
@@ -31,6 +30,7 @@ function fetchUserPurchases($conn, $user_id) {
 
     return $purchases;
 }
+
 
 // Cancel order functionality
 if (isset($_GET['cancel'])) {
@@ -102,7 +102,6 @@ if (isset($_GET['cancel'])) {
                                 <h3><?php echo htmlspecialchars($purchase['product_name']); ?></h3>
                                 <p>Price: ₱<?php echo number_format($purchase['price'], 2); ?></p>
                                 <p>Quantity: <?php echo htmlspecialchars($purchase['quantity']); ?></p>
-                                <!-- Cancel order button -->
                                 <button type="button" class="btn btn-danger" onclick="cancelOrder(<?php echo htmlspecialchars($purchase['cart_item_id']); ?>)">Cancel Order</button>
                             </div>
                         </div>

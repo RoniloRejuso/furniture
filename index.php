@@ -108,7 +108,13 @@
                     <?php
                     include 'dbcon.php';
 
-                    $sql = "SELECT * FROM products LIMIT 10";
+                    if (isset($_GET['search']) && !empty($_GET['search'])) {
+                        $search = $conn->real_escape_string($_GET['search']);
+                        $sql = "SELECT * FROM products WHERE product_name LIKE '%$search%' OR product_id LIKE '%$search%'";
+                    } else {
+                        $sql = "SELECT * FROM products LIMIT 10";
+                    }
+
                     $result = mysqli_query($conn, $sql);
                     $products = [];
 

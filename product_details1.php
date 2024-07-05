@@ -117,7 +117,7 @@ if(isset($_GET['product_id'])) {
             <h2><small><b>Recommended for You</b></small></h2>
             <div class="row">
                 <?php
-                include 'config.php';
+                include 'dbcon.php';
 
                 function generateRecommendations($transactions, $minSupport) {
                     $allProducts = [];

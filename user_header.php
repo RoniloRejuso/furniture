@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
 
     <!-- Imported CSS -->
     <link rel="stylesheet" href="css/animate.min.css">
@@ -23,6 +25,7 @@
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/jquery.fancybox.min.css">
     <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/nice-select.css">
     <link rel="stylesheet" href="css/nice-select.css">
 
     <!-- Font Awesome -->

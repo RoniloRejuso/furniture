@@ -3,9 +3,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $servername = "localhost"; // Update if necessary
-$username = "u138133975_ourhome";
-$database = "u138133975_furniture";
-$password = "7u&0t]B;uQ*";
+$username = "root";
+$database = "furniture";
+$password = "";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $database);

@@ -111,25 +111,25 @@ include 'user_body1.php';
         </div>
         <div class="search-section" style="text-align: center;">
             <form method="GET" action="">
-            <input type="text" name="search" placeholder="Search products">
-            <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
+                <input type="text" name="search" placeholder="Search products" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+                <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
             </form>
         </div>
         <div class="sorting_filtering_section">
             <form method="GET" action="" id="filterForm">
                 <select name="sort_by" style="padding:5px;border: 1px solid gray;" onchange="document.getElementById('filterForm').submit();">
-                <option value="default">Default Sorting</option>
-                <option value="name_asc">Name: A to Z</option>
-                <option value="name_desc">Name: Z to A</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
+                    <option value="default" <?php echo (isset($_GET['sort_by']) && $_GET['sort_by'] == 'default') ? 'selected' : ''; ?>>Default Sorting</option>
+                    <option value="name_asc" <?php echo (isset($_GET['sort_by']) && $_GET['sort_by'] == 'name_asc') ? 'selected' : ''; ?>>Name: A to Z</option>
+                    <option value="name_desc" <?php echo (isset($_GET['sort_by']) && $_GET['sort_by'] == 'name_desc') ? 'selected' : ''; ?>>Name: Z to A</option>
+                    <option value="price_asc" <?php echo (isset($_GET['sort_by']) && $_GET['sort_by'] == 'price_asc') ? 'selected' : ''; ?>>Price: Low to High</option>
+                    <option value="price_desc" <?php echo (isset($_GET['sort_by']) && $_GET['sort_by'] == 'price_desc') ? 'selected' : ''; ?>>Price: High to Low</option>
                 </select>
                 <select name="filter_by_category" style="padding:5px;border: 1px solid gray;" onchange="document.getElementById('filterForm').submit();">
-                    <option value="all">All Categories</option>
-                    <option value="bedroom">Bedroom</option>
-                    <option value="dining_room">Dining Room</option>
-                    <option value="living_room">Living Room</option>
-                    <option value="office">Office</option>
+                    <option value="all" <?php echo (isset($_GET['filter_by_category']) && $_GET['filter_by_category'] == 'all') ? 'selected' : ''; ?>>All Categories</option>
+                    <option value="bedroom" <?php echo (isset($_GET['filter_by_category']) && $_GET['filter_by_category'] == 'bedroom') ? 'selected' : ''; ?>>Bedroom</option>
+                    <option value="dining_room" <?php echo (isset($_GET['filter_by_category']) && $_GET['filter_by_category'] == 'dining_room') ? 'selected' : ''; ?>>Dining Room</option>
+                    <option value="living_room" <?php echo (isset($_GET['filter_by_category']) && $_GET['filter_by_category'] == 'living_room') ? 'selected' : ''; ?>>Living Room</option>
+                    <option value="home_office" <?php echo (isset($_GET['filter_by_category']) && $_GET['filter_by_category'] == 'office') ? 'selected' : ''; ?>>Office</option>
                 </select>
             </form>
         </div>
@@ -137,7 +137,37 @@ include 'user_body1.php';
             <?php
             include "dbcon.php";
 
-            $sql = "SELECT * FROM products";
+            $search = isset($_GET['search']) ? $_GET['search'] : '';
+            $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'default';
+            $filter_by_category = isset($_GET['filter_by_category']) ? $_GET['filter_by_category'] : 'all';
+
+            $sql = "SELECT * FROM products WHERE 1";
+
+            if (!empty($search)) {
+                $sql .= " AND product_name LIKE '%$search%'";
+            }
+
+            if ($filter_by_category != 'all') {
+                $sql .= " AND category = '$filter_by_category'";
+            }
+
+            switch ($sort_by) {
+                case 'name_asc':
+                    $sql .= " ORDER BY product_name ASC";
+                    break;
+                case 'name_desc':
+                    $sql .= " ORDER BY product_name DESC";
+                    break;
+                case 'price_asc':
+                    $sql .= " ORDER BY price ASC";
+                    break;
+                case 'price_desc':
+                    $sql .= " ORDER BY price DESC";
+                    break;
+                default:
+                    break;
+            }
+
             $result = mysqli_query($conn, $sql);
             $products = [];
 
@@ -180,17 +210,17 @@ include 'user_body1.php';
     <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
     <a href="user.php"><i class="fas fa-user"></i></a>
 </div>
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <script src="js/plugin.js"></script>
-      <!-- sidebar -->
-      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="js/custom.js"></script>
-      <!-- javascript --> 
-      <script src="js/owl.carousel.js"></script>
-      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>  
-      <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-   </body>
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-3.0.0.min.js"></script>
+<script src="js/plugin.js"></script>
+<!-- sidebar -->
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/custom.js"></script>
+<!-- javascript --> 
+<script src="js/owl.carousel.js"></script>
+<script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>  
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+</body>
 </html>

@@ -99,37 +99,71 @@ include 'user_body.php';
                 <h1 class="product_taital">Dining Room</h1>
             </div>
             <div class="search-section" style="text-align: center;">
-         <form method="GET" action="">
-            <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;border: 1px solid gray;"
->
-            <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
+            <form method="GET" action="">
+                <input type="text" name="search" placeholder="Search products" style="margin: 0 auto; display: inline-block;border: 1px solid gray;">
+                <button type="submit" class="search-icon" style="padding:3px 10px;background-color:#964B33;color:white;border-radius:3px;"><i class="fas fa-search"></i></button>
             </form>
-      </div>
-      <div class="sorting_filtering_section" style="text-align: center; margin-top: 10px;">
-         <form method="GET" action="" id="filterForm">
-            <select name="sort_by" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
-               <option value="default">Default Sorting</option>
-               <option value="name_asc">Name: A to Z</option>
-               <option value="name_desc">Name: Z to A</option>
-               <option value="price_asc">Price: Low to High</option>
-               <option value="price_desc">Price: High to Low</option>
-            </select>
-         </form>
-      </div>
+        </div>
+        <div class="sorting_filtering_section" style="text-align: center; margin-top: 10px;">
+            <form method="GET" action="" id="filterForm">
+                <select name="sort_by" style="padding:10px;" onchange="document.getElementById('filterForm').submit();">
+                    <option value="default">Default Sorting</option>
+                    <option value="name_asc">Name: A to Z</option>
+                    <option value="name_desc">Name: Z to A</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                </select>
+            </form>
+        </div>
          <div class="row">
-            <?php
+               <?php
             
                 include 'dbcon.php';
 
-               // Check connection
-               if ($conn->connect_error) {
-                  die("Connection failed: " . $conn->connect_error);
-               }
-
-            // Prepare and execute SQL statement to fetch dining room products
-            $stmt = $conn->prepare("SELECT product_name, price, product_image, product_id FROM products WHERE category = 'dining_room' AND status = 'Available'");
-            $stmt->execute();
-            $result = $stmt->get_result();
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+    
+                // Get search and sort parameters
+                $search = isset($_GET['search']) ? $_GET['search'] : '';
+                $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'default';
+    
+                // Base SQL query
+                $sql = "SELECT product_name, price, product_image, product_id FROM products WHERE category = 'dining_room' AND status = 'Available'";
+    
+                // Add search condition
+                if (!empty($search)) {
+                    $sql .= " AND product_name LIKE ?";
+                }
+    
+                // Add sorting
+                switch ($sort_by) {
+                    case 'name_asc':
+                        $sql .= " ORDER BY product_name ASC";
+                        break;
+                    case 'name_desc':
+                        $sql .= " ORDER BY product_name DESC";
+                        break;
+                    case 'price_asc':
+                        $sql .= " ORDER BY price ASC";
+                        break;
+                    case 'price_desc':
+                        $sql .= " ORDER BY price DESC";
+                        break;
+                    default:
+                        $sql .= " ORDER BY product_id";
+                        break;
+                }
+    
+                // Prepare and execute the statement
+                $stmt = $conn->prepare($sql);
+    
+                if (!empty($search)) {
+                    $search_param = "%$search%";
+                    $stmt->bind_param("s", $search_param);
+                }
+                $stmt->execute();
+                $result = $stmt->get_result();
 
             // Loop through the fetched products
             while ($product = $result->fetch_assoc()) {

@@ -1,5 +1,5 @@
 <?php
-include('config.php'); // Include your database connection file
+include('dbcon.php'); // Include your database connection file
 
 if (isset($_POST['checkout']) && $_POST['checkout'] == 1) {
    // Process checkout

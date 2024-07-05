@@ -1054,6 +1054,7 @@ button {
     display: flex;
     align-items: right;
     border: transparent;
+    width: 40px;
 }
 
 .quantity-btn {

@@ -101,7 +101,13 @@ if (isset($_GET['product_id'])) {
                     confirmButtonText: 'OK'
                 }).then(() => {
                     window.location.href = 'product_details1.php?product_id=<?php echo $product_id; ?>';
-            });
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Please wait for the reticle to display.',
+                    confirmButtonText: 'OK'
+                });
             }
 
             scene = new THREE.Scene();

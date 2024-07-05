@@ -1,5 +1,4 @@
 <?php
-@include 'config.php';
 include 'dbcon.php';
 session_start();
 
@@ -24,12 +23,13 @@ $user_data = mysqli_fetch_assoc($user_query);
 $user_id = $user_data['user_id'];
 $firstname = $user_data['firstname'];
 $lastname = $user_data['lastname'];
-$address_parts = explode(', ', $user_data['address']);
-$address = $address_parts[0];
-$barangay = isset($address_parts[1]) ? $address_parts[1] : '';
-$city = isset($address_parts[2]) ? $address_parts[2] : '';
-$province = isset($address_parts[3]) ? $address_parts[3] : '';
-$postal_code = isset($address_parts[4]) ? $address_parts[4] : '';
+$address = $user_data['address'] ?? '';
+$address_parts = $address ? explode(', ', $address) : [];
+$address = $address_parts[0] ?? '';
+$barangay = $address_parts[1] ?? '';
+$city = $address_parts[2] ?? '';
+$province = $address_parts[3] ?? '';
+$postal_code = $address_parts[4] ?? '';
 $additional_address = '';
 $phone_number = $user_data['phone_number'];
 
@@ -153,6 +153,7 @@ include 'user_header.php';
     width: 90%;
     max-width: 500px;
     margin: 20px auto;
+    text-align: left;
 }
 
 @media (min-width: 768px) {
@@ -257,13 +258,13 @@ include 'user_body.php';
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
-            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
         </nav>
     </div>
 </div>
 <div class="user_settings_section text-center">
     <div class="container">
-        < class="checkout_section">
+        <div class="checkout_section">
             <form action="" method="post">
                 <div class="section_container">
                     <h2>Contact</h2>

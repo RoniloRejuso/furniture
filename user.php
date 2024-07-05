@@ -99,7 +99,38 @@ if ($result && mysqli_num_rows($result) > 0) {
     .custom-logout-btn:hover {
         opacity: 0.7;
     }
+    .button-container a {
+    display: inline-block;
+    margin: 0;
+    padding: 8px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: opacity 0.3s;
+    background-color: transparent;
+}
 
+.btn-purchase {
+    border: none;
+    background-color: transparent;
+    color:#493A2D;
+}
+
+.btn-cart {
+    border: none;
+    background-color: transparent;
+    color:#964B33;
+}
+
+.btn-purchase:hover {
+    background-color: transparent;
+    color:#964B33;
+}
+
+.btn-cart:hover {
+    background-color: transparent;
+    color:#493A2D;
+}
 </style>
 <body>
 <?php include 'user_body.php'; ?>
@@ -183,6 +214,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                             </div>
                         </div>
                         <div class="button-container mb-1">
+                        <a href="user_purchase.php" class="btn btn-purchase">
+                            <i class="fas fa-shopping-bag"></i> My Purchases
+                        </a>
+                        <a href="user_carts.php" class="btn btn-cart">
+                            <i class="fas fa-shopping-cart"></i> My Cart
+                        </a>
                             <button type="submit" class="btn btn-success" id="save_button" style="display:none;">Save Changes</button>
                             <button type="button" class="btn btn-secondary" id="cancel_button" onclick="cancelChanges()" style="display:none;"><i class="fas fa-times"></i></button>
                         </div>

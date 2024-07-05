@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -266,7 +267,7 @@ include 'user_body.php';
 
                         <div class="form-group">
                         <label for="password2">Password:</label>
-                        <input type="password" class="form-control password-input" id="password" name="password2" placeholder="Enter your password" maxlength="10" required>
+                        <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
                         <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
                         <div id="passwordError2" class="error-message" style="display:none;">Password should not be only numbers.</div>
                         <div id="passwordStrengthError" class="error-message" style="display:none;">Password is too weak. It should have at least one uppercase letter or special character.</div>
@@ -278,6 +279,16 @@ include 'user_body.php';
                         <i class="fas fa-eye toggle-password" onclick="togglePassword('cpassword')"></i>
                         <small id="passwordMismatchError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
                     </div>
+                    
+                    
+                                            <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
+                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
+                    </form>
+
 
                     <script>
 function validatePassword() {
@@ -571,13 +582,6 @@ function togglePassword(fieldId) {
     }
 </script>
 
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
-                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
-                        </div>
-
-                        <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
-                    </form>
 
                     <script>
         function validateForm() {

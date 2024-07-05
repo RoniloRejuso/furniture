@@ -3,56 +3,60 @@ session_start();
 include 'dbcon.php';
 
 if(isset($_POST['add_to_cart'])) {
-    $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
-    $product_quantity = 1;
-
-    // Fetch product details
-    $fetch_product_query = "SELECT p.product_name, p.product_image, p.price
-                            FROM products p
-                            WHERE p.product_id = '$product_id'";
-    $result = mysqli_query($conn, $fetch_product_query);
-
-    if(mysqli_num_rows($result) > 0) {
-        $product = mysqli_fetch_assoc($result);
-
-        // Get user_id from session
+    if(isset($_SESSION['user_id'])) {
         $user_id = $_SESSION['user_id'];
+        $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
+        $product_quantity = 1;
 
-        // Check if cart exists for user
-        $select_cart_id = mysqli_query($conn, "SELECT cart_id FROM cart WHERE user_id = '$user_id'");
-        if(mysqli_num_rows($select_cart_id) > 0) {
-            $cart_row = mysqli_fetch_assoc($select_cart_id);
-            $cart_id = $cart_row['cart_id'];
-        } else {
-            // Create new cart for user
-            $insert_cart = mysqli_query($conn, "INSERT INTO cart (user_id) VALUES ('$user_id')");
-            if($insert_cart) {
-                $cart_id = mysqli_insert_id($conn);
+        // Fetch product details
+        $fetch_product_query = "SELECT p.product_name, p.product_image, p.price
+                                FROM products p
+                                WHERE p.product_id = '$product_id'";
+        $result = mysqli_query($conn, $fetch_product_query);
+
+        if(mysqli_num_rows($result) > 0) {
+            $product = mysqli_fetch_assoc($result);
+
+            // Check if cart exists for user
+            $select_cart_id = mysqli_query($conn, "SELECT cart_id FROM cart WHERE user_id = '$user_id'");
+            if(mysqli_num_rows($select_cart_id) > 0) {
+                $cart_row = mysqli_fetch_assoc($select_cart_id);
+                $cart_id = $cart_row['cart_id'];
             } else {
-                echo 'Failed to create cart for user';
-                exit();
+                // Create new cart for user
+                $insert_cart = mysqli_query($conn, "INSERT INTO cart (user_id) VALUES ('$user_id')");
+                if($insert_cart) {
+                    $cart_id = mysqli_insert_id($conn);
+                } else {
+                    echo 'Failed to create cart for user';
+                    exit();
+                }
             }
-        }
 
-        // Add item to cart
-        $price = $product['price'];
-        $amount = $price * $product_quantity;
+            // Add item to cart
+            $price = $product['price'];
+            $amount = $price * $product_quantity;
 
-        $insert_cart_item = mysqli_query($conn, "INSERT INTO cart_items (cart_id, product_id, quantity, amount) 
-                                                 VALUES ('$cart_id', '$product_id', '$product_quantity', '$amount')");
+            $insert_cart_item = mysqli_query($conn, "INSERT INTO cart_items (cart_id, product_id, quantity, amount) 
+                                                     VALUES ('$cart_id', '$product_id', '$product_quantity', '$amount')");
 
-        if($insert_cart_item) {
-            $message = 'Product added to cart successfully';
+            if($insert_cart_item) {
+                $message = 'Product added to cart successfully';
+            } else {
+                $message = 'Failed to add product to cart';
+            }
         } else {
-            $message = 'Failed to add product to cart';
+            echo "Product not found.";
+            exit;
         }
-    } else {
-        echo "Product not found.";
-        exit;
-    }
 
-    header("Location: user_carts.php");
-    exit();
+        header("Location: user_carts.php");
+        exit();
+    } else {
+        // Redirect to login page if user is not logged in
+        header("Location: user_login.php");
+        exit();
+    }
 }
 
 if(isset($_GET['product_id'])) {
@@ -247,10 +251,6 @@ if(isset($_GET['product_id'])) {
                     text: 'This product is out of stock!',
                 });
             }
-        }
-
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
         }
     </script> 
 </body>

@@ -1,7 +1,7 @@
 <?php
 include 'dbcon.php';
 
-$conn = mysqli_connect('localhost', 'u138133975_ourhome', '7u&0t]B;uQ*', 'u138133975_furniture');
+$conn = mysqli_connect('localhost', 'u138133975_ourhome', 'A@&DDb;7', 'u138133975_furniture');
 if (!$conn) {
 	echo ("Connection Failed: " . mysqli_connect_error());
 	exit;
@@ -58,87 +58,119 @@ if (!$result) {
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Orders</h4>
+                <h4>Users</h4>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <div class="table-top">
-                    <div class="search-set">
-                        <div class="search-path">
-                            <button class="btn btn-filter" id="filter_search">
-                                <img src="assets/img/icons/filter.svg" alt="img">
-                                <span>
-                                    <img src="assets/img/icons/closes.svg" alt="img">
-                                </span>
-                            </button>
-                        </div>
-                        <div class="search-input">
-                            <button class="btn btn-searchset">
-                                <img src="assets/img/icons/search-white.svg" alt="img">
-                            </button>
-                        </div>
-                    </div>
-                    <div class="wordset">
-                        <ul>
-                            <li>
-                                <a href="orders_pdf.php" data-bs-toggle="tooltip" data-bs-placement="top" title="pdf">
-                                    <img src="assets/img/icons/pdf.svg" alt="img">
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+        
+<?php
+// Database connection details
+$servername = "localhost";  // Replace with your server name
+$username = "u138133975_ourhome";     // Replace with your MySQL username
+$password = "A@&DDb;7";     // Replace with your MySQL password
+$dbname = "u138133975_furniture";  // Replace with your MySQL database name
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch recently added users query
+$query = "SELECT user_id, firstname, lastname, email
+          FROM users
+          ORDER BY user_id DESC
+          LIMIT 9"; // Adjust limit to 9 to account for the 1 static row
+
+$result = $conn->query($query);
+
+?>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-top">
+            <div class="search-set">
+                <div class="search-path">
+
                 </div>
-                <table class="table datanew">
-                    <thead>
+                <div class="search-input">
+
+                </div>
+            </div>
+            <div class="wordset">
+                <ul>
+                    <li>
+                        <a href="users_pdf.php" data-bs-toggle="tooltip" data-bs-placement="top" title="pdf">
+                            <img src="assets/img/icons/pdf.svg" alt="img">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <table class="table datanew">
+            <thead>
+                <tr>
+                    <th>
+                        <label class="checkboxs">
+                            <input type="checkbox" id="select-all">
+                            <span class="checkmarks"></span>
+                        </label>
+                    </th>
+                    <th>User ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample data row -->
+                <tr>
+                    <td>
+                        <label class="checkboxs">
+                            <input type="checkbox">
+                            <span class="checkmarks"></span>
+                        </label>
+                    </td>
+                    <td>1</td>
+                    <td>Ivan James</td>
+                    <td>Rodriguez</td>
+                    <td>ivanrodi229@gmail.com</td>
+                    <td>
+                        <a href="#" data-id="1" class="btn btn-danger btn-sm delete-btn">Delete</a>
+                    </td>
+                </tr>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <th>
+                            <td>
                                 <label class="checkboxs">
-                                    <input type="checkbox" id="select-all">
+                                    <input type="checkbox">
                                     <span class="checkmarks"></span>
                                 </label>
-                            </th>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Amount</th>
-                            <th>Date</th>
-                            <th>Action</th>
+                            </td>
+                            <td><?php echo $row["user_id"]; ?></td>
+                            <td><?php echo $row["firstname"]; ?></td>
+                            <td><?php echo $row["lastname"]; ?></td>
+                            <td><?php echo $row["email"]; ?></td>
+                            <td>
+                                <a href="#" data-id="<?php echo $row["user_id"]; ?>" class="btn btn-danger btn-sm delete-btn">Delete</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($result->num_rows > 0): ?>
-                            <?php while ($row = $result->fetch_assoc()): ?>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td><?php echo $row["orders_id"]; ?></td>
-                                    <td><?php echo $row["name"]; ?></td>
-                                    <td><?php echo $row["product_name"]; ?></td>
-                                    <td><?php echo $row["quantity"]; ?></td>
-                                    <td><?php echo $row["amount"]; ?></td>
-                                    <td><?php echo $row["date"]; ?></td>
-                                    <td>
-                                        <a href="#" data-id="<?php echo $row["orders_id"]; ?>" class="btn btn-danger btn-sm delete-btn">Delete</a>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="9" class="text-center">No orders found</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="text-center">No users found</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </div>
+</div>
+</div>
+
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/feather.min.js"></script>
 <script src="assets/js/jquery.slimscroll.min.js"></script>

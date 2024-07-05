@@ -207,7 +207,7 @@ if(isset($_GET['product_id'])) {
         <a href="index.php"><i class="fas fa-home"></i></a>
         <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-        <a href="user.php"><i class="fas fa-user"></i></a>
+        <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
     </div>
 
     <!-- JavaScript -->

@@ -164,7 +164,7 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
             <div class="recommended_products"><br><br>
-            <h2></small><span class="divider-line"></span><small><b> Suggested Picks </b></small></h2>
+            <h2></small><span class="divider-line"></span><small><b> Suggested Picks </b> </small><span class="divider-line"></span></h2>
                 <div class="row">
                     <?php
                     include 'dbcon.php';

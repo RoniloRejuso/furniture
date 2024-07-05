@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = mysqli_connect("localhost", "u138133975_ourhome", "7u&0t]B;uQ*", "u138133975_furniture");
+$conn = mysqli_connect("localhost", "u138133975_ourhome", "A@&DDb;7", "u138133975_furniture");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -99,8 +99,8 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
                 <h6><?php echo htmlspecialchars($row['username']); ?></h6>
                 <h5>Admin</h5>
             <?php else: ?>
-                <h6>Unknown User</h6>
-                <h5>Unknown Role</h5>
+                <h6>Admin</h6>
+                <h5>User1</h5>
             <?php endif; ?>
             </div>
         </div>
@@ -153,13 +153,13 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
               <li class="submenu">
                 <a href="javascript:void(0);">
                   <img src="assets/img/icons/purchase1.svg" alt="img">
-                  <span>Orders</span>
+                  <span>Users</span>
                   <span class="menu-arrow"></span>
                 </a>
                 <ul>
                   <li>
                     <a href="orders.php">
-                      Orders
+                      Users
                     </a>
                   </li>
                 </ul>

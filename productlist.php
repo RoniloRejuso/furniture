@@ -65,12 +65,6 @@ $result = $conn->query($sql);
                     <div class="table-top">
                         <div class="search-set">
                             <div class="search-path">
-                                <a class="btn btn-filter" id="filter_search">
-                                    <img src="assets/img/icons/filter.svg" alt="img">
-                                    <span>
-                                        <img src="assets/img/icons/closes.svg" alt="img">
-                                    </span>
-                                </a>
                             </div>
                             <div class="search-input">
                                 <a class="btn btn-searchset">
@@ -81,7 +75,7 @@ $result = $conn->query($sql);
                         <div class="wordset">
                             <ul>
                                 <li>
-                                    <a href="pdf_product.php" data-bs-toggle="tooltip" data-bs-placement="top" title="pdf">
+                                    <a href="product_pdf.php" data-bs-toggle="tooltip" data-bs-placement="top" title="pdf">
                                         <img src="assets/img/icons/pdf.svg" alt="img">
                                     </a>
                                 </li>

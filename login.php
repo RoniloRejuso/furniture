@@ -61,7 +61,7 @@
             <form method="post" class="form-horizontal" action="dex.php">
 
             <div class="logcontrol-group">
-        <label class="logcontrol-label" for="inputUsername"></label>
+        <label class="logcontrol-label" for="inputUsername" style="color: beige; margin-right:330px;">Username</label>
         <div class="logcontrols">
             <input type="text" name="username" id="username" placeholder="Enter Username" maxlength="50" required>
             <span id="username-error" class="error">Username cannot be purely numerical.</span>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="logcontrol-group">
-        <label class="logcontrol-label" for="inputPassword"></label>
+        <label class="logcontrol-label" for="inputPassword" style="color: beige; margin-right:330px;">Password</label>
         <div class="logcontrols">
             <input type="password" name="password" id="password" placeholder="Enter Password" maxlength="10" required>
             <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>

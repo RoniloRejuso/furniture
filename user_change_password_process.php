@@ -28,18 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($changeQuery->affected_rows > 0) {
         echo "<script>
             alert('Password updated successfully!');
-            window.location.href = 'login.php';
+            window.location.href = 'user_login.php';
         </script>";
     } else {
         echo "<script>
             alert('Failed to update password');
-            window.location.href = 'change_password.php';
+            window.location.href = 'user_change_password.php';
         </script>";
     }
 } else {
     echo "<script>
         alert('Invalid request method');
-        window.location.href = 'change_password.php';
+        window.location.href = 'user_change_password.php';
     </script>";
 }
 

@@ -113,7 +113,7 @@ else if (isset($_POST['login_btn'])) {
                         text: 'Welcome to Dashboard',
                         icon: 'success'
                     }).then(() => {
-                        window.location.href = 'index.php';
+                        window.location.href = 'admin_index.php';
                     });
                 </script>";
                 exit();
@@ -125,7 +125,7 @@ else if (isset($_POST['login_btn'])) {
                         text: 'Logged in successfully',
                         icon: 'success'
                     }).then(() => {
-                        window.location.href = 'index.php';
+                        window.location.href = 'admin_index.php';
                     });
                 </script>";
                 exit();

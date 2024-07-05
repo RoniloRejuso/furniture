@@ -5,7 +5,7 @@ $password = "7u&0t]B;uQ*";
 $database = "u138133975_furniture";
 
 // Create connection
-$conn = mysqli_connect('localhost', 'u138133975_ourhome', '7u&0t]B;uQ*', 'u138133975_furniture');
+$conn = mysqli_connect('localhost', 'u138133975_ourhome', 'A@&DDb;7', 'u138133975_furniture');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

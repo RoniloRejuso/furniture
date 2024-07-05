@@ -33,6 +33,8 @@ $postal_code = $address_parts[4] ?? '';
 $additional_address = '';
 $phone_number = $user_data['phone_number'];
 
+$order_placed = false;
+
 if (isset($_POST['order_btn'])) {
     // Validate and sanitize input data
     $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
@@ -49,6 +51,9 @@ if (isset($_POST['order_btn'])) {
     // Compile full address
     $full_address = "$address, $barangay, $city, $province, $postal_code";
 
+    // Update user address in the users table
+    $update_user_address_query = mysqli_query($conn, "UPDATE users SET address = '$full_address', phone_number = '$phone_number' WHERE user_id = '$user_id'");
+
     // Fetch the cart items
     $select_cart = mysqli_query($conn, "SELECT ci.cart_id, p.product_name, p.price, p.product_image, ci.quantity
                                         FROM cart_items ci
@@ -56,75 +61,27 @@ if (isset($_POST['order_btn'])) {
                                         WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
 
     $grand_total = 0;
-    $order_items = array();
+    $cart_id = null;
 
     if (mysqli_num_rows($select_cart) > 0) {
+        // Loop through cart items and calculate the grand total
         while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
             $cart_id = $fetch_cart['cart_id'];
-            $product_name = mysqli_real_escape_string($conn, $fetch_cart['product_name']);
             $quantity = intval($fetch_cart['quantity']);
             $price = floatval($fetch_cart['price']);
-            $product_image = mysqli_real_escape_string($conn, $fetch_cart['product_image']);
             $total_price = $price * $quantity;
-
-            // Calculate grand total
             $grand_total += $total_price;
-
-            // Store order item details
-            $order_items[] = array(
-                'product_name' => $product_name,
-                'quantity' => $quantity,
-                'price' => $price,
-                'product_image' => $product_image
-            );
         }
 
         // Insert order details into orders table
-        $insert_order_query = mysqli_query($conn, "INSERT INTO orders (user_id, firstname, lastname, address, barangay, city, province, postal_code, additional_address, phone_number, payment_method, total_amount, order_date, status)
-                                                  VALUES ('$user_id', '$firstname', '$lastname', '$address', '$barangay', '$city', '$province', '$postal_code', '$additional_address', '$phone_number', '$payment_method', '$grand_total', NOW(), 'Pending')");
+        $insert_order_query = mysqli_query($conn, "INSERT INTO orders (cart_id, payment_method, date)
+        VALUES ('$cart_id', '$payment_method', NOW())");
 
         if ($insert_order_query) {
-            $order_id = mysqli_insert_id($conn);
-
-            // Insert order items into order_items table
-            foreach ($order_items as $item) {
-                $product_name = mysqli_real_escape_string($conn, $item['product_name']);
-                $quantity = intval($item['quantity']);
-                $price = floatval($item['price']);
-                $product_image = mysqli_real_escape_string($conn, $item['product_image']);
-
-                $insert_order_item_query = mysqli_query($conn, "INSERT INTO order_items (order_id, product_name, price, quantity, product_image)
-                                                                VALUES ('$order_id', '$product_name', '$price', '$quantity', '$product_image')");
-                if (!$insert_order_item_query) {
-                    die('Failed to insert order items: ' . mysqli_error($conn));
-                }
-            }
-
             // Clear cart items after successful order placement
             $delete_cart_items_query = mysqli_query($conn, "DELETE FROM cart_items WHERE cart_id = '$cart_id'");
             if ($delete_cart_items_query) {
-                echo "
-                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thank you for shopping!',
-                        text: 'Your order has been placed successfully.',
-                        showCancelButton: true,
-                        confirmButtonText: 'Keep Shopping',
-                        cancelButtonText: 'Check my Purchase',
-                        confirmButtonColor: '#964B33',
-                        cancelButtonColor: '#493A2D'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'user_product.php';
-                        } else {
-                            window.location.href = 'user_purchase.php';
-                        }
-                    });
-                </script>
-                ";
-                exit;
+                $order_placed = true;
             } else {
                 die('Failed to clear the cart items: ' . mysqli_error($conn));
             }
@@ -333,6 +290,28 @@ include 'user_body.php';
         <br><br>
     </div>
 </div>
+
+<?php if ($order_placed) : ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Thank you for shopping!',
+    text: 'Your order has been placed successfully.',
+    showCancelButton: true,
+    confirmButtonText: 'Keep Shopping',
+    cancelButtonText: 'Check my Purchase',
+    confirmButtonColor: '#964B33',
+    cancelButtonColor: '#493A2D'
+}).then((result) => {
+    if (result.isConfirmed) {
+        window.location.href = 'user_product.php';
+    } else {
+        window.location.href = 'user_purchase.php';
+    }
+});
+</script>
+<?php endif; ?>
+
 </body>
 </html>
-

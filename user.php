@@ -131,6 +131,12 @@ if ($result && mysqli_num_rows($result) > 0) {
     background-color: transparent;
     color:#493A2D;
 }
+@media (max-width: 320px) {
+    .button-container a {
+       font-size: 14px;
+       padding: 4px 10px;
+    }
+}
 </style>
 <body>
 <?php include 'user_body.php'; ?>

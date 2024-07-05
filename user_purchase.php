@@ -11,26 +11,33 @@ if (!isset($_SESSION['user_id'])) {
 
 function fetchUserPurchases($conn, $user_id) {
     $purchases = [];
-    $query = "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, ci.quantity
-              FROM orders o
-              JOIN cart c ON o.cart_id = c.cart_id
-              JOIN cart_items ci ON c.cart_id = ci.cart_id
-              JOIN products p ON ci.product_id = p.product_id
-              WHERE c.user_id = '$user_id'"; // Changed from o.user_id to c.user_id
+    $query = "SELECT o.orders_id, ci.cart_item_id, p.product_name, p.price, p.product_image, ci.quantity, o.date, o.payment_method
+                FROM orders o
+                JOIN cart c ON o.cart_id = c.cart_id
+                JOIN cart_items ci ON c.cart_id = ci.cart_id
+                JOIN products p ON ci.product_id = p.product_id
+                WHERE c.user_id = ?;";
 
-    $select_purchases = mysqli_query($conn, $query);
-    
-    if ($select_purchases) {
-        while ($fetch_purchase = mysqli_fetch_assoc($select_purchases)) {
-            $purchases[] = $fetch_purchase;
+    if ($stmt = mysqli_prepare($conn, $query)) {
+        mysqli_stmt_bind_param($stmt, "i", $user_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if ($result) {
+            while ($fetch_purchase = mysqli_fetch_assoc($result)) {
+                $purchases[] = $fetch_purchase;
+            }
+        } else {
+            error_log("Error fetching purchases: " . mysqli_error($conn));
         }
+
+        mysqli_stmt_close($stmt);
     } else {
-        error_log("Error fetching purchases: " . mysqli_error($conn));
+        error_log("Error preparing statement: " . mysqli_error($conn));
     }
 
     return $purchases;
 }
-
 
 // Cancel order functionality
 if (isset($_GET['cancel'])) {
@@ -43,6 +50,7 @@ if (isset($_GET['cancel'])) {
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,6 +110,8 @@ if (isset($_GET['cancel'])) {
                                 <h3><?php echo htmlspecialchars($purchase['product_name']); ?></h3>
                                 <p>Price: ₱<?php echo number_format($purchase['price'], 2); ?></p>
                                 <p>Quantity: <?php echo htmlspecialchars($purchase['quantity']); ?></p>
+                                <p>Date: <?php echo htmlspecialchars($purchase['date']); ?></p>
+                                <p>Payment Method: <?php echo htmlspecialchars($purchase['payment_method']); ?></p>
                                 <button type="button" class="btn btn-danger" onclick="cancelOrder(<?php echo htmlspecialchars($purchase['cart_item_id']); ?>)">Cancel Order</button>
                             </div>
                         </div>

@@ -359,12 +359,13 @@ $result = $conn->query($query);
                         <td>1</td>
                         <td><a href="javascript:void(0);">Nesting Table</a></td>
                         <td class="productimgname">
-                            <a class="product-img" href="productlist.php">
+                            <a class="product-img" href="productlist.html">
                                 <img
                                     src="uploads/nestingtable.png"
                                     alt="product"
                                 />
                             </a>
+
                         </td>
                         <td>2</td>
                         <td>30000</td>
@@ -381,6 +382,7 @@ $result = $conn->query($query);
                                         <a class='product-img' href='productlist.html'>
                                             <img src='" . $row["product_image"] . "' alt='product' />
                                         </a>
+
                                     </td>
                                     <td>" . $row["quantity"] . "</td>
                                     <td>" . $row["price"] . "</td>
@@ -399,6 +401,11 @@ $result = $conn->query($query);
 </div>
 </div>
 </div>
+
+
+
+          
+
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/feather.min.js"> </script>
     <script src="assets/js/jquery.slimscroll.min.js"></script>

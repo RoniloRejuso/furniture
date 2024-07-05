@@ -138,7 +138,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
-            <a href="user_product.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
+            <a href="user_home.php" class="continue-shopping"><i class="fas fa-arrow-left"></i> Home</a>
         </nav>
     </div>
 </div>

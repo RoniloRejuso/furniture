@@ -140,14 +140,19 @@ if (isset($_POST['checkout'])) {
     </div>
     <div class="user_settings_section text-center">
         <div class="container">
-            <section class="cart-container">
+        <section class="cart-container">
                 <form method="post" action="">
                     <?php
-                    $user_id = 1;
-                    $stmt = $conn->prepare("SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, p.quantity AS available_quantity, ci.quantity
-                                            FROM cart_items ci
-                                            JOIN products p ON ci.product_id = p.product_id
-                                            WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = ?)");
+                    $user_id = $_SESSION['user_id']; // Use the logged-in user's ID
+
+                    // Updated SQL query to group by product_id and sum quantities
+                    $stmt = $conn->prepare("
+                        SELECT p.product_id, p.product_name, p.price, p.product_image, SUM(ci.quantity) AS quantity
+                        FROM cart_items ci
+                        JOIN products p ON ci.product_id = p.product_id
+                        WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = ?)
+                        GROUP BY p.product_id, p.product_name, p.price, p.product_image
+                    ");
                     $stmt->bind_param("i", $user_id);
                     $stmt->execute();
                     $result = $stmt->get_result();
@@ -166,18 +171,18 @@ if (isset($_POST['checkout'])) {
                                 </div>
                                 <div class="product-details">
                                     <h3>Our Home <?php echo htmlspecialchars($fetch_cart['product_name']); ?></h3>
-                                    <p>Sub Total: <span id="subtotal_<?php echo $fetch_cart['cart_item_id']; ?>">₱<?php echo number_format($sub_total, 2); ?></span></p>
-                                    <input type="hidden" name="update_quantity_id" value="<?php echo $fetch_cart['cart_item_id']; ?>">
-                                    <input type="hidden" id="price_<?php echo $fetch_cart['cart_item_id']; ?>" value="<?php echo $fetch_cart['price']; ?>">
+                                    <p>Sub Total: <span id="subtotal_<?php echo $fetch_cart['product_id']; ?>">₱<?php echo number_format($sub_total, 2); ?></span></p>
+                                    <input type="hidden" name="update_quantity_id" value="<?php echo $fetch_cart['product_id']; ?>">
+                                    <input type="hidden" id="price_<?php echo $fetch_cart['product_id']; ?>" value="<?php echo $fetch_cart['price']; ?>">
                                     <div class="quantity-input">
-                                        <button type="button" class="quantity-btn minus" onclick="updateQuantity(<?php echo $fetch_cart['cart_item_id']; ?>, -1)">-</button>
-                                        <input type="number" id="quantity_<?php echo $fetch_cart['cart_item_id']; ?>" name="update_quantity" pattern="\d*"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9); updateSubtotal(<?php echo $fetch_cart['cart_item_id']; ?>)"
-                                            value="<?php echo $fetch_cart['quantity']; ?>" min="1" max="<?php echo $fetch_cart['available_quantity']; ?>" step="1">
-                                        <button type="button" class="quantity-btn plus" onclick="updateQuantity(<?php echo $fetch_cart['cart_item_id']; ?>, 1)">+</button>
+                                        <button type="button" class="quantity-btn minus" onclick="updateQuantity(<?php echo $fetch_cart['product_id']; ?>, -1)">-</button>
+                                        <input type="number" id="quantity_<?php echo $fetch_cart['product_id']; ?>" name="update_quantity" pattern="\d*"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9); updateSubtotal(<?php echo $fetch_cart['product_id']; ?>)"
+                                            value="<?php echo $fetch_cart['quantity']; ?>" min="1" step="1">
+                                        <button type="button" class="quantity-btn plus" onclick="updateQuantity(<?php echo $fetch_cart['product_id']; ?>, 1)">+</button>
                                     </div>
-                                    <a href="#" onclick="removeCartItem(<?php echo $fetch_cart['cart_item_id']; ?>)" class="remove-btn"><i class="fas fa-times"></i></a>
-                                    <label class="custom-checkbox"><input type="checkbox" name="selected_items[]" value="<?php echo $fetch_cart['cart_item_id']; ?>"></label>
+                                    <a href="#" onclick="removeCartItem(<?php echo $fetch_cart['product_id']; ?>)" class="remove-btn"><i class="fas fa-times"></i></a>
+                                    <label class="custom-checkbox"><input type="checkbox" name="selected_items[]" value="<?php echo $fetch_cart['product_id']; ?>"></label>
                                 </div>
                             </div>
                             <?php
@@ -185,7 +190,6 @@ if (isset($_POST['checkout'])) {
                         ?>
                         <div class="cart-total">
                             <p><b>Total Amount: ₱ <span id="total_amount"><?php echo number_format($grand_total, 2); ?></span></b></p>
-                            <button type="submit" class="btn" name="delete_all" onclick="return confirm('Are you sure you want to clear all items from the cart?')">Clear Cart</button>
                             <div class="checkout-btn">
                                 <button type="submit" class="btn" name="checkout" <?php echo $item_count == 0 ? 'disabled' : ''; ?>>Checkout</button>
                             </div>
@@ -229,7 +233,6 @@ if (isset($_POST['checkout'])) {
     <script>
         function removeCartItem(cart_item_id) {
             Swal.fire({
-                title: 'Are you sure?',
                 text: "You want to remove this item from your cart?",
                 icon: 'warning',
                 showCancelButton: true,
@@ -250,7 +253,6 @@ if (isset($_POST['checkout'])) {
 
             if (newValue <= 0) {
                 Swal.fire({
-                    title: 'Are you sure?',
                     text: "You want to remove this item from your cart?",
                     icon: 'warning',
                     showCancelButton: true,
@@ -265,7 +267,6 @@ if (isset($_POST['checkout'])) {
             } else if (newValue > maxQuantity) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
                     text: 'Quantity exceeds available stock!',
                     confirmButtonColor: '#964B33'
                 });
@@ -317,7 +318,6 @@ if (isset($_POST['checkout'])) {
             if (selectedItems.length === 0) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
                     text: 'Please select at least one item to checkout!',
                     confirmButtonColor: '#964B33'
                 });

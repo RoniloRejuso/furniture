@@ -217,7 +217,7 @@ include 'user_body1.php';
    <a href="index.php"><i class="fas fa-home"></i></a>
    <a href="user_prod.php"><i class="fas fa-couch"></i></a>
    <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-   <a href="user.php"><i class="fas fa-user"></i></a>
+   <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
 </div>
 
 <script src="js/jquery.min.js"></script>

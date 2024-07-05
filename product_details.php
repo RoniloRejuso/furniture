@@ -12,22 +12,25 @@ if(isset($_POST['add_to_cart'])) {
     $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
     $product_quantity = 1;
 
+    // Fetch product details
     $fetch_product_query = "SELECT p.product_name, p.product_image, p.price
                             FROM products p
                             WHERE p.product_id = '$product_id'";
-    
     $result = mysqli_query($conn, $fetch_product_query);
 
     if(mysqli_num_rows($result) > 0) {
         $product = mysqli_fetch_assoc($result);
 
-        $user_id = 1;
+        // Get user_id from session
+        $user_id = $_SESSION['user_id'];
 
+        // Check if cart exists for user
         $select_cart_id = mysqli_query($conn, "SELECT cart_id FROM cart WHERE user_id = '$user_id'");
         if(mysqli_num_rows($select_cart_id) > 0) {
             $cart_row = mysqli_fetch_assoc($select_cart_id);
             $cart_id = $cart_row['cart_id'];
         } else {
+            // Create new cart for user
             $insert_cart = mysqli_query($conn, "INSERT INTO cart (user_id) VALUES ('$user_id')");
             if($insert_cart) {
                 $cart_id = mysqli_insert_id($conn);
@@ -37,6 +40,7 @@ if(isset($_POST['add_to_cart'])) {
             }
         }
 
+        // Add item to cart
         $price = $product['price'];
         $amount = $price * $product_quantity;
 
@@ -76,6 +80,7 @@ if(isset($_GET['product_id'])) {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +94,7 @@ if(isset($_GET['product_id'])) {
         <div class="row product-details">
             <div class="product-container1">
                 <div class="product_image">
-                    <img src="<?php echo $product['product_image']; ?>" alt="Our Home">
+                    <img src="<?php echo $product['product_image']; ?>" alt="Product Image">
                 </div>
                 <div class="product-info">
                     <h2 class="product-name"><b>Our Home <?php echo $product['product_name']; ?></b></h2>
@@ -105,13 +110,12 @@ if(isset($_GET['product_id'])) {
                     <div class="buttons">
                         <form id="add-to-cart-form" action="" method="POST">
                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                            <input type="hidden" name="product_name" value="<?php echo $product['product_name']; ?>">
-                            <input type="hidden" name="price" value="<?php echo $product['price']; ?>">
-                            <input type="hidden" name="product_image" value="<?php echo $product['product_image']; ?>">
                             <button type="button" class="btn btn-view-ar" onclick="viewInAR(<?php echo $product['product_id']; ?>)">
-                            <i class="fas fa-cube"></i> View in AR</button>
+                                <i class="fas fa-cube"></i> View in AR
+                            </button>
                             <button type="submit" class="btn btn-add-to-cart" name="add_to_cart" onclick="checkStock(event)">
-                            <i class="fas fa-shopping-cart"></i> Add to cart</button>
+                                <i class="fas fa-shopping-cart"></i> Add to cart
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -200,10 +204,10 @@ if(isset($_GET['product_id'])) {
         </div>
     </div><br><br><br>
     <div class="floating-navbar">
-        <a href="user_home.php"><i class="fas fa-home"></i></a>
-        <a href="user_product.php"><i class="fas fa-couch"></i></a>
+        <a href="index.php"><i class="fas fa-home"></i></a>
+        <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-        <a href="user.php?user_id=<?php echo $_SESSION['user_id']; ?>"><i class="fas fa-user"></i></a>
+        <a href="user.php"><i class="fas fa-user"></i></a>
     </div>
 
     <!-- JavaScript -->
@@ -246,7 +250,6 @@ if(isset($_GET['product_id'])) {
                 event.preventDefault();
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
                     text: 'This product is out of stock!',
                 });
             }

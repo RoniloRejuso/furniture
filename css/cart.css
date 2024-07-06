@@ -24,15 +24,6 @@
     margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-    .product-image {
-        margin-top: 20px;
-        margin-right: 10px;
-        text-align: center;
-
-    }
-}
-
 .product-image {
     max-width: 250px;
     height: 180px;
@@ -100,84 +91,165 @@
         padding: 4px 8px;
         font-size: 12px;
     }
+}
+@media (max-width: 800px) {
+    .btn {
+        width: 300px;
+        font-size: 14px;
+        padding: 10px;
+    }
 
-    @media (max-width: 450px) {
-        .btn {
-            width: 100%;
-            font-size: 12px;
-            padding: 10px;
-        }
+    .container {
+        padding: 10px;
+    }
 
-        .container {
-            padding: 10px;
-        }
+    .cart-item1 {
+        width: 500px;
+        height: auto;
+        padding: 10px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    }
 
-        .cart-item1 {
-            width: 100%;
-            height: auto;
-            padding: 10px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-        }
+    .cart-item {
+        width: 400px;
+        padding: 5px;
+    }
 
-        .cart-item {
-            padding: 5px;
-        }
+    .custom-checkbox {
+        top: 15px;
+        right: 40px;
+        font-size: 14px;
+        transform: scale(1);
+    }
 
-        .custom-checkbox {
-            top: 15px;
-            right: 40px;
-            font-size: 14px;
-            transform: scale(1);
-        }
+    .divider-line {
+        width: 21%;
+    }
 
-        .divider-line {
-            width: 21%;
-        }
+    .product-details {
+        font-size: 13px;
+        height: 150px;
+        width: 170px;
+    }
 
-        .product-details {
-            font-size: 11px;
-            height: 150px;
-            width: 170px;
-        }
+    .product-details h3 {
+        font-size: 15px;
+        width: 150px;
+        margin: 0 10px;
+        font-weight: bold;
+    }
 
-        .product-details h3 {
-            font-size: 14px;
-            width: 150px;
-            margin: 0 10px;
-            font-weight: bold;
-        }
+    .product-details p {
+        font-size: 12px;
+        margin: 20px 0 0 10px;
+    }
 
-        .product-details p {
-            font-size: 10px;
-            margin: 20px 0 0 10px;
-        }
+    .product-image {
+        width: 200px;
+        height: 80px;
+        padding: 5px;
+    }
 
-        .product-image {
-            width: 100px;
-            height: 80px;
-            padding: 5px;
-        }
+    .product-image img {
+        width: 200px;
+        height: 140px;
+    }
 
-        .product-image img {
-            width: 130px;
-            height: 100px;
-        }
+    .quantity-btn {
+        padding: 4px 6px;
+        font-size: 10px;
+    }
 
-        .quantity-btn {
-            padding: 4px 6px;
-            font-size: 10px;
-        }
-
-        .quantity-input {
-            margin-bottom: 20px;
-        }
-
-        .quantity-input input[type="number"] {
-            width: 50px;
-        }
+    .quantity-input {
+        margin-bottom: 20px;
     }
 
     .quantity-input input[type="number"] {
-        width: 60px;
+        width: 50px;
     }
+}
+
+.quantity-input input[type="number"] {
+    width: 60px;
+}
+
+@media (max-width: 450px) {
+    .btn {
+        width: 200px;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .cart-item1 {
+        width: 300px;
+        height: auto;
+        padding: 10px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .cart-item {
+        width: 300px;
+        padding: 5px;
+    }
+
+    .custom-checkbox {
+        top: 15px;
+        right: 40px;
+        font-size: 14px;
+        transform: scale(1);
+    }
+
+    .divider-line {
+        width: 21%;
+    }
+
+    .product-details {
+        font-size: 11px;
+        height: 150px;
+        width: 170px;
+    }
+
+    .product-details h3 {
+        font-size: 14px;
+        width: 140px;
+        margin: 0 10px;
+        font-weight: bold;
+    }
+
+    .product-details p {
+        font-size: 10px;
+        margin: 20px 0 0 10px;
+    }
+
+    .product-image {
+        width: 170px;
+        height: 80px;
+        padding: 5px;
+    }
+
+    .product-image img {
+        width: 130px;
+        height: 120px;
+    }
+
+    .quantity-btn {
+        padding: 6px 8px 0;
+        font-size: 10px;
+    }
+
+    .quantity-input {
+        margin-bottom: 20px;
+    }
+
+    .quantity-input input[type="number"] {
+        width: 50px;
+    }
+}
+
+.quantity-input input[type="number"] {
+    width: 60px;
 }

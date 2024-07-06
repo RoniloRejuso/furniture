@@ -78,7 +78,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         color: white;
         padding: 8px 20px;
         cursor: pointer;
-        margin-left: 60px;
+        margin-left: 10px;
     }
 
     #cancel_button {
@@ -87,7 +87,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         color: white;
         padding: 8px 20px;
         cursor: pointer;
-        margin-right: 80px;
+        margin-right: 10px;
     }
     .custom-logout-btn {
         background-color: #493A2D;
@@ -168,7 +168,9 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <div class="input-group">
                                 <input type="text" class="form-control" id="username" name="username" value="<?php echo $user['firstname'] . ' ' . $user['lastname']; ?>" readonly>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="splitName()">Edit</button>
+                                <button class="btn btn-outline-secondary" type="button" onclick="splitName()">
+                                    <i class="fas fa-edit"></i>
+                                </button>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +180,9 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $user['firstname']; ?>" readonly>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('firstname')">Edit</button>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('firstname')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +191,9 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $user['lastname']; ?>" readonly>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('lastname')">Edit</button>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('lastname')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -197,16 +203,20 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <div class="input-group">
                                 <input type="email" class="form-control" id="email" name="email" value="<?php echo $user['email']; ?>" readonly>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('email')">Edit</button>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('email')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group position-relative">
-                            <label for="contact" class="d-none">Contact Number:</label>
+                            <label for="contact" class="d-none">Contact:</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="contact" name="contact" value="<?php echo $user['phone_number']; ?>" readonly>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('contact')">Edit</button>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('contact')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +225,9 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <div class="input-group">
                                 <textarea class="form-control" id="address" name="address" rows="3" readonly><?php echo $user['address']; ?></textarea>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('address')">Edit</button>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="enableEdit('address')">
+                                        <i class="fas fa-edit"></i>
+                                    </butto>
                                 </div>
                             </div>
                         </div>
@@ -226,6 +238,8 @@ if ($result && mysqli_num_rows($result) > 0) {
                         <a href="user_carts.php" class="btn btn-cart">
                             <i class="fas fa-shopping-cart"></i> My Cart
                         </a>
+                        </div>
+                        <div class="button-container mb-1">
                             <button type="submit" class="btn btn-success" id="save_button" style="display:none;">Save Changes</button>
                             <button type="button" class="btn btn-secondary" id="cancel_button" onclick="cancelChanges()" style="display:none;"><i class="fas fa-times"></i></button>
                         </div>
@@ -292,7 +306,6 @@ function confirmSaveChanges(event) {
     if (firstname === '' || lastname === '') {
         Swal.fire({
             icon: 'error',
-            title: 'Oops...',
             text: 'Please enter both first name and last name!',
         });
         return;
@@ -301,7 +314,6 @@ function confirmSaveChanges(event) {
     // Further validations can be added here if needed
 
     Swal.fire({
-        title: 'Are you sure?',
         text: "Do you want to save the changes?",
         icon: 'warning',
         showCancelButton: true,

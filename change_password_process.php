@@ -126,7 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change'])) {
 $conn->close();
 ?>
 
-
 <!-- Optional: Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-zGS6E7LOZB7z7jcN6m+AaA6JwwrK/ZpNqY0d9N5/RwH+LZ1OQVpZf3ZlLwJ4yD2r" crossorigin="anonymous"></script>
 </body>

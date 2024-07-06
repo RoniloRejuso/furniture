@@ -65,6 +65,7 @@
 
 <body>
 
+
 <?php
 include 'dbcon.php';
 use PHPMailer\PHPMailer\PHPMailer;
@@ -95,35 +96,10 @@ if (isset($_POST['verify_email'])) {
                     Swal.fire({
                         icon: "error",
                         title: "Verification Failed",
-                        text: "Verification code is incorrect. What would you like to do?",
-                        showCancelButton: true,
-                        confirmButtonText: "Resend Email",
-                        cancelButtonText: "Cancel",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Resend email
-                            resendEmail("' . $email . '");
-                        } else {
-                            // Cancel and go back to the page
-                            window.location.href = "change_code.php?email=' . $email . '";
-                        }
+                        text: "Verification code is incorrect. Please try again.",
+                        confirmButtonText: "OK"
                     });
                 });
-
-                function resendEmail(email) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("POST", "resend_verification.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            Swal.fire("Resent!", "A new verification code has been sent to your email.", "success")
-                                .then(() => {
-                                    window.location.href = "change_code.php?email=' . $email . '";
-                                });
-                        }
-                    };
-                    xhr.send("email=" + email);
-                }
               </script>';
     }
 }
@@ -155,7 +131,7 @@ if (isset($_POST['resend_verification'])) {
         $mail->send();
 
         // Update the verification code in the URL
-        header("Location: current_page.php?email=" . $email . "&code=" . $new_verification_code);
+        header("Location: change_code.php?email=" . $email . "&code=" . $new_verification_code);
         exit();
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -37,21 +38,39 @@ include 'user_header.php';
             display: none;
         }
         .form-control.error {
-            border-color: red !important; /* Ensure red border for form-control elements */
+            border-color: red !important;
         }
 
 
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
 
-    .form-group {
-        position: relative;
-    }
-    .toggle-password {
-        position: absolute;
-        top: 70%; /* Adjust as needed to center vertically */
-        right: 10px; /* Adjust as needed to position */
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
+.form-control {
+    padding-right: 2.5rem;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 75%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.error-message {
+    color: red;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
 </style>
 
 
@@ -86,7 +105,7 @@ include 'user_body.php';
                         
                         <div class="form-group">
                             <label for="password">Password:</label>
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+                            <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password')"></i>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" maxlength="10" required>
                         </div>
                         <button type="submit" class="btn btn-primary" id="login_btn" name="login_btn">Login</button>
@@ -266,18 +285,25 @@ include 'user_body.php';
 
                         <div class="form-group">
                         <label for="password2">Password:</label>
-                        <input type="password" class="form-control password-input" id="password" name="password2" placeholder="Enter your password" maxlength="10" required>
+                        <input type="password" class="form-control password-input" id="password2" name="password2" placeholder="Enter your password" maxlength="10" required>
                         <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('password2')"></i>
                         <div id="passwordError2" class="error-message" style="display:none;">Password should not be only numbers.</div>
                         <div id="passwordStrengthError" class="error-message" style="display:none;">Password is too weak. It should have at least one uppercase letter or special character.</div>
                     </div>
-
                     <div class="form-group">
                         <label for="cpassword">Confirm Password:</label>
                         <input type="password" class="form-control password-input" id="cpassword" name="cpassword" placeholder="Confirm your password" maxlength="10" required>
-                        <i class="fas fa-eye toggle-password" onclick="togglePassword('cpassword')"></i>
-                        <small id="passwordMismatchError" class="form-text text-danger" style="display:none;">Passwords do not match</small>
+                        <i class="fas fa-eye toggle-password" style="color:grey;" onclick="togglePassword('cpassword')"></i>
+                        <small id="passwordMismatchError" class="error-message" style="display:none;">Passwords do not match</small>
                     </div>
+                    <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
+                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
+                    </form>
+
 
                     <script>
 function validatePassword() {
@@ -571,13 +597,6 @@ function togglePassword(fieldId) {
     }
 </script>
 
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
-                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
-                        </div>
-
-                        <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>
-                    </form>
 
                     <script>
         function validateForm() {

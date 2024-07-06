@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 if (isset($_GET['delete_id'])) {
     $product_id = (int)$_GET['delete_id']; // Ensure the ID is an integer
 
-    $delete_query = $conn->prepare("DELETE FROM orders WHERE orders_id = ?");
+    $delete_query = $conn->prepare("DELETE FROM users WHERE user_id = ?");
     $delete_query->bind_param("i", $product_id);
 
     if ($delete_query->execute()) {
@@ -26,13 +26,14 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-$sql = "SELECT * FROM orders";
+$sql = "SELECT * FROM users";
 $result = $conn->query($sql);
 
 if (!$result) {
     die("Query failed: " . $conn->error);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,15 +59,15 @@ if (!$result) {
     <div class="content">
         <div class="page-header">
             <div class="page-title">
-                <h4>Users</h4>
+                <h4>Orders</h4>
             </div>
         </div>
         
 <?php
 // Database connection details
 $servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";     // Replace with your MySQL username
-$password = "A@&DDb;7";     // Replace with your MySQL password
+$username = "u138133975_ourhome";  // Replace with your MySQL username
+$password = "A@&DDb;7";  // Replace with your MySQL password
 $dbname = "u138133975_furniture";  // Replace with your MySQL database name
 
 // Create connection
@@ -77,14 +78,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch recently added users query
-$query = "SELECT user_id, firstname, lastname, email
-          FROM users
-          ORDER BY user_id DESC
-          LIMIT 9"; // Adjust limit to 9 to account for the 1 static row
+// Fetch cart items query
+$query = "SELECT cart_item_id, cart_id, product_id, quantity, amount
+          FROM cart_items
+          ORDER BY cart_item_id DESC
+          LIMIT 9"; // Adjust limit as needed
 
 $result = $conn->query($query);
-
 ?>
 
 <div class="card">
@@ -111,57 +111,35 @@ $result = $conn->query($query);
         <table class="table datanew">
             <thead>
                 <tr>
-                    <th>
-                        <label class="checkboxs">
-                            <input type="checkbox" id="select-all">
-                            <span class="checkmarks"></span>
-                        </label>
-                    </th>
-                    <th>User ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
+                    <th>Cart Item ID</th>
+                    <th>Cart ID</th>
+                    <th>Product ID</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Sample data row -->
                 <tr>
-                    <td>
-                        <label class="checkboxs">
-                            <input type="checkbox">
-                            <span class="checkmarks"></span>
-                        </label>
-                    </td>
                     <td>1</td>
-                    <td>Ivan James</td>
-                    <td>Rodriguez</td>
-                    <td>ivanrodi229@gmail.com</td>
-                    <td>
-                        <a href="#" data-id="1" class="btn btn-danger btn-sm delete-btn">Delete</a>
-                    </td>
+                    <td>1</td>
+                    <td>101</td>
+                    <td>2</td>
+                    <td>50.00</td>
                 </tr>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td>
-                                <label class="checkboxs">
-                                    <input type="checkbox">
-                                    <span class="checkmarks"></span>
-                                </label>
-                            </td>
-                            <td><?php echo $row["user_id"]; ?></td>
-                            <td><?php echo $row["firstname"]; ?></td>
-                            <td><?php echo $row["lastname"]; ?></td>
-                            <td><?php echo $row["email"]; ?></td>
-                            <td>
-                                <a href="#" data-id="<?php echo $row["user_id"]; ?>" class="btn btn-danger btn-sm delete-btn">Delete</a>
-                            </td>
+                            <td><?php echo $row["cart_item_id"]; ?></td>
+                            <td><?php echo $row["cart_id"]; ?></td>
+                            <td><?php echo $row["product_id"]; ?></td>
+                            <td><?php echo $row["quantity"]; ?></td>
+                            <td><?php echo $row["amount"]; ?></td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center">No users found</td>
+                        <td colspan="5" class="text-center">No cart items found</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -170,6 +148,20 @@ $result = $conn->query($query);
 </div>
 </div>
 </div>
+
+
+
+<script>
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            const userId = this.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this user?')) {
+                window.location.href = `delete_user.php?delete_id=${userId}`;
+            }
+        });
+    });
+</script>
 
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/feather.min.js"></script>

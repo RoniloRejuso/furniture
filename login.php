@@ -30,26 +30,31 @@
         color: red;
     }
     .logcontrol-group {
-        position: relative;
-        margin-bottom: 1em;
-    }
-    .toggle-password {
-        position: absolute;
-        top: 43%;
-        right: 80px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        display: none; /* Initially hidden */
-    }
-    .error {
-            color: red;
-            font-size: 12px;
-            display: none;
-        }
-        .red-border {
-            border-color: red;
-            background-color: #ffcccc; /* Light red background color */
-        }
+    position: relative;
+    margin-bottom: 1em;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 35%;
+    right: 90px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+    display: none;
+}
+
+.red-border {
+    border-color: red;
+    background-color: #ffcccc; /* Light red background color */
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    display: none;
+}
+
 </style>
 <body>    
     <div class="logcontainer">
@@ -106,68 +111,61 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        function togglePassword(id) {
-            const passwordField = document.getElementById(id);
-            const eyeIcon = passwordField.nextElementSibling;
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
+    function togglePassword(id) {
+        const passwordField = document.getElementById(id);
+        const eyeIcon = passwordField.nextElementSibling;
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
         }
+    }
 
-        document.getElementById('password').addEventListener('input', showHideEyeIcon);
+    document.getElementById('password').addEventListener('input', showHideEyeIcon);
 
-        function showHideEyeIcon() {
-            const passwordValue = document.getElementById('password').value;
-            const eyeIcon = document.querySelector('.toggle-password');
-            if (passwordValue.trim() !== '') {
-                eyeIcon.style.display = 'block'; // Show eye icon
-            } else {
-                eyeIcon.style.display = 'none'; // Hide eye icon
-            }
+    function showHideEyeIcon() {
+        const passwordValue = document.getElementById('password').value;
+        const eyeIcon = document.querySelector('.toggle-password');
+        if (passwordValue.trim() !== '') {
+            eyeIcon.style.display = 'block'; // Show eye icon
+        } else {
+            eyeIcon.style.display = 'none'; // Hide eye icon
         }
-        document.getElementById('username').addEventListener('input', function () {
-            var usernameInput = document.getElementById('username');
-            var usernameError = document.getElementById('username-error');
-            var usernameValue = usernameInput.value;
+    }
 
-            if (/^\d+$/.test(usernameValue)) {  // Check if the input is purely numerical
-                usernameInput.classList.add('red-border');
-                usernameError.style.display = 'block';
-            } else {
-                usernameInput.classList.remove('red-border');
-                usernameError.style.display = 'none';
-            }
-        });
+    document.getElementById('username').addEventListener('input', function () {
+        var usernameInput = document.getElementById('username');
+        var usernameError = document.getElementById('username-error');
+        var usernameValue = usernameInput.value;
 
-        document.getElementById('password').addEventListener('input', function () {
-            var passwordInput = document.getElementById('password');
-            var passwordError = document.getElementById('password-error');
-            var passwordValue = passwordInput.value;
-
-            if (/^\d+$/.test(passwordValue) || /^[a-z]+$/.test(passwordValue)) {  // Check if the input is purely numerical or purely lowercase letters
-                passwordInput.classList.add('red-border');
-                passwordError.style.display = 'block';
-            } else {
-                passwordInput.classList.remove('red-border');
-                passwordError.style.display = 'none';
-            }
-        });
-
-        function togglePassword(fieldId) {
-            var field = document.getElementById(fieldId);
-            if (field.type === "password") {
-                field.type = "text";
-            } else {
-                field.type = "password";
-            }
+        if (/^\d+$/.test(usernameValue)) {  // Check if the input is purely numerical
+            usernameInput.classList.add('red-border');
+            usernameError.style.display = 'block';
+        } else {
+            usernameInput.classList.remove('red-border');
+            usernameError.style.display = 'none';
         }
+    });
 
+    document.getElementById('password').addEventListener('input', function () {
+        var passwordInput = document.getElementById('password');
+        var passwordError = document.getElementById('password-error');
+        var passwordValue = passwordInput.value;
+
+        if (/^\d+$/.test(passwordValue) || /^[a-z]+$/.test(passwordValue)) {  // Check if the input is purely numerical or purely lowercase letters
+            passwordInput.classList.add('red-border');
+            passwordError.style.display = 'block';
+        } else {
+            passwordInput.classList.remove('red-border');
+            passwordError.style.display = 'none';
+        }
+    });
+    showHideEyeIcon();
     </script>
 </body>
 </html>

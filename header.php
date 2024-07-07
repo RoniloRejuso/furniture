@@ -19,6 +19,10 @@ if ($session_id) {
 $queryTotalPendingNotifications = "SELECT COUNT(*) AS TotalNotification FROM orders";
 $resultTotalPendingNotifications = mysqli_query($conn, $queryTotalPendingNotifications);
 $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_assoc($resultTotalPendingNotifications) : null;
+
+// Fetch the actual notifications
+$queryNotifications = "SELECT * FROM orders ORDER BY date DESC LIMIT 5"; // Adjust the LIMIT as needed
+$resultNotifications = mysqli_query($conn, $queryNotifications);
 ?>
 
 
@@ -53,30 +57,29 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
               </a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-              <img src="assets/img/icons/notification-bing.svg" alt="img">
-              <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
-            </a>
-            
-            <div class="dropdown-menu notifications">
-              <div class="topnav-dropdown-header">
-                <span class="notification-title">
-                  Notifications
-                </span>
-                <a href="javascript:void(0)" class="clear-noti">
-                  Clear All
-                </a>
-              </div>
-              <div class="noti-content">
-              </div>
-              <div class="topnav-dropdown-footer">
-                <a href="orders.php">
-                  View all Notifications.
-                </a>
-              </div>
-            </div>
-          </li>
+<!--
+<li class="nav-item dropdown">
+    <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+        <img src="assets/img/icons/notification-bing.svg" alt="img">
+        <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
+    </a>
+    
+    <div class="dropdown-menu notifications">
+        <div class="topnav-dropdown-header">
+            <span class="notification-title">Notifications</span>
+            <a href="javascript:void(0)" class="clear-noti">Clear All</a>
+        </div>
+        <div class="noti-content">
+        </div>
+        <div class="topnav-dropdown-footer">
+            <a href="">All Notifications</a>
+        </div>
+    </div>
+</li>
+-->
+
+
+          
           <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset"
             data-bs-toggle="dropdown">
@@ -153,13 +156,13 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
               <li class="submenu">
                 <a href="javascript:void(0);">
                   <img src="assets/img/icons/purchase1.svg" alt="img">
-                  <span>Users</span>
+                  <span>Orders</span>
                   <span class="menu-arrow"></span>
                 </a>
                 <ul>
                   <li>
                     <a href="orders.php">
-                      Users
+                      Orders
                     </a>
                   </li>
                 </ul>

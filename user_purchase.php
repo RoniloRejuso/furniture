@@ -2,7 +2,6 @@
 session_start();
 include('dbcon.php');
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['message'] = "You must log in first";
     header("Location: user_login.php");
@@ -50,7 +49,6 @@ if (isset($_GET['cancel'])) {
     exit();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -132,7 +130,6 @@ if (isset($_GET['cancel'])) {
         // JavaScript function to cancel an order
         function cancelOrder(cart_item_id) {
             Swal.fire({
-                title: 'Are you sure?',
                 text: "You want to cancel this order?",
                 icon: 'warning',
                 showCancelButton: true,

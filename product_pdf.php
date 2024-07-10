@@ -81,16 +81,6 @@ $pdf->SetFont('');
 // Print table rows
 $fill = 0;
 
-// Sample data row
-$pdf->Cell($w[0], 6, '1', 'LR', 0, 'C', $fill);
-$pdf->Cell($w[1], 6, 'Sample Product', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[2], 6, 'Available', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[3], 6, '100', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[4], 6, '10', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[5], 6, '<img src="path/to/sample_image.jpg" alt="Product Image" width="50">', 'LR', 0, 'L', $fill);
-$pdf->Ln();
-$fill = !$fill;
-
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $pdf->Cell($w[0], 6, $row['product_id'], 'LR', 0, 'C', $fill);
@@ -98,38 +88,22 @@ if ($result->num_rows > 0) {
         $pdf->Cell($w[2], 6, $row['status'], 'LR', 0, 'L', $fill);
         $pdf->Cell($w[3], 6, $row['price'], 'LR', 0, 'L', $fill);
         $pdf->Cell($w[4], 6, $row['quantity'], 'LR', 0, 'L', $fill);
-        $pdf->Cell($w[5], 6, '<img src="' . $row['product_image'] . '" alt="Product Image" width="50">', 'LR', 0, 'L', $fill);
+        // Display image in PDF (example assumes product_image is a path to an image)
+        $pdf->Image($row['product_image'], $pdf->GetX(), $pdf->GetY(), 30, 30, '', '', '', true, 150, '', false, false, 0, false, false, false);
         $pdf->Ln();
         $fill = !$fill;
     }
+} else {
+    $pdf->Cell(array_sum($w), 6, 'No products found', 'LR', 0, 'C', $fill);
+    $pdf->Ln();
 }
 
 // Closing line
 $pdf->Cell(array_sum($w), 0, '', 'T');
 
-// Output PDF to uploads directory
-$pdf->Output(__DIR__ . '/uploads/products_report.pdf', 'F');
-?>
+// Output PDF to browser for download
+$pdf->Output('products_report.pdf', 'D'); // 'D' parameter forces download
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Products PDF Generation</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-<script>
-    Swal.fire({
-        title: 'Success!',
-        text: 'Products copied successfully',
-        icon: 'success',
-        confirmButtonText: 'OK'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = 'productlist.php';
-        }
-    });
-</script>
-</body>
-</html>
+// Close connection
+$conn->close();
+?>

@@ -19,6 +19,10 @@ if ($session_id) {
 $queryTotalPendingNotifications = "SELECT COUNT(*) AS TotalNotification FROM orders";
 $resultTotalPendingNotifications = mysqli_query($conn, $queryTotalPendingNotifications);
 $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_assoc($resultTotalPendingNotifications) : null;
+
+// Fetch the actual notifications
+$queryNotifications = "SELECT * FROM orders ORDER BY date DESC LIMIT 5"; // Adjust the LIMIT as needed
+$resultNotifications = mysqli_query($conn, $queryNotifications);
 ?>
 
 
@@ -53,30 +57,29 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
               </a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-              <img src="assets/img/icons/notification-bing.svg" alt="img">
-              <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
-            </a>
-            
-            <div class="dropdown-menu notifications">
-              <div class="topnav-dropdown-header">
-                <span class="notification-title">
-                  Notifications
-                </span>
-                <a href="javascript:void(0)" class="clear-noti">
-                  Clear All
-                </a>
-              </div>
-              <div class="noti-content">
-              </div>
-              <div class="topnav-dropdown-footer">
-                <a href="orders.php">
-                  View all Notifications.
-                </a>
-              </div>
-            </div>
-          </li>
+<!--
+<li class="nav-item dropdown">
+    <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+        <img src="assets/img/icons/notification-bing.svg" alt="img">
+        <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
+    </a>
+    
+    <div class="dropdown-menu notifications">
+        <div class="topnav-dropdown-header">
+            <span class="notification-title">Notifications</span>
+            <a href="javascript:void(0)" class="clear-noti">Clear All</a>
+        </div>
+        <div class="noti-content">
+        </div>
+        <div class="topnav-dropdown-footer">
+            <a href="">All Notifications</a>
+        </div>
+    </div>
+</li>
+-->
+
+
+          
           <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset"
             data-bs-toggle="dropdown">
@@ -118,6 +121,7 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
             <i class="fa fa-ellipsis-v">
             </i>
           </a>
+          
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="profile.html">My Profile</a>
             <a class="dropdown-item" href="generalsettings.html">Settings</a>
@@ -125,47 +129,51 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
           </div>
         </div>
       </div>
+      
+      
       <div class="sidebar" id="sidebar">
-        <div class="sidebar-inner slimscroll">
-          <div id="sidebar-menu" class="sidebar-menu">
-            <ul>
-            <li>
-              <a href="admin_index.php">
-                <img src="assets/img/icons/dashboard.svg" alt="img"><span>Dashboard</span>
-              </a>
-            </li>
+  <div class="sidebar-inner slimscroll">
+    <div id="sidebar-menu" class="sidebar-menu">
+      <ul>
+        <li>
+          <a href="admin_index.php">
+            <img src="assets/img/icons/dashboard.svg" alt="img"><span>Dashboard</span>
+          </a>
+        </li>
 
-              <li class="submenu">
-                <a href="javascript:void(0);">
-                  <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
-                  <span class="menu-arrow">
-                  </span>
-                </a>
-                <ul>
-                  <li>
-                    <a href="productlist.php">Product List</a>
-                  </li>
-                  <li>
-                    <a href="addproduct.php">Add Product</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="submenu">
-                <a href="javascript:void(0);">
-                  <img src="assets/img/icons/purchase1.svg" alt="img">
-                  <span>Users</span>
-                  <span class="menu-arrow"></span>
-                </a>
-                <ul>
-                  <li>
-                    <a href="orders.php">
-                      Users
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            
-          </div>
-        </div>
-      </div>
+        <li class="submenu">
+          <a href="javascript:void(0);">
+            <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
+            <span class="menu-arrow"></span>
+          </a>
+          <ul>
+            <li><a href="productlist.php">Product List</a></li>
+            <li><a href="addproduct.php">Add Product</a></li>
+          </ul>
+        </li>
+        
+        <li class="submenu">
+          <a href="javascript:void(0);">
+            <img src="assets/img/icons/purchase1.svg" alt="img"><span>Orders</span>
+            <span class="menu-arrow"></span>
+          </a>
+          <ul>
+            <li><a href="orders.php">Orders</a></li>
+          </ul>
+        </li>
+
+        <li class="submenu">
+          <a href="javascript:void(0);">
+            <img src="assets/img/icons/purchase1.svg" alt="img"><span>Users</span>
+            <span class="menu-arrow"></span>
+          </a>
+          <ul>
+            <li><a href="table_users.php">Users</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+      

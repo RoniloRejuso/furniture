@@ -111,31 +111,32 @@ if (!isset($_SESSION['admin_id'])) {
             </span>
         </div>
         <div class="dash-widgetcontent">
-            <h6>Logged-in Admins</h6>
+            <h6>Registered Users</h6>
             <h5>
                 <?php
-                $sql = "SELECT COUNT(*) AS admin_count FROM admin WHERE is_admin = 1";
+                include 'dbcon.php';
+
+                $sql = "SELECT COUNT(*) AS user_count FROM users";
                 $result = $conn->query($sql);
 
-                if ($result->num_rows > 0) {
+                if ($result && $result->num_rows > 0) {
                     $row = $result->fetch_assoc();
-                    $adminCount = $row['admin_count'];
+                    $userCount = $row['user_count'];
                 } else {
-                    $adminCount = null;
+                    $userCount = null;
                 }
 
-                if (is_null($adminCount) || $adminCount == 0) {
+                if (is_null($userCount) || $userCount == 0) {
                     echo '<span class="counters" data-count="0">No data available</span>';
                 } else {
-                    echo '<span class="counters" data-count="' . $adminCount . '">' . $adminCount . '</span>';
+                    echo '<span class="counters" data-count="' . $userCount . '">' . $userCount . '</span>';
                 }
                 ?>
             </h5>
         </div>
     </div>
 </div>
-    </div>
-</div>
+
           <div class="row">
             <div class="col-lg-7 col-sm-12 col-12 d-flex">
               <div class="card flex-fill">

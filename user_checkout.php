@@ -238,7 +238,7 @@ include 'user_body.php';
                         <input type="text" name="barangay" placeholder="Barangay" value="<?= $barangay ?>" required>
                         <input type="text" name="city" placeholder="City" value="<?= $city ?>" required>
                         <input type="text" name="province" placeholder="Province" value="<?= $province ?>" required>
-                        <input type="text" name="postal_code" placeholder="Postal Code" value="<?= $postal_code ?>" required>
+                        <input type="text" name="postal_code" placeholder="Postal Code" value="<?= $postal_code ?>" required pattern="\d{4}" title="Postal code must be exactly 4 digits">
                         <div class="additional_address">
                             <input type="text" name="additional_address" placeholder="Apartment, Suite, etc..." value="<?= $additional_address ?>">
                         </div>
@@ -257,6 +257,18 @@ include 'user_body.php';
                         <h2>Billing Address</h2>
                         <label><input type="radio" name="billing_address" value="same_as_shipping" required> Same as Shipping Address</label>
                         <label><input type="radio" name="billing_address" value="different" required> Use Different Billing Address</label>
+
+                        <div id="billing_address_fields" style="display: none;">
+                            <h3>Enter Billing Address</h3>
+                            <input type="text" name="billing_address" placeholder="Address" value="">
+                            <input type="text" name="billing_barangay" placeholder="Barangay" value="">
+                            <input type="text" name="billing_city" placeholder="City" value="">
+                            <input type="text" name="billing_province" placeholder="Province" value="">
+                            <input type="text" name="billing_postal_code" placeholder="Postal Code" value="" pattern="\d{4}" title="Postal code must be exactly 4 digits">
+                            <div class="additional_billing_address">
+                                <input type="text" name="billing_additional_address" placeholder="Apartment, Suite, etc...">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="section_container">
@@ -309,6 +321,48 @@ Swal.fire({
     } else {
         window.location.href = 'user_purchase.php';
     }
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+    const postalCodeInput = document.querySelector('input[name="postal_code"]');
+
+    postalCodeInput.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+
+        if (this.value.length > 4) {
+            this.value = this.value.slice(0, 4);
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+    const billingAddressRadios = document.querySelectorAll('input[name="billing_address"]');
+    const billingAddressFields = document.getElementById('billing_address_fields');
+
+    billingAddressRadios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === 'different') {
+                billingAddressFields.style.display = 'block';
+            } else {
+                billingAddressFields.style.display = 'none';
+                // Clear the billing address fields when not needed
+                billingAddressFields.querySelectorAll('input').forEach(input => input.value = '');
+            }
+        });
+    });
+
+    // Optional: Add validation for new billing address fields if necessary
+    document.querySelector('form').addEventListener('submit', function (event) {
+        const selectedBillingAddress = document.querySelector('input[name="billing_address"]:checked');
+        if (selectedBillingAddress && selectedBillingAddress.value === 'different') {
+            const billingFields = billingAddressFields.querySelectorAll('input');
+            for (const field of billingFields) {
+                if (field.required && !field.value.trim()) {
+                    alert('Please fill out all required billing address fields.');
+                    event.preventDefault();
+                    return;
+                }
+            }
+        }
+    });
 });
 </script>
 <?php endif; ?>

@@ -141,6 +141,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
           </a>
         </li>
 
+<<<<<<< HEAD
         <li class="submenu">
           <a href="javascript:void(0);">
             <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
@@ -177,3 +178,39 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
 </div>
 
       
+=======
+              <li class="submenu">
+                <a href="javascript:void(0);">
+                  <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
+                  <span class="menu-arrow">
+                  </span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="productlist.php">Product List</a>
+                  </li>
+                  <li>
+                    <a href="addproduct.php">Add Product</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="submenu">
+                <a href="javascript:void(0);">
+                  <img src="assets/img/icons/purchase1.svg" alt="img">
+                  <span>Orders</span>
+                  <span class="menu-arrow"></span>
+                </a>
+                <ul>
+                  <li>
+                    <a href="orders.php">
+                      Orders
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            
+          </div>
+        </div>
+      </div>
+>>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8

@@ -126,7 +126,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change'])) {
 $conn->close();
 ?>
 
+<<<<<<< HEAD
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 17a20228005d2339de0a3d25e155d42fa8040180
+>>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
 <!-- Optional: Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-zGS6E7LOZB7z7jcN6m+AaA6JwwrK/ZpNqY0d9N5/RwH+LZ1OQVpZf3ZlLwJ4yD2r" crossorigin="anonymous"></script>
 </body>

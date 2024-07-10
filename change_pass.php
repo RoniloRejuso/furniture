@@ -25,7 +25,7 @@ if (isset($_POST["reset"])) {
     $email = $_POST["email"];
 
     // Check if the email is registered in the database
-    $query = "SELECT * FROM users WHERE email = ?";
+    $query = "SELECT * FROM admin WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -56,7 +56,7 @@ if (isset($_POST["reset"])) {
             $mail->send();
 
             // Redirect to email_verify.php passing email and verification code
-            header("Location: user_change_code.php?email=" . $email . "&code=" . $verification_code);
+            header("Location: change_code.php?email=" . $email . "&code=" . $verification_code);
             exit();
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

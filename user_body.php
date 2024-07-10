@@ -8,7 +8,7 @@
             <nav class="navbar navbar-light bg-light justify-content-between">
                <div id="mySidenav" class="sidenav"><br><br><br>
                <span href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="margin: 0 auto;">&times;</span>
-                  <a class="user_products" href="user_new_products1.php">
+                  <a class="user_products" href="user_new_products.php">
                     <i style="margin-left:70px;" class="fas fa-box-open"></i>  New Products
                   </a>
                   <div class="dropdown">
@@ -28,7 +28,7 @@
                         <a class="dropdown-item" href="user_office.php">
                             <i style="margin-left:70px;" class="fas fa-briefcase"></i>  Office
                         </a>
-                        <a class="dropdown-item" href="user_products.php">
+                        <a class="dropdown-item" href="user_product.php">
                             <i style="margin-left:70px;" class="fas fa-th-list"></i>  All products
                         </a>
                     </div>

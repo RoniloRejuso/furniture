@@ -73,37 +73,47 @@ if (isset($_POST['checkout'])) {
         <section class="cart-container">
             <form method="post" action="">
                 <?php
-                // Query to fetch cart items with product details
+                // Query to fetch cart items with product details and aggregate quantities
                 $user_id = $_SESSION['user_id'];
-                $select_cart = mysqli_query($conn, "SELECT ci.cart_item_id, p.product_name, p.price, p.product_image, p.quantity AS available_quantity, ci.quantity
-                                                    FROM cart_items ci
-                                                    JOIN products p ON ci.product_id = p.product_id
-                                                    WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
+                $select_cart = mysqli_query($conn, "
+                    SELECT p.product_id, p.product_name, p.price, p.product_image, SUM(ci.quantity) AS total_quantity
+                    FROM cart_items ci
+                    JOIN products p ON ci.product_id = p.product_id
+                    WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')
+                    GROUP BY p.product_id, p.product_name, p.price, p.product_image
+                ");
                 
                 $grand_total = 0;
                 $item_count = mysqli_num_rows($select_cart);
 
                 if ($item_count > 0) {
                     while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+                        $product_id = $fetch_cart['product_id'];
+                        $product_name = $fetch_cart['product_name'];
+                        $price = $fetch_cart['price'];
+                        $product_image = $fetch_cart['product_image'];
+                        $total_quantity = $fetch_cart['total_quantity'];
+                        $sub_total = $price * $total_quantity;
+
                         ?>
                         <div class="cart-item">
                             <div class="product-image">
-                                <img src="<?php echo $fetch_cart['product_image']; ?>" alt="Product Image">
+                                <img src="<?php echo $product_image; ?>" alt="Product Image">
                             </div>
                             <div class="product-details">
-                                <h3>Our Home <?php echo $fetch_cart['product_name']; ?></h3>
-                                <p>Sub Total: <span id="subtotal_<?php echo $fetch_cart['cart_item_id']; ?>">₱<?php echo number_format($sub_total = $fetch_cart['price'] * $fetch_cart['quantity'], 2); ?></span></p>
-                                <input type="hidden" name="update_quantity_id" value="<?php echo $fetch_cart['cart_item_id']; ?>">
-                                <input type="hidden" id="price_<?php echo $fetch_cart['cart_item_id']; ?>" value="<?php echo $fetch_cart['price']; ?>">
+                                <h3>Our Home <?php echo $product_name; ?></h3>
+                                <p>Sub Total: <span id="subtotal_<?php echo $product_id; ?>">₱<?php echo number_format($sub_total, 2); ?></span></p>
+                                <input type="hidden" name="update_quantity_id" value="<?php echo $product_id; ?>">
+                                <input type="hidden" id="price_<?php echo $product_id; ?>" value="<?php echo $price; ?>">
                                 <div class="quantity-input">
-                                    <button type="button" class="quantity-btn minus" onclick="updateQuantity(<?php echo $fetch_cart['cart_item_id']; ?>, -1)">-</button>
-                                    <input type="number" id="quantity_<?php echo $fetch_cart['cart_item_id']; ?>" name="update_quantity" pattern="\d*" 
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9); updateSubtotal(<?php echo $fetch_cart['cart_item_id']; ?>)" 
-                                        value="<?php echo $fetch_cart['quantity']; ?>" min="1" max="<?php echo $fetch_cart['available_quantity']; ?>" step="1">
-                                    <button type="button" class="quantity-btn plus" onclick="updateQuantity(<?php echo $fetch_cart['cart_item_id']; ?>, 1)">+</button>
+                                    <button type="button" class="quantity-btn minus" onclick="updateQuantity('<?php echo $product_id; ?>', -1)">-</button>
+                                    <input type="number" id="quantity_<?php echo $product_id; ?>" name="update_quantity" pattern="\d*" 
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9); updateSubtotal('<?php echo $product_id; ?>')" 
+                                        value="<?php echo $total_quantity; ?>" min="1" step="1">
+                                    <button type="button" class="quantity-btn plus" onclick="updateQuantity('<?php echo $product_id; ?>', 1)">+</button>
                                 </div>
-                                <a href="#" onclick="removeCartItem(<?php echo $fetch_cart['cart_item_id']; ?>)" class="remove-btn"><i class="fas fa-times"></i></a>
-                                <label class="custom-checkbox"><input type="checkbox" name="selected_items[]" value="<?php echo $fetch_cart['cart_item_id']; ?>"></label>
+                                <a href="#" onclick="removeCartItem('<?php echo $product_id; ?>')" class="remove-btn"><i class="fas fa-times"></i></a>
+                                <label class="custom-checkbox"><input type="checkbox" name="selected_items[]" value="<?php echo $product_id; ?>"></label>
                             </div>
                         </div>
                         <?php
@@ -133,88 +143,124 @@ if (isset($_POST['checkout'])) {
         <div class="recommended_products"><br><br>
             <h3><small><span class="divider-line"></span><b> Interested in This? </b><span class="divider-line"></span></small></h3>
             <div class="row">
-                <?php
-                include 'config.php';
+            <?php
+                include 'dbcon.php';
 
-                function generateRecommendations($transactions, $minSupport) {
+                // Function to generate unique product recommendations
+                function generateRecommendations($transactions) {
                     $allProducts = [];
                     foreach ($transactions as $transaction) {
-                        $products = explode(', ', $transaction["product_name"]);
-                        $allProducts = array_merge($allProducts, $products);
+                        $allProducts[] = $transaction["product_name"];
                     }
                     return array_unique($allProducts);
                 }
 
+                // Create a connection to the database
                 $conn = mysqli_connect($servername, $username, $password, $database);
 
+                // Check for connection errors
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
 
-                $sql = " SELECT p.product_id, p.product_name, p.price, p.product_image
-                FROM orders o
-                JOIN cart c ON o.cart_id = c.cart_id
-                JOIN cart_items ci ON c.cart_id = ci.cart_id
-                JOIN products p ON ci.product_id = p.product_id
-                WHERE o.orders_id = ?;";
+                // Check if orders_id is provided in the URL
+                if (isset($_GET['orders_id']) && is_numeric($_GET['orders_id'])) {
+                    $orders_id = intval($_GET['orders_id']);
 
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $_GET['order_id']);
-                $stmt->execute();
-                $result = $stmt->get_result();
+                    // Debugging: Print the orders_id
+                    echo "Orders ID: " . htmlspecialchars($orders_id) . "<br>";
 
-                if ($result->num_rows > 0) {
-                    $transactions = [];
-                    while ($row = $result->fetch_assoc()) {
-                        $transactions[] = $row;
-                    }
+                    // Fetch cart_id associated with the orders_id
+                    $cartIdQuery = "SELECT c.cart_id 
+                                    FROM orders o
+                                    JOIN cart c ON o.cart_id = c.cart_id
+                                    WHERE o.orders_id = ?";
+                    $stmt = $conn->prepare($cartIdQuery);
+                    $stmt->bind_param("i", $orders_id);
+                    $stmt->execute();
+                    $cartIdResult = $stmt->get_result();
 
-                    $minSupport = 0.1;
-                    $recommendations = generateRecommendations($transactions, $minSupport);
+                    // Debugging: Print the number of rows returned
+                    echo "Cart ID Rows: " . $cartIdResult->num_rows . "<br>";
 
-                    shuffle($recommendations);
+                    if ($cartIdResult->num_rows > 0) {
+                        $cart = $cartIdResult->fetch_assoc();
+                        $cart_id = $cart['cart_id'];
 
-                    $displayLimit = 1;
-                    $count = 0;
+                        // Debugging: Print the cart_id
+                        echo "Cart ID: " . htmlspecialchars($cart_id) . "<br>";
 
-                    foreach ($recommendations as $product) {
-                        foreach ($transactions as $transaction) {
-                            if ($product == $transaction["product_name"]) {
-                                $product_id = $transaction["product_id"];
-                                $price = $transaction["price"];
-                                $product_image = $transaction["product_image"];
-                                break;
+                        // Fetch products from cart_items associated with the cart_id
+                        $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image
+                                FROM cart_items ci
+                                JOIN products p ON ci.product_id = p.product_id
+                                WHERE ci.cart_id = ?
+                                GROUP BY p.product_id, p.product_name, p.price, p.product_image";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("i", $cart_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        // Debugging: Print the number of rows returned
+                        echo "Product Rows: " . $result->num_rows . "<br>";
+
+                        if ($result->num_rows > 0) {
+                            $transactions = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $transactions[] = $row;
                             }
-                        }
 
-                        echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
-                        echo '<a href="product_details.php?product_id=' . $product_id . '">';
-                        echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
-                        echo '<div class="product-info">';
-                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
-                        echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
-                        echo '</div>';
-                        echo '</a>';
-                        echo '</div>';
+                            $recommendations = generateRecommendations($transactions);
+                            shuffle($recommendations);
 
-                        $count++;
-                        if ($count >= $displayLimit) {
-                            break;
+                            $displayLimit = 1;
+                            $count = 0;
+
+                            foreach ($recommendations as $product_name) {
+                                foreach ($transactions as $transaction) {
+                                    if ($product_name == $transaction["product_name"]) {
+                                        $product_id = $transaction["product_id"];
+                                        $price = $transaction["price"];
+                                        $product_image = $transaction["product_image"];
+                                        break;
+                                    }
+                                }
+
+                                echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
+                                echo '<a href="product_details.php?product_id=' . $product_id . '">';
+                                echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
+                                echo '<div class="product-info">';
+                                echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . htmlspecialchars($product_name) . '</big></b></h4>';
+                                echo '<h3 class="product-price" style="color: black; float: right;">₱' . htmlspecialchars($price) . '</h3><br><br>';
+                                echo '</div>';
+                                echo '</a>';
+                                echo '</div>';
+
+                                $count++;
+                                if ($count >= $displayLimit) {
+                                    break;
+                                }
+                            }
+                        } else {
+                            echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                            echo '<b>No Products available.<b>';
+                            echo '</div>';
                         }
+                    } else {
+                        echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
+                        echo '<b>Invalid order ID.<b>';
+                        echo '</div>';
                     }
                 } else {
                     echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
-                    echo '<b>No Products available.<b>';
+                    echo '<b>Invalid order ID.<b>';
                     echo '</div>';
                 }
 
                 $conn->close();
                 ?>
-            </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 <script src="js/jquery.min.js"></script>
 <script src="js/popper.min.js"></script>
@@ -228,7 +274,7 @@ if (isset($_POST['checkout'])) {
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-    function removeCartItem(cart_item_id) {
+    function removeCartItem(product_id) {
         Swal.fire({
             text: "You want to remove this item from your cart?",
             icon: 'warning',
@@ -238,13 +284,13 @@ if (isset($_POST['checkout'])) {
             confirmButtonText: 'Yes'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'user_carts.php?remove=' + cart_item_id;
+                window.location.href = 'user_carts.php?remove=' + product_id;
             }
         });
     }
 
-    function updateQuantity(cart_item_id, change) {
-        var quantityInput = document.getElementById('quantity_' + cart_item_id);
+    function updateQuantity(product_id, change) {
+        var quantityInput = document.getElementById('quantity_' + product_id);
         var newValue = parseInt(quantityInput.value) + change;
         var maxQuantity = parseInt(quantityInput.max); // Fetch maximum quantity allowed
         
@@ -258,7 +304,7 @@ if (isset($_POST['checkout'])) {
                 confirmButtonText: 'Yes'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'user_carts.php?remove=' + cart_item_id;
+                    window.location.href = 'user_carts.php?remove=' + product_id;
                 }
             });
         } else if (newValue > maxQuantity) {
@@ -269,14 +315,14 @@ if (isset($_POST['checkout'])) {
             });
         } else {
             quantityInput.value = newValue;
-            updateSubtotal(cart_item_id);
+            updateSubtotal(product_id);
         }
     }
 
-    function updateSubtotal(cart_item_id) {
-        var quantityInput = document.getElementById('quantity_' + cart_item_id);
-        var priceInput = document.getElementById('price_' + cart_item_id);
-        var subtotalSpan = document.getElementById('subtotal_' + cart_item_id);
+    function updateSubtotal(product_id) {
+        var quantityInput = document.getElementById('quantity_' + product_id);
+        var priceInput = document.getElementById('price_' + product_id);
+        var subtotalSpan = document.getElementById('subtotal_' + product_id);
 
         var quantity = parseInt(quantityInput.value);
         var price = parseFloat(priceInput.value);
@@ -291,7 +337,7 @@ if (isset($_POST['checkout'])) {
         var totalAmountSpan  = document.getElementById('total_amount');
         var totalAmount = 0;
 
-        var subtotals = document.querySelectorAll('.subtotal');
+        var subtotals = document.querySelectorAll('[id^="subtotal_"]');
 
         subtotals.forEach(function(subtotal) {
             totalAmount += parseFloat(subtotal.textContent.replace('₱', ''));
@@ -305,9 +351,9 @@ if (isset($_POST['checkout'])) {
         var totalAmount = 0;
 
         selectedItems.forEach(function(item) {
-            var cartItemId = item.value;
-            var quantity = parseInt(document.getElementById('quantity_' + cartItemId).value);
-            var price = parseFloat(document.getElementById('price_' + cartItemId).value);
+            var product_id = item.value;
+            var quantity = parseInt(document.getElementById('quantity_' + product_id).value);
+            var price = parseFloat(document.getElementById('price_' + product_id).value);
             var subtotal = quantity * price;
             totalAmount += subtotal;
         });
@@ -327,4 +373,3 @@ if (isset($_POST['checkout'])) {
 
 </body>
 </html>
-

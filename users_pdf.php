@@ -16,22 +16,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch cart items query
-<<<<<<< HEAD
 $query = "SELECT cart_item_id, cart_id, product_id, quantity, amount FROM cart_items ORDER BY cart_item_id DESC LIMIT 9"; // Adjust limit as needed
-=======
-<<<<<<< HEAD
-$query = "SELECT cart_item_id, cart_id, product_id, quantity, amount FROM cart_items ORDER BY cart_item_id DESC LIMIT 9"; // Adjust limit as needed
-=======
-<<<<<<< HEAD
-$query = "SELECT cart_item_id, cart_id, product_id, quantity, amount FROM cart_items ORDER BY cart_item_id DESC LIMIT 9"; // Adjust limit as needed
-=======
-$query = "SELECT cart_item_id, cart_id, product_id, quantity, amount
-          FROM cart_items
-          ORDER BY cart_item_id DESC
-          LIMIT 9"; // Adjust limit as needed
->>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
->>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
->>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab
 
 $result = $conn->query($query);
 
@@ -97,24 +82,6 @@ $pdf->SetFont('');
 // Print table rows
 $fill = 0;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-// Sample data row
-$pdf->Cell($w[0], 6, '1', 'LR', 0, 'C', $fill);
-$pdf->Cell($w[1], 6, '1', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[2], 6, '101', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[3], 6, '2', 'LR', 0, 'L', $fill);
-$pdf->Cell($w[4], 6, '50.00', 'LR', 0, 'L', $fill);
-$pdf->Ln();
-$fill = !$fill;
-
->>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
->>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
->>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $pdf->Cell($w[0], 6, $row['cart_item_id'], 'LR', 0, 'C', $fill);
@@ -133,56 +100,9 @@ if ($result->num_rows > 0) {
 // Closing line
 $pdf->Cell(array_sum($w), 0, '', 'T');
 
-<<<<<<< HEAD
 // Output PDF to browser for download
 $pdf->Output('cart_items_report.pdf', 'D'); // 'D' parameter forces download
-=======
-<<<<<<< HEAD
-// Output PDF to browser for download
-$pdf->Output('cart_items_report.pdf', 'D'); // 'D' parameter forces download
-=======
-<<<<<<< HEAD
-// Output PDF to browser for download
-$pdf->Output('cart_items_report.pdf', 'D'); // 'D' parameter forces download
-=======
-// Output PDF to uploads directory
-$pdf->Output(__DIR__ . '/uploads/cart_items_report.pdf', 'F');
->>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
->>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
->>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab
 
 // Close connection
 $conn->close();
 ?>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cart Items PDF Generation</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-<script>
-    Swal.fire({
-        title: 'Success!',
-        text: 'Cart items report generated successfully',
-        icon: 'success',
-        confirmButtonText: 'OK'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = 'orders.php';
-        }
-    });
-</script>
-</body>
-</html>
->>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
->>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
->>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab

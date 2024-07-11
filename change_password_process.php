@@ -128,8 +128,17 @@ $conn->close();
 
 <<<<<<< HEAD
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
 =======
 >>>>>>> 17a20228005d2339de0a3d25e155d42fa8040180
+>>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
+>>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
+>>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab
 <!-- Optional: Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-zGS6E7LOZB7z7jcN6m+AaA6JwwrK/ZpNqY0d9N5/RwH+LZ1OQVpZf3ZlLwJ4yD2r" crossorigin="anonymous"></script>
 </body>

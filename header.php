@@ -121,6 +121,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
             <i class="fa fa-ellipsis-v">
             </i>
           </a>
+          
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="profile.html">My Profile</a>
             <a class="dropdown-item" href="generalsettings.html">Settings</a>
@@ -128,16 +129,66 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
           </div>
         </div>
       </div>
+      
+      
       <div class="sidebar" id="sidebar">
-        <div class="sidebar-inner slimscroll">
-          <div id="sidebar-menu" class="sidebar-menu">
-            <ul>
-            <li>
-              <a href="admin_index.php">
-                <img src="assets/img/icons/dashboard.svg" alt="img"><span>Dashboard</span>
-              </a>
-            </li>
+  <div class="sidebar-inner slimscroll">
+    <div id="sidebar-menu" class="sidebar-menu">
+      <ul>
+        <li>
+          <a href="admin_index.php">
+            <img src="assets/img/icons/dashboard.svg" alt="img"><span>Dashboard</span>
+          </a>
+        </li>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
+>>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab
+        <li class="submenu">
+          <a href="javascript:void(0);">
+            <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
+            <span class="menu-arrow"></span>
+          </a>
+          <ul>
+            <li><a href="productlist.php">Product List</a></li>
+            <li><a href="addproduct.php">Add Product</a></li>
+          </ul>
+        </li>
+        
+        <li class="submenu">
+          <a href="javascript:void(0);">
+            <img src="assets/img/icons/purchase1.svg" alt="img"><span>Orders</span>
+            <span class="menu-arrow"></span>
+          </a>
+          <ul>
+            <li><a href="orders.php">Orders</a></li>
+          </ul>
+        </li>
+
+        <li class="submenu">
+          <a href="javascript:void(0);">
+            <img src="assets/img/icons/purchase1.svg" alt="img"><span>Users</span>
+            <span class="menu-arrow"></span>
+          </a>
+          <ul>
+            <li><a href="table_users.php">Users</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+      
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
               <li class="submenu">
                 <a href="javascript:void(0);">
                   <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
@@ -172,3 +223,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
           </div>
         </div>
       </div>
+>>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
+>>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
+>>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab

@@ -1,19 +1,6 @@
 <?php
 require_once('tcpdf/tcpdf.php'); // Ensure the path is correct
-
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";  // Replace with your MySQL username
-$password = "A@&DDb;7";  // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'dbcon.php';
 
 // Fetch cart items query
 $query = "SELECT cart_item_id, cart_id, product_id, quantity, amount FROM cart_items ORDER BY cart_item_id DESC LIMIT 9"; // Adjust limit as needed

@@ -201,7 +201,7 @@ include 'user_body1.php';
          ?>
       </div>
    </div>
-</div>
+</div><br><br><br>
 
 <div class="floating-navbar">
    <a href="index.php"><i class="fas fa-home"></i></a>

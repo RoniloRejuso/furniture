@@ -97,7 +97,7 @@ if (isset($_GET['product_id'])) {
             if (!isMobileDevice()) {
                 Swal.fire({
                     icon: 'info',
-                    text: 'Open the web app on any mobile device to use the AR experience.',
+                    text: 'This feature is not compatible on this device',
                     confirmButtonText: 'OK'
                 }).then(() => {
                     window.location.href = 'product_details1.php?product_id=<?php echo $product_id; ?>';

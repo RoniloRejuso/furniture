@@ -1,10 +1,6 @@
 <?php
 session_start();
-$conn = mysqli_connect("localhost", "u138133975_ourhome", "A@&DDb;7", "u138133975_furniture");
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+include 'dbcon.php';
 
 $session_id = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : null;
 $row = null;
@@ -25,15 +21,15 @@ $queryNotifications = "SELECT * FROM orders ORDER BY date DESC LIMIT 5"; // Adju
 $resultNotifications = mysqli_query($conn, $queryNotifications);
 ?>
 
-
+<link href="images/icon.png" rel="icon">
     <div class="main-wrapper">
       <div class="header">
         <div class="header-left active">
           <a href="admin_index.php" class="logo">
-            <img src="assets/img/our home.png" alt="">
+            <img src="images/logo.png" alt="">
           </a>
           <a href="admin_index.php" class="logo-small">
-            <img src="assets/img/logo-small.png" alt="">
+            <img src="images/icon.png" alt="">
           </a>
           <a id="toggle_btn" href="javascript:void(0);">
           </a>
@@ -77,9 +73,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
     </div>
 </li>
 -->
-
-
-          
           <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset"
             data-bs-toggle="dropdown">
@@ -89,32 +82,29 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
                 </span>
               </span>
             </a>
-
             <div class="dropdown-menu menu-drop-user">
-    <div class="profilename">
-        <div class="profileset">
-            <span class="user-img">
-                <img src="assets/img/profiles/avator1.jpg" alt="">
-                <span class="status online"></span>
-            </span>
-            <div class="profilesets">
-            <?php if ($row): ?>
-                <h6><?php echo htmlspecialchars($row['username']); ?></h6>
-                <h5>Admin</h5>
-            <?php else: ?>
-                <h6>Admin</h6>
-                <h5>User1</h5>
-            <?php endif; ?>
-            </div>
-        </div>
-        <hr class="m-0">
-        <a class="dropdown-item logout pb-0" href="logout1.php">
-            <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
-        </a>
-    </div>
-</div>
-
-
+              <div class="profilename">
+                  <div class="profileset">
+                      <span class="user-img">
+                          <img src="assets/img/profiles/avator1.jpg" alt="">
+                          <span class="status online"></span>
+                      </span>
+                      <div class="profilesets">
+                      <?php if ($row): ?>
+                          <h6><?php echo htmlspecialchars($row['username']); ?></h6>
+                          <h5>Admin</h5>
+                      <?php else: ?>
+                          <h6>Admin</h6>
+                          <h5>User1</h5>
+                      <?php endif; ?>
+                      </div>
+                  </div>
+                  <hr class="m-0">
+                  <a class="dropdown-item logout pb-0" href="logout1.php">
+                      <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">Logout
+                  </a>
+              </div>
+          </div>
         <div class="dropdown mobile-user-menu">
           <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
           aria-expanded="false">
@@ -129,8 +119,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
           </div>
         </div>
       </div>
-      
-      
       <div class="sidebar" id="sidebar">
   <div class="sidebar-inner slimscroll">
     <div id="sidebar-menu" class="sidebar-menu">
@@ -140,14 +128,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
             <img src="assets/img/icons/dashboard.svg" alt="img"><span>Dashboard</span>
           </a>
         </li>
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
->>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab
         <li class="submenu">
           <a href="javascript:void(0);">
             <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
@@ -182,13 +162,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
     </div>
   </div>
 </div>
-
-      
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
               <li class="submenu">
                 <a href="javascript:void(0);">
                   <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
@@ -219,10 +192,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
                 </ul>
               </li>
             </ul>
-            
           </div>
         </div>
       </div>
->>>>>>> b68a38d76038cea4c49156dfeafeb59dd52b37c8
->>>>>>> b6b93d693c913d05296d8548b7e741bd2bd6313e
->>>>>>> cbc680c9ba4b9d5710445edd16ae8fb866fcf4ab

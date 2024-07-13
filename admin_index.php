@@ -272,19 +272,7 @@ if (!isset($_SESSION['admin_id'])) {
             </thead>
             <tbody>
                 <?php
-                $servername = "localhost";
-                $username = "u138133975_ourhome";
-                $password = "A@&DDb;7";
-                $database = "u138133975_furniture";
-
-                // Create connection
-                $conn= mysqli_connect('localhost', 'u138133975_ourhome', 'A@&DDb;7', 'u138133975_furniture');
-
-                // Check connection
-                if (!$conn) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-
+                include 'dbcon.php';
 
                       // Query to fetch top 3 products with highest quantity from the database
                       $query = "SELECT product_image, product_name, quantity, price FROM products ORDER BY quantity DESC LIMIT 2";
@@ -307,100 +295,86 @@ if (!isset($_SESSION['admin_id'])) {
                 ?>
             </tbody>
         </table>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        <?php
+        include 'dbcon.php';
 
-<?php
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";     // Replace with your MySQL username
-$password = "A@&DDb;7";     // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+        // Fetch recently added products query
+        $query = "SELECT product_id, product_name, product_image, quantity, price, date
+                FROM products
+                WHERE date >= DATE_SUB(NOW(), INTERVAL 4 WEEK)
+                ORDER BY date DESC
+                LIMIT 9";
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        $result = $conn->query($query);
 
-// Fetch recently added products query
-$query = "SELECT product_id, product_name, product_image, quantity, price, date
-          FROM products
-          WHERE date >= DATE_SUB(NOW(), INTERVAL 4 WEEK)
-          ORDER BY date DESC
-          LIMIT 9"; // Adjust limit to 9 to account for the 1 static row
+        ?>
+        <div class="card mb-0">
+            <div class="card-body">
+                <h4 class="card-title">Newly Added Products</h4>
+                <div class="table-responsive dataview">
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Product Image</th>
+                                <th>Product Quantity</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><a href="javascript:void(0);">Nesting Table</a></td>
+                                <td class="productimgname">
+                                    <a class="product-img" href="productlist.html">
+                                        <img
+                                            src="uploads/nestingtable.png"
+                                            alt="product"
+                                        />
+                                    </a>
 
-$result = $conn->query($query);
+                                </td>
+                                <td>2</td>
+                                <td>30000</td>
+                                <td>2024-06-25</td>
+                            </tr>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                // Output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                    echo "<tr>
+                                            <td>" . $row["product_id"] . "</td>
+                                            <td>" . $row["product_name"] . "</td>
+                                            <td class='productimgname'>
+                                                <a class='product-img' href='productlist.html'>
+                                                    <img src='" . $row["product_image"] . "' alt='product' />
+                                                </a>
 
-?>
-
-<div class="card mb-0">
-    <div class="card-body">
-        <h4 class="card-title">Newly Added Products</h4>
-        <div class="table-responsive dataview">
-            <table class="table datatable">
-                <thead>
-                    <tr>
-                        <th>Product ID</th>
-                        <th>Product Name</th>
-                        <th>Product Image</th>
-                        <th>Product Quantity</th>
-                        <th>Price</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><a href="javascript:void(0);">Nesting Table</a></td>
-                        <td class="productimgname">
-                            <a class="product-img" href="productlist.html">
-                                <img
-                                    src="uploads/nestingtable.png"
-                                    alt="product"
-                                />
-                            </a>
-
-                        </td>
-                        <td>2</td>
-                        <td>30000</td>
-                        <td>2024-06-25</td>
-                    </tr>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        // Output data of each row
-                        while($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                    <td>" . $row["product_id"] . "</td>
-                                    <td>" . $row["product_name"] . "</td>
-                                    <td class='productimgname'>
-                                        <a class='product-img' href='productlist.html'>
-                                            <img src='" . $row["product_image"] . "' alt='product' />
-                                        </a>
-
-                                    </td>
-                                    <td>" . $row["quantity"] . "</td>
-                                    <td>" . $row["price"] . "</td>
-                                    <td>" . $row["date"] . "</td>
-                                  </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='6'>No newly added products found.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                                            </td>
+                                            <td>" . $row["quantity"] . "</td>
+                                            <td>" . $row["price"] . "</td>
+                                            <td>" . $row["date"] . "</td>
+                                        </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No newly added products found.</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
-</div>
+    </div>
 </div>
 
 

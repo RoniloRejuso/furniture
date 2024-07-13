@@ -24,13 +24,6 @@ if (isset($_GET['product_id'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********************" crossorigin="anonymous" />
-    <title>Our Home</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
 <?php
     include 'user_header.php';
 ?>
@@ -103,10 +96,10 @@ if (isset($_GET['product_id'])) {
             if (!isMobileDevice()) {
                 Swal.fire({
                     icon: 'info',
-                    text: 'Open the web app on any mobile device to use the AR experience.',
+                    text: 'This feature is not compatible on this device',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    window.location.href = 'product_details1.php?product_id=<?php echo $product_id; ?>';
+                    window.location.href = 'product_details.php?product_id=<?php echo $product_id; ?>';
             });
             }
 

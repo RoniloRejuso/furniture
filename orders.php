@@ -1,16 +1,6 @@
 <?php
 include 'dbcon.php';
 
-$conn = mysqli_connect('localhost', 'u138133975_ourhome', 'A@&DDb;7', 'u138133975_furniture');
-if (!$conn) {
-	echo ("Connection Failed: " . mysqli_connect_error());
-	exit;
-}
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 if (isset($_GET['delete_id'])) {
     $product_id = (int)$_GET['delete_id']; // Ensure the ID is an integer
 
@@ -26,8 +16,17 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-$sql = "SELECT * FROM users";
-$result = $conn->query($sql);
+// Fetch cart items with user and product details
+$query = "SELECT cart_items.cart_item_id, cart_items.cart_id, cart_items.product_id, cart_items.quantity, cart_items.amount, 
+                 carts.user_id, users.firstname, users.lastname, users.address, products.product_name
+          FROM cart_items 
+          JOIN carts ON cart_items.cart_id = carts.cart_id 
+          JOIN users ON carts.user_id = users.user_id 
+          JOIN products ON cart_items.product_id = products.product_id 
+          ORDER BY cart_items.cart_item_id DESC 
+          LIMIT 9"; // Adjust limit as needed
+
+$result = $conn->query($query);
 
 if (!$result) {
     die("Query failed: " . $conn->error);
@@ -62,30 +61,6 @@ if (!$result) {
                 <h4>Orders</h4>
             </div>
         </div>
-        
-<?php
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";  // Replace with your MySQL username
-$password = "A@&DDb;7";  // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch cart items query
-$query = "SELECT cart_item_id, cart_id, product_id, quantity, amount
-          FROM cart_items
-          ORDER BY cart_item_id DESC
-          LIMIT 9"; // Adjust limit as needed
-
-$result = $conn->query($query);
-?>
 
 <div class="card">
     <div class="card-body">
@@ -112,34 +87,30 @@ $result = $conn->query($query);
             <thead>
                 <tr>
                     <th>Cart Item ID</th>
-                    <th>Cart ID</th>
-                    <th>Product ID</th>
+                    <th>Customer</th>
+                    <th>Product Name</th>
                     <th>Quantity</th>
                     <th>Amount</th>
+                    <th>User ID</th>
+                    <th>Address</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Sample data row -->
-                <tr>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>101</td>
-                    <td>2</td>
-                    <td>50.00</td>
-                </tr>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
                             <td><?php echo $row["cart_item_id"]; ?></td>
-                            <td><?php echo $row["cart_id"]; ?></td>
-                            <td><?php echo $row["product_id"]; ?></td>
+                            <td><?php echo $row["firstname"] . ' ' . $row["lastname"]; ?></td>
+                            <td><?php echo $row["product_name"]; ?></td>
                             <td><?php echo $row["quantity"]; ?></td>
                             <td><?php echo $row["amount"]; ?></td>
+                            <td><?php echo $row["user_id"]; ?></td>
+                            <td><?php echo $row["address"]; ?></td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="5" class="text-center">No cart items found</td>
+                        <td colspan="7" class="text-center">No cart items found</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -148,8 +119,6 @@ $result = $conn->query($query);
 </div>
 </div>
 </div>
-
-
 
 <script>
     document.querySelectorAll('.delete-btn').forEach(button => {
@@ -174,11 +143,6 @@ $result = $conn->query($query);
 <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
 <script src="assets/js/script.js"></script>
 <script>
-// Ensure select-all checkbox functionality
-$('#select-all').click(function(event) {
-    $(':checkbox').prop('checked', this.checked);
-});
-
 $(document).ready(function() {
     $('[data-bs-toggle="tooltip"]').tooltip();
 

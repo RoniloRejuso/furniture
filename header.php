@@ -1,6 +1,4 @@
 <?php
-session_start();
-include 'dbcon.php';
 
 $session_id = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : null;
 $row = null;
@@ -20,7 +18,25 @@ $totalPendingNotificationRow = $resultTotalPendingNotifications ? mysqli_fetch_a
 $queryNotifications = "SELECT * FROM orders ORDER BY date DESC LIMIT 5"; // Adjust the LIMIT as needed
 $resultNotifications = mysqli_query($conn, $queryNotifications);
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="POS - Bootstrap Admin Template">
+    <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
+    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Our Home</title>
+    <link rel="icon" href="images/icon.png">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
 <link href="images/icon.png" rel="icon">
     <div class="main-wrapper">
       <div class="header">
@@ -29,7 +45,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
             <img src="images/logo.png" alt="">
           </a>
           <a href="admin_index.php" class="logo-small">
-            <img src="images/icon.png" alt="">
+            <img src="images/logo_icon.png" alt="">
           </a>
           <a id="toggle_btn" href="javascript:void(0);">
           </a>
@@ -53,31 +69,28 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
               </a>
             </div>
           </li>
-<!--
-<li class="nav-item dropdown">
-    <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-        <img src="assets/img/icons/notification-bing.svg" alt="img">
-        <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
-    </a>
-    
-    <div class="dropdown-menu notifications">
-        <div class="topnav-dropdown-header">
-            <span class="notification-title">Notifications</span>
-            <a href="javascript:void(0)" class="clear-noti">Clear All</a>
-        </div>
-        <div class="noti-content">
-        </div>
-        <div class="topnav-dropdown-footer">
-            <a href="">All Notifications</a>
-        </div>
-    </div>
-</li>
--->
+          <li class="nav-item dropdown">
+              <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                  <img src="assets/img/icons/notification-bing.svg" alt="img">
+                  <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
+              </a>
+              <div class="dropdown-menu notifications">
+                  <div class="topnav-dropdown-header">
+                      <span class="notification-title">Notifications</span>
+                      <a href="javascript:void(0)" class="clear-noti">Clear All</a>
+                  </div>
+                  <div class="noti-content">
+                  </div>
+                  <div class="topnav-dropdown-footer">
+                      <a href="">All Notifications</a>
+                  </div>
+              </div>
+          </li>
           <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset"
             data-bs-toggle="dropdown">
               <span class="user-img">
-                <img src="assets/img/profiles/avator1.jpg" alt="">
+                <img src="assets/img/profiles/avator.jpg" alt="">
                 <span class="status online">
                 </span>
               </span>
@@ -95,7 +108,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
                           <h5>Admin</h5>
                       <?php else: ?>
                           <h6>Admin</h6>
-                          <h5>User1</h5>
+                          <h5>User</h5>
                       <?php endif; ?>
                       </div>
                   </div>
@@ -111,12 +124,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
             <i class="fa fa-ellipsis-v">
             </i>
           </a>
-          
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="profile.html">My Profile</a>
-            <a class="dropdown-item" href="generalsettings.html">Settings</a>
-            <a class="dropdown-item" href="login.php">Logout</a>
-          </div>
         </div>
       </div>
       <div class="sidebar" id="sidebar">
@@ -138,7 +145,6 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
             <li><a href="addproduct.php">Add Product</a></li>
           </ul>
         </li>
-        
         <li class="submenu">
           <a href="javascript:void(0);">
             <img src="assets/img/icons/purchase1.svg" alt="img"><span>Orders</span>
@@ -162,36 +168,3 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
     </div>
   </div>
 </div>
-              <li class="submenu">
-                <a href="javascript:void(0);">
-                  <img src="assets/img/icons/product.svg" alt="img"><span>Tracking</span>
-                  <span class="menu-arrow">
-                  </span>
-                </a>
-                <ul>
-                  <li>
-                    <a href="productlist.php">Product List</a>
-                  </li>
-                  <li>
-                    <a href="addproduct.php">Add Product</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="submenu">
-                <a href="javascript:void(0);">
-                  <img src="assets/img/icons/purchase1.svg" alt="img">
-                  <span>Orders</span>
-                  <span class="menu-arrow"></span>
-                </a>
-                <ul>
-                  <li>
-                    <a href="orders.php">
-                      Orders
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>

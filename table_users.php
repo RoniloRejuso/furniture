@@ -34,7 +34,7 @@ if (!$result) {
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
     <title>Our Home</title>
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+    <link rel="icon" href="images/icon.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
@@ -54,21 +54,6 @@ if (!$result) {
         </div>
         
 <?php
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";  // Replace with your MySQL username
-$password = "A@&DDb;7";  // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch users query
 $query = "SELECT user_id, firstname, lastname, email
           FROM users
           ORDER BY user_id DESC

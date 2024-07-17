@@ -1,14 +1,11 @@
 <?php
 include 'dbcon.php';
-require_once('tcpdf/tcpdf.php'); // Ensure the path is correct
-// Fetch users query
+require_once('tcpdf/tcpdf.php');
 $query = "SELECT user_id, firstname, lastname, email FROM users ORDER BY user_id DESC";
 $result = $conn->query($query);
 
-// Create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-// Set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Your Name');
 $pdf->SetTitle('Users List');

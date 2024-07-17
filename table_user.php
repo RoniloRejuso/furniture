@@ -1,20 +1,6 @@
 <?php
+include 'dbcon.php';
 require_once('tcpdf/tcpdf.php'); // Ensure the path is correct
-
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";  // Replace with your MySQL username
-$password = "A@&DDb;7";  // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 // Fetch users query
 $query = "SELECT user_id, firstname, lastname, email FROM users ORDER BY user_id DESC";
 $result = $conn->query($query);

@@ -1,6 +1,6 @@
 <?php
-require_once('tcpdf/tcpdf.php'); // Ensure the path is correct
 include 'dbcon.php';
+require_once('tcpdf/tcpdf.php'); // Ensure the path is correct
 
 // Fetch cart items query
 $query = "SELECT cart_item_id, cart_id, product_id, quantity, amount FROM cart_items ORDER BY cart_item_id DESC LIMIT 9"; // Adjust limit as needed

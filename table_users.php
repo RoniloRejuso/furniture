@@ -1,16 +1,6 @@
 <?php
 include 'dbcon.php';
 
-$conn = mysqli_connect('localhost', 'u138133975_ourhome', 'A@&DDb;7', 'u138133975_furniture');
-if (!$conn) {
-	echo ("Connection Failed: " . mysqli_connect_error());
-	exit;
-}
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 if (isset($_GET['delete_id'])) {
     $product_id = (int)$_GET['delete_id']; // Ensure the ID is an integer
 

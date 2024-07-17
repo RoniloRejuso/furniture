@@ -18,10 +18,10 @@ if (isset($_GET['delete_id'])) {
 
 // Fetch cart items with user and product details
 $query = "SELECT cart_items.cart_item_id, cart_items.cart_id, cart_items.product_id, cart_items.quantity, cart_items.amount, 
-                 carts.user_id, users.firstname, users.lastname, users.address, products.product_name
+                 cart.user_id, users.firstname, users.lastname, users.address, products.product_name
           FROM cart_items 
-          JOIN carts ON cart_items.cart_id = carts.cart_id 
-          JOIN users ON carts.user_id = users.user_id 
+          JOIN cart ON cart_items.cart_id = cart.cart_id 
+          JOIN users ON cart.user_id = users.user_id 
           JOIN products ON cart_items.product_id = products.product_id 
           ORDER BY cart_items.cart_item_id DESC 
           LIMIT 9"; // Adjust limit as needed

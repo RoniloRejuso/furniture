@@ -95,7 +95,7 @@
                     </div>
                     <a href="login.php" style="color: #ffd698;"><small>Log In</small></a>
                 </div>
-                <img src="assets/img/our home.png" alt="" style="width: 200px; height: auto; margin-top: 5px; margin-left: 30px;">
+                <img src="assets/img/FurniView.png" alt="" style="width: 200px; height: auto; margin-top: 5px; margin-left: 30px;">
             </form>
 
             <script>

@@ -6,10 +6,9 @@ error_reporting(E_ALL);?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Our Home</title>
+    <title>FurniView</title>
     <script src='sweetalert.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 

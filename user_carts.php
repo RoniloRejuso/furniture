@@ -101,7 +101,7 @@ if (isset($_POST['checkout'])) {
                                 <img src="<?php echo $product_image; ?>" alt="Product Image">
                             </div>
                             <div class="product-details">
-                                <h3>Our Home <?php echo $product_name; ?></h3>
+                                <h3>FurniView <?php echo $product_name; ?></h3>
                                 <p>Sub Total: <span id="subtotal_<?php echo $product_id; ?>">₱<?php echo number_format($sub_total, 2); ?></span></p>
                                 <input type="hidden" name="update_quantity_id" value="<?php echo $product_id; ?>">
                                 <input type="hidden" id="price_<?php echo $product_id; ?>" value="<?php echo $price; ?>">
@@ -230,7 +230,7 @@ if (isset($_POST['checkout'])) {
                                 echo '<a href="product_details.php?product_id=' . $product_id . '">';
                                 echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
                                 echo '<div class="product-info">';
-                                echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . htmlspecialchars($product_name) . '</big></b></h4>';
+                                echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>FurniView</big></b>&nbsp;<b><big>' . htmlspecialchars($product_name) . '</big></b></h4>';
                                 echo '<h3 class="product-price" style="color: black; float: right;">₱' . htmlspecialchars($price) . '</h3><br><br>';
                                 echo '</div>';
                                 echo '</a>';

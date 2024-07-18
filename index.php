@@ -139,7 +139,7 @@
                             <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                             <div class="product-info">
                                 <h4 class="product-name">
-                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                    <b>FurniView </b><b><?php echo $product['product_name'];?></b>
                                 </h4>
                                 <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
                             </div>
@@ -214,7 +214,7 @@
                             echo '<a href="product_details.php?product_id=' . $product_id . '">';
                             echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
                             echo '<div class="product-info">';
-                            echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
+                            echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>FurniView</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
                             echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
                             echo '</div>';
                             echo '</a>';

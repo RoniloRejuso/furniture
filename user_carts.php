@@ -16,9 +16,6 @@ if (isset($_POST['update_update_btn'])) {
         $update_quantity_query = mysqli_query($conn, "UPDATE cart_items SET quantity = '$update_value' WHERE cart_item_id = '$update_id'");
 
         if ($update_quantity_query) {
-            if ($update_value == 0) {
-                mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$update_id'");
-            }
             header('Location: user_carts.php');
             exit();
         } else {
@@ -31,14 +28,14 @@ if (isset($_POST['update_update_btn'])) {
 
 if (isset($_GET['remove'])) {
     $remove_id = $_GET['remove'];
-    mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$remove_id'");
+    mysqli_query($conn, "DELETE FROM cart_items WHERE product_id = '$remove_id'");
     header('Location: user_carts.php');
     exit();
 }
 
 if (isset($_GET['delete_all'])) {
     $user_id = $_SESSION['user_id'];
-    mysqli_query($conn, "DELETE FROM cart_items WHERE cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
+    mysqli_query($conn, "DELETE FROM cart_items WHERE product_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
     header('Location: user_carts.php');
     exit();
 }
@@ -55,7 +52,6 @@ if (isset($_POST['checkout'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -278,7 +274,7 @@ if (isset($_POST['checkout'])) {
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-    function removeCartItem(cart_item_id) {
+    function removeCartItem(product_id) {
         Swal.fire({
             text: "You want to remove this item from your cart?",
             icon: 'warning',
@@ -288,12 +284,12 @@ if (isset($_POST['checkout'])) {
             confirmButtonText: 'Yes'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'user_carts.php?remove=' + cart_item_id;
+                window.location.href = 'user_carts.php?remove=' + product_id;
             }
         });
     }
 
-    function updateQuantity(cart_item_id, change) {
+    function updateQuantity(product_id, change) {
         var quantityInput = document.getElementById('quantity_' + product_id);
         var newValue = parseInt(quantityInput.value) + change;
         var maxQuantity = parseInt(quantityInput.max); // Fetch maximum quantity allowed
@@ -308,9 +304,7 @@ if (isset($_POST['checkout'])) {
                 confirmButtonText: 'Yes'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Set the quantity to 0 and submit the form
-                    quantityInput.value = 0;
-                    document.getElementById('update_form_' + product_id).submit();
+                    window.location.href = 'user_carts.php?remove=' + product_id;
                 }
             });
         } else if (newValue > maxQuantity) {
@@ -376,5 +370,6 @@ if (isset($_POST['checkout'])) {
         }
     }
 </script>
+
 </body>
 </html>

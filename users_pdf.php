@@ -1,9 +1,25 @@
 <?php
-include 'dbcon.php';
 require_once('tcpdf/tcpdf.php'); // Ensure the path is correct
 
-// Fetch cart items query
-$query = "SELECT cart_item_id, cart_id, product_id, quantity, amount FROM cart_items ORDER BY cart_item_id DESC LIMIT 9"; // Adjust limit as needed
+// Database connection details
+$servername = "localhost";  // Replace with your server name
+$username = "u138133975_ourhome";  // Replace with your MySQL username
+$password = "A@&DDb;7";  // Replace with your MySQL password
+$dbname = "u138133975_furniture";  // Replace with your MySQL database name
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch cart items and product details query
+$query = "SELECT ci.product_id, p.product_name, p.category, p.price, ci.quantity, ci.amount
+          FROM cart_items ci
+          JOIN products p ON ci.product_id = p.product_id
+          ORDER BY ci.cart_item_id DESC LIMIT 9"; // Adjust limit as needed
 
 $result = $conn->query($query);
 
@@ -45,7 +61,7 @@ $pdf->AddPage();
 $pdf->SetFont('helvetica', '', 12);
 
 // Column titles
-$header = array('Cart Item ID', 'Cart ID', 'Product ID', 'Quantity', 'Amount');
+$header = array('Product ID', 'Product Name', 'Category', 'Price', 'Quantity', 'Amount');
 
 // Print table header
 $pdf->SetFillColor(255, 255, 255);
@@ -54,7 +70,7 @@ $pdf->SetDrawColor(0, 0, 0);
 $pdf->SetLineWidth(0.3);
 $pdf->SetFont('', 'B');
 
-$w = array(30, 30, 30, 30, 30); // Column widths
+$w = array(30, 40, 40, 30, 20, 30); // Column widths
 $num_headers = count($header);
 for ($i = 0; $i < $num_headers; ++$i) {
     $pdf->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
@@ -71,11 +87,12 @@ $fill = 0;
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $pdf->Cell($w[0], 6, $row['cart_item_id'], 'LR', 0, 'C', $fill);
-        $pdf->Cell($w[1], 6, $row['cart_id'], 'LR', 0, 'L', $fill);
-        $pdf->Cell($w[2], 6, $row['product_id'], 'LR', 0, 'L', $fill);
-        $pdf->Cell($w[3], 6, $row['quantity'], 'LR', 0, 'L', $fill);
-        $pdf->Cell($w[4], 6, $row['amount'], 'LR', 0, 'L', $fill);
+        $pdf->Cell($w[0], 6, $row['product_id'], 'LR', 0, 'C', $fill);
+        $pdf->Cell($w[1], 6, $row['product_name'], 'LR', 0, 'L', $fill);
+        $pdf->Cell($w[2], 6, $row['category'], 'LR', 0, 'L', $fill);
+        $pdf->Cell($w[3], 6, $row['price'], 'LR', 0, 'R', $fill);
+        $pdf->Cell($w[4], 6, $row['quantity'], 'LR', 0, 'R', $fill);
+        $pdf->Cell($w[5], 6, $row['amount'], 'LR', 0, 'R', $fill);
         $pdf->Ln();
         $fill = !$fill;
     }

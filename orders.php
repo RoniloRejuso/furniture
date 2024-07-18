@@ -155,11 +155,8 @@ $result = $conn->query($query);
 </div>
 </div>
 
-<?php
-// Close the database connection
-$conn->close();
-?>
-git
+
+
 
 
 

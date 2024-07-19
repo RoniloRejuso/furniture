@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Home</title>
+    <title>FurniView</title>
     <link rel="icon" href="images/icon.png">
     <link href="assets/css/login.css" rel="stylesheet">
     <!-- Add Font Awesome CSS -->

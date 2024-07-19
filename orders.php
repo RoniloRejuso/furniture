@@ -1,11 +1,12 @@
 <?php
+session_start();
 include 'dbcon.php';
 
 if (isset($_GET['delete_id'])) {
-    $product_id = (int)$_GET['delete_id']; // Ensure the ID is an integer
+    $order_item_id = (int)$_GET['delete_id']; // Ensure the ID is an integer
 
-    $delete_query = $conn->prepare("DELETE FROM users WHERE user_id = ?");
-    $delete_query->bind_param("i", $product_id);
+    $delete_query = $conn->prepare("DELETE FROM order_items WHERE order_item_id = ?");
+    $delete_query->bind_param("i", $order_item_id);
 
     if ($delete_query->execute()) {
         $_SESSION['message'] = "Order deleted successfully";
@@ -16,12 +17,14 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-$query = "SELECT ci.cart_item_id, u.firstname, u.lastname, p.product_name, p.category, p.price, p.product_image,ci.cart_id, ci.quantity, ci.amount
-          FROM cart_items ci
-          JOIN products p ON ci.product_id = p.product_id
-          JOIN cart c On ci.cart_id = c.cart_id
+// Updated query to fetch user_id from cart via orders
+$query = "SELECT oi.order_item_id, u.firstname, u.lastname, p.product_name, p.price, p.product_image, oi.quantity, (oi.quantity * p.price) AS amount
+          FROM order_items oi
+          JOIN products p ON oi.product_id = p.product_id
+          JOIN orders o ON oi.orders_id = o.orders_id
+          JOIN cart c ON o.cart_id = c.cart_id
           JOIN users u ON c.user_id = u.user_id
-          ORDER BY ci.cart_item_id";
+          ORDER BY oi.order_item_id";
 
 $result = $conn->query($query);
 ?>
@@ -35,7 +38,7 @@ $result = $conn->query($query);
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Our Home</title>
+    <title>FurniView</title>
     <link rel="icon" href="images/icon.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/animate.css">
@@ -82,30 +85,32 @@ $result = $conn->query($query);
                     <th>Order ID</th>
                     <th>Customer Name</th>
                     <th>Product Name</th>
-                    <th>Category</th>
                     <th>Price</th>
                     <th>Product Image</th>
                     <th>Quantity</th>
                     <th>Amount</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><?php echo $row["cart_item_id"]; ?></td>
+                            <td><?php echo $row["order_item_id"]; ?></td>
                             <td><?php echo $row["firstname"]; ?> <?php echo $row["lastname"]; ?></td>
-                            <td><?php echo $row["product_name"]; ?></td>
-                            <td><?php echo $row["category"]; ?></td>
-                            <td><?php echo $row["price"]; ?></td>
+                            <td>Our Home <?php echo $row["product_name"]; ?></td>
+                            <td>₱<?php echo number_format($row["price"], 2); ?></td>
                             <td><img src="<?php echo $row["product_image"]; ?>" alt="Product Image" width="50"></td>
                             <td><?php echo $row["quantity"]; ?></td>
-                            <td><?php echo $row["amount"]; ?></td>
+                            <td>₱<?php echo number_format($row["amount"], 2); ?></td>
+                            <td>
+                                <button class="btn btn-danger delete-btn" data-id="<?php echo $row['order_item_id']; ?>">Delete</button>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="8" class="text-center">No cart items found</td>
+                        <td colspan="9" class="text-center">No orders found</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -119,9 +124,9 @@ $result = $conn->query($query);
     document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', function (e) {
             e.preventDefault();
-            const userId = this.getAttribute('data-id');
-            if (confirm('Are you sure you want to delete this user?')) {
-                window.location.href = `delete_user.php?delete_id=${userId}`;
+            const orderItemId = this.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this order?')) {
+                window.location.href = `orders.php?delete_id=${orderItemId}`;
             }
         });
     });

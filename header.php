@@ -27,7 +27,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Our Home</title>
+    <title>FurniView</title>
     <link rel="icon" href="images/icon.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/animate.css">
@@ -90,7 +90,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset"
             data-bs-toggle="dropdown">
               <span class="user-img">
-                <img src="assets/img/profiles/avator.jpg" alt="">
+                <img src="assets/img/profiles/avator1.jpg" alt="">
                 <span class="status online">
                 </span>
               </span>

@@ -12,8 +12,104 @@
         opacity: 0.8;
     }
     .row{
-        margin: 0 -12px;
+        margin: 0;
     }
+
+    .divider-line {
+        width: 40%;
+    }
+    .product_box {
+        width: 230px;
+        height: 200px;
+        margin: 10px 10px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 170px;
+        font-size: 16px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+
+@media (max-width: 1440px) {
+    .divider-line {
+        width: 40%;
+    }
+    .product_box {
+        width: 230px;
+        height: 200px;
+        margin: 10px 10px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 120px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
+@media (max-width: 1024px) {
+    .divider-line {
+        width: 40%;
+    }
+    .product_box {
+        width: 200px;
+        height: 200px;
+        margin: 10px 10px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 120px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
+@media (max-width: 768px) {
+    .divider-line {
+        width: 38%;
+    }
+    .product_box {
+        width: 150px;
+        height: 200px;
+        margin: 10px 5px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 120px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
 @media (max-width: 576px) {
     .divider-line {
         width: 30%;
@@ -30,7 +126,6 @@
     }
     .product-name {
         float: left;
-        margin-right: 5px;
         width: 140px;
         font-size: 14px;
     }
@@ -66,6 +161,9 @@
 }
 
 @media (max-width:320px) {
+    .row{
+        margin: 0 auto;
+    }
     .divider-line {
         width: 21%;
     }
@@ -112,7 +210,7 @@
                         $search = $conn->real_escape_string($_GET['search']);
                         $sql = "SELECT * FROM products WHERE product_name LIKE '%$search%' OR product_id LIKE '%$search%'";
                     } else {
-                        $sql = "SELECT * FROM products LIMIT 10";
+                        $sql = "SELECT * FROM products LIMIT 12";
                     }
 
                     $result = mysqli_query($conn, $sql);
@@ -133,19 +231,19 @@
                     shuffle($products);
                     ?>
                     <?php foreach ($products as $product) { ?>
-                        <div style="margin-left:18px;">
-                    <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
-                        <div class="product_box">
-                            <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
-                            <div class="product-info">
-                                <h4 class="product-name">
-                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
-                                </h4>
-                                <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
+                    <div style="margin-left: 10px;">
+                        <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                            <div class="product_box">
+                                <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
+                                <div class="product-info">
+                                    <h4 class="product-name">
+                                        <b>Our Home </b><b><?php echo $product['product_name'];?></b>
+                                    </h4>
+                                    <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                     <?php } ?>
                 </div><br>
                 <div class="row">
@@ -160,7 +258,6 @@
                 <?php
                 include 'dbcon.php';
 
-                // Function to generate unique product recommendations
                 function generateRecommendations($transactions) {
                     $allProducts = [];
                     foreach ($transactions as $transaction) {
@@ -206,16 +303,18 @@
                                 break;
                             }
                         }
-
-                        echo '<div class="product_box" style="width: 250px; margin: 0 auto;">';
+                        echo '<div style="margin-left:10px;">';
+                        echo '<div class="product_box">';
                         echo '<a href="product_details.php?product_id=' . $product_id . '">';
                         echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
                         echo '<div class="product-info">';
-                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product_name . '</big></b></h4>';
+                        echo '<h4 class="product-name"><b>Our Home</b>&nbsp; <b>' . $product_name . '</b></h4>';
                         echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '</h3><br><br>';
                         echo '</div>';
                         echo '</a>';
                         echo '</div>';
+                        echo '</div>';
+
 
                         $count++;
                         if ($count >= $displayLimit) {

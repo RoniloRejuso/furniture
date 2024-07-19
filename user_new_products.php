@@ -29,6 +29,112 @@ include 'user_header.php';
         font-size: 12px;
     }
 }
+    .btn {
+        display: flex;
+        justify-content: center;       
+    }
+    .btn:hover {
+        opacity: 0.8;
+    }
+    .row{
+        margin: 0;
+    }
+
+    .divider-line {
+        width: 40%;
+    }
+    .product_box {
+        width: 230px;
+        height: 200px;
+        margin: 10px 10px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 170px;
+        font-size: 16px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+
+@media (max-width: 1440px) {
+    .divider-line {
+        width: 40%;
+    }
+    .product_box {
+        width: 230px;
+        height: 200px;
+        margin: 10px 10px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 120px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
+@media (max-width: 1024px) {
+    .divider-line {
+        width: 40%;
+    }
+    .product_box {
+        width: 200px;
+        height: 200px;
+        margin: 10px 10px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 120px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
+@media (max-width: 768px) {
+    .divider-line {
+        width: 38%;
+    }
+    .product_box {
+        width: 150px;
+        height: 200px;
+        margin: 10px 5px;
+        padding: 5px;
+    }
+    .image_1 {
+        height: 100px;
+        margin: 5px 0;
+    }
+    .product-name {
+        float: left;
+        width: 120px;
+        font-size: 14px;
+    }
+    .product-price {
+        font-size: 14px;
+        margin: 0 0 0 20px;
+    }
+}
 @media (max-width: 576px) {
     .divider-line {
         width: 30%;
@@ -45,7 +151,6 @@ include 'user_header.php';
     }
     .product-name {
         float: left;
-        margin-right: 5px;
         width: 140px;
         font-size: 14px;
     }
@@ -81,6 +186,9 @@ include 'user_header.php';
 }
 
 @media (max-width:320px) {
+    .row{
+        margin: 0 auto;
+    }
     .divider-line {
         width: 21%;
     }
@@ -107,7 +215,7 @@ include 'user_header.php';
 </style>
 <body>
 <?php
-include 'user_body1.php';
+include 'user_body.php';
 ?>
 <div class="new_product_section">
    <div class="container">
@@ -190,8 +298,8 @@ include 'user_body1.php';
 
          while ($product = $result->fetch_assoc()) {
          ?>
-            <div style="margin-left:18px;">
-               <a href="product_details1.php?product_id=<?php echo $product['product_id']; ?>">
+                <div style="margin-left:10px;">
+                <a href="product_details.php?product_id=<?php echo $product['product_id']; ?>">
                   <div class="product_box">
                      <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                      <div class="product-info">

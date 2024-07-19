@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id'])) {
 
 function fetchUserPurchases($conn, $user_id) {
     $purchases = [];
-    $query = "SELECT o.orders_id, o.cart_id, p.product_name, p.price, p.product_image, ci.quantity, o.date, o.payment_method
+    $query = "SELECT o.orders_id, o.cart_id, p.product_name, p.price, p.product_image, oi.quantity, o.date, o.payment_method, oi.order_item_id
                 FROM orders o
                 JOIN cart c ON o.cart_id = c.cart_id
-                JOIN cart_items ci ON c.cart_id = ci.cart_id
-                JOIN products p ON ci.product_id = p.product_id
+                JOIN order_items oi ON o.orders_id = oi.orders_id
+                JOIN products p ON oi.product_id = p.product_id
                 WHERE c.user_id = ?;";
 
     if ($stmt = mysqli_prepare($conn, $query)) {
@@ -40,8 +40,8 @@ function fetchUserPurchases($conn, $user_id) {
 
 // Cancel order functionality
 if (isset($_GET['cancel'])) {
-    $cart_item_id = $_GET['cancel'];
-    if (mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$cart_item_id'")) {
+    $order_item_id = $_GET['cancel'];
+    if (mysqli_query($conn, "DELETE FROM order_items WHERE order_item_id = '$order_item_id'")) {
         header('Location: user_purchase.php');
     } else {
         error_log("Error canceling order: " . mysqli_error($conn));
@@ -54,7 +54,8 @@ if (isset($_GET['cancel'])) {
 <html lang="en">
 <head>
     <?php include 'user_header.php'; ?>
-    <title>My Purchases</title>
+
+    <title>FurniView</title>
     <style>
         .purchase-container {
             display: flex;
@@ -66,17 +67,46 @@ if (isset($_GET['cancel'])) {
 
         .purchase-item {
             display: flex;
-            padding: 20px;
+            flex-direction: column;
+            padding: 10px;
             border: 1px solid #ddd;
             margin-bottom: 20px;
             background-color: #FFF6EB;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 250px;
+            height: 350px;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
         }
         .product-details {
-            flex: 3;
-            padding: 10px;
+            width: 240px;
+            padding: 5px;
+        }
+        .product-details h3 {
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        .product-details .info {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px;
+        }
+        .product-details p {
+            margin: 0 10px 0 5px;
+            font-size: 11px;
+        }
+        .btn-container {
+            text-align: center;
+        }
+        .btn-container button {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -91,7 +121,7 @@ if (isset($_GET['cancel'])) {
         </div>
     </div>
     <div class="user_settings_section text-center">
-        <div class="container">
+        <div class="container" style="background-color: transparent;">
             <section class="purchase-container">
                 <?php
                 $user_id = $_SESSION['user_id'];
@@ -105,18 +135,22 @@ if (isset($_GET['cancel'])) {
                                 <img src="<?php echo htmlspecialchars($purchase['product_image']); ?>" alt="Product Image">
                             </div>
                             <div class="product-details">
-                                <h3><?php echo htmlspecialchars($purchase['product_name']); ?></h3>
-                                <p>Price: ₱<?php echo number_format($purchase['price'], 2); ?></p>
-                                <p>Quantity: <?php echo htmlspecialchars($purchase['quantity']); ?></p>
+                                <h3>Our Home <?php echo htmlspecialchars($purchase['product_name']); ?></h3>
+                                <div class="info">
+                                    <p>Price: ₱<?php echo number_format($purchase['price'], 2); ?></p>
+                                    <p>Quantity: <?php echo htmlspecialchars($purchase['quantity']); ?></p>
+                                </div>
                                 <p>Date: <?php echo htmlspecialchars($purchase['date']); ?></p>
                                 <p>Payment Method: <?php echo htmlspecialchars($purchase['payment_method']); ?></p>
-                                <button type="button" class="btn btn-danger" onclick="cancelOrder(<?php echo htmlspecialchars($purchase['cart_item_id']); ?>)">Cancel Order</button>
+                                <div class="btn-container">
+                                    <button type="button" class="btn btn-danger" style="background-color: #964B33;" onclick="cancelOrder(<?php echo htmlspecialchars($purchase['order_item_id']); ?>)">Cancel Order</button>
+                                </div>
                             </div>
                         </div>
                         <?php
                     }
                 } else {
-                    echo '<p>No purchases found.</p>';
+                    echo '<p><b>No purchases found.</b></p>';
                 }
                 ?>
             </section>
@@ -128,7 +162,7 @@ if (isset($_GET['cancel'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         // JavaScript function to cancel an order
-        function cancelOrder(cart_item_id) {
+        function cancelOrder(order_item_id) {
             Swal.fire({
                 text: "You want to cancel this order?",
                 icon: 'warning',
@@ -138,7 +172,7 @@ if (isset($_GET['cancel'])) {
                 confirmButtonText: 'Yes'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'user_purchase.php?cancel=' + cart_item_id;
+                    window.location.href = 'user_purchase.php?cancel=' + order_item_id;
                 }
             });
         }

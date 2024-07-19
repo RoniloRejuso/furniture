@@ -69,11 +69,10 @@ if (isset($_POST['checkout'])) {
     </div>
 </div>
 <div class="user_settings_section text-center">
-    <div class="container">
+    <div class="container" style="background-color: transparent;">
         <section class="cart-container">
             <form method="post" action="">
                 <?php
-                // Query to fetch cart items with product details and aggregate quantities
                 $user_id = $_SESSION['user_id'];
                 $select_cart = mysqli_query($conn, "
                     SELECT p.product_id, p.product_name, p.price, p.product_image, SUM(ci.quantity) AS total_quantity
@@ -193,11 +192,11 @@ if (isset($_POST['checkout'])) {
                             }
                         }
 
-                        echo '<div class="product_box" style="width: 250px; margin: 0 auto;">';
+                        echo '<div class="product_box" style="margin: 0 auto;">';
                         echo '<a href="product_details.php?product_id=' . $product_id . '">';
                         echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
                         echo '<div class="product-info">';
-                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product_name . '</big></b></h4>';
+                        echo '<h4 class="product-name""><b>Our Home</big></b>&nbsp; <b>' . $product_name . '</b></h4>';
                         echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '</h3><br><br>';
                         echo '</div>';
                         echo '</a>';

@@ -276,7 +276,7 @@ include 'user_header.php';
                 </div>
                 <div class="section_container">
                     <div class="billing_section">
-                        <h2>Billing Address</h2>
+                        <h2>Shipping Address</h2>
                         <label><input type="radio" name="billing_address" value="same_as_shipping" required> Home Address</label>
                         <label><input type="radio" name="billing_address" value="different" required> Use Other Address</label>
 

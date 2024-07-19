@@ -167,7 +167,7 @@ include 'user_body1.php';
                             <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                             <div class="product-info">
                                 <h4 class="product-name">
-                                    <b>FurniView </b><b><?php echo $product['product_name'];?></b>
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
                                 </h4>
                                 <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
                             </div>
@@ -187,7 +187,7 @@ include 'user_body1.php';
         <a href="index.php"><i class="fas fa-home"></i></a>
         <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-        <a href="user.php"><i class="fas fa-user"></i></a>
+        <a href="user_login.php"><i class="fas fa-user"></i></a>
       </div>
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>

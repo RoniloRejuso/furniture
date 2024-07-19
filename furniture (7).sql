@@ -102,11 +102,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `admin_id`, `product_name`, `category`, `status`, `price`, `quantity`, `color`, `size`, `weight_capacity`, `description`, `product_image`, `file_path`, `date`) VALUES
-(3, NULL, 'FurniView FurniView christan sectional sofa', 'living_room', 'Available', 30000.00, 2, 'grey', 'Queen 60 x 75 in', '95 kg', 'very comfortable to use', 'uploads/nesting-tables.png', 'uploads/sofa 1.jpg', '0000-00-00'),
-(4, NULL, 'FurniView FurniView christan sectional sofa', 'dining_room', 'Available', 30000.00, 100, 'grey', 'Queen 60 x 75 in', '120 kg', 'very comfortable', 'uploads/nesting-tables.png', 'uploads/sofa 1.jpg', '0000-00-00'),
-(5, NULL, 'FurniView FurniView sofa', 'living_room', 'Available', 30000.00, 12, 'white', 'Queen 60 x 75 in', '10kg -15kg', 'Very comfy to use', 'uploads/sofa 1.jpg', 'uploads/sofa 1.jpg', '2024-06-22'),
-(6, NULL, 'FurniView FurniView sofa', 'dining_room', 'Available', 30000.00, 1, 'white', 'Queen 60 x 75 in', '120 kg', 'very comfy', 'uploads/table 1.jpg', 'uploads/armchair.glb', '2024-06-24'),
-(7, NULL, 'FurniView FurniView sofa', 'living_room', 'Available', 30000.00, 12, 'grey', 'Queen 60 x 75 in', '120 kg', 'very comfy', 'uploads/armchair.png', 'uploads/bed1.jpg', '2024-06-25');
+(3, NULL, 'Our Home Our Home christan sectional sofa', 'living_room', 'Available', 30000.00, 2, 'grey', 'Queen 60 x 75 in', '95 kg', 'very comfortable to use', 'uploads/nesting-tables.png', 'uploads/sofa 1.jpg', '0000-00-00'),
+(4, NULL, 'Our Home Our Home christan sectional sofa', 'dining_room', 'Available', 30000.00, 100, 'grey', 'Queen 60 x 75 in', '120 kg', 'very comfortable', 'uploads/nesting-tables.png', 'uploads/sofa 1.jpg', '0000-00-00'),
+(5, NULL, 'Our Home Our Home sofa', 'living_room', 'Available', 30000.00, 12, 'white', 'Queen 60 x 75 in', '10kg -15kg', 'Very comfy to use', 'uploads/sofa 1.jpg', 'uploads/sofa 1.jpg', '2024-06-22'),
+(6, NULL, 'Our Home Our Home sofa', 'dining_room', 'Available', 30000.00, 1, 'white', 'Queen 60 x 75 in', '120 kg', 'very comfy', 'uploads/table 1.jpg', 'uploads/armchair.glb', '2024-06-24'),
+(7, NULL, 'Our Home Our Home sofa', 'living_room', 'Available', 30000.00, 12, 'grey', 'Queen 60 x 75 in', '120 kg', 'very comfy', 'uploads/armchair.png', 'uploads/bed1.jpg', '2024-06-25');
 
 -- --------------------------------------------------------
 

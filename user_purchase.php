@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 
 function fetchUserPurchases($conn, $user_id) {
     $purchases = [];
-    $query = "SELECT o.orders_id, ci.cart_item_id, p.product_name, p.price, p.product_image, ci.quantity, o.date, o.payment_method
+    $query = "SELECT o.orders_id, o.cart_id, p.product_name, p.price, p.product_image, ci.quantity, o.date, o.payment_method
                 FROM orders o
                 JOIN cart c ON o.cart_id = c.cart_id
                 JOIN cart_items ci ON c.cart_id = ci.cart_id

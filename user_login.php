@@ -298,7 +298,7 @@ include 'user_body.php';
                     </div>
                     <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="acceptTerms" name="acceptTerms">
-                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“FurniView”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
+                            <label class="form-check-label" for="acceptTerms">I agree and consent to the collection, use or otherwise processing of my personal data by Casamia Furniture Center, Inc. (“Our Home”) and its service group. I agree to be bound by the Website’s Terms of Service and Privacy Notice.</label>
                         </div>
 
                         <button type="submit" class="btn btn-create-account mt-3" name="register_btn" id="register_btn">Create</button>

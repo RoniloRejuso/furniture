@@ -27,7 +27,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>FurniView</title>
+    <title>Our Home</title>
     <link rel="icon" href="images/icon.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/animate.css">
@@ -69,7 +69,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
               </a>
             </div>
           </li>
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
               <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                   <img src="assets/img/icons/notification-bing.svg" alt="img">
                   <span class="badge rounded-pill"><?php echo $totalPendingNotificationRow['TotalNotification'];?></span>
@@ -85,7 +85,7 @@ $resultNotifications = mysqli_query($conn, $queryNotifications);
                       <a href="">All Notifications</a>
                   </div>
               </div>
-          </li>
+          </li>-->
           <li class="nav-item dropdown has-arrow main-drop">
             <a href="javascript:void(0);" class="dropdown-toggle nav-link userset"
             data-bs-toggle="dropdown">

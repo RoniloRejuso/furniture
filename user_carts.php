@@ -101,7 +101,7 @@ if (isset($_POST['checkout'])) {
                                 <img src="<?php echo $product_image; ?>" alt="Product Image">
                             </div>
                             <div class="product-details">
-                                <h3>FurniView <?php echo $product_name; ?></h3>
+                                <h3>Our Home <?php echo $product_name; ?></h3>
                                 <p>Sub Total: <span id="subtotal_<?php echo $product_id; ?>">₱<?php echo number_format($sub_total, 2); ?></span></p>
                                 <input type="hidden" name="update_quantity_id" value="<?php echo $product_id; ?>">
                                 <input type="hidden" id="price_<?php echo $product_id; ?>" value="<?php echo $price; ?>">
@@ -155,112 +155,70 @@ if (isset($_POST['checkout'])) {
                     return array_unique($allProducts);
                 }
 
-                // Create a connection to the database
-                $conn = mysqli_connect($servername, $username, $password, $database);
+                // Fetch all orders or specific criteria as needed
+                $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image
+                        FROM order_items oi
+                        JOIN products p ON oi.product_id = p.product_id
+                        GROUP BY p.product_id, p.product_name, p.price, p.product_image";
+                $stmt = $conn->prepare($sql);
 
-                // Check for connection errors
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
+                // Debugging: Check if the statement was prepared successfully
+                if ($stmt === false) {
+                    echo "Error preparing statement: " . $conn->error;
+                    exit;
                 }
 
-                // Check if orders_id is provided in the URL
-                if (isset($_GET['orders_id']) && is_numeric($_GET['orders_id'])) {
-                    $orders_id = intval($_GET['orders_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
-                    // Debugging: Print the orders_id
-                    echo "Orders ID: " . htmlspecialchars($orders_id) . "<br>";
+                if ($result->num_rows > 0) {
+                    $transactions = [];
+                    while ($row = $result->fetch_assoc()) {
+                        $transactions[] = $row;
+                    }
 
-                    // Fetch cart_id associated with the orders_id
-                    $cartIdQuery = "SELECT c.cart_id 
-                                    FROM orders o
-                                    JOIN cart c ON o.cart_id = c.cart_id
-                                    WHERE o.orders_id = ?";
-                    $stmt = $conn->prepare($cartIdQuery);
-                    $stmt->bind_param("i", $orders_id);
-                    $stmt->execute();
-                    $cartIdResult = $stmt->get_result();
+                    $recommendations = generateRecommendations($transactions);
+                    shuffle($recommendations);
 
-                    // Debugging: Print the number of rows returned
-                    echo "Cart ID Rows: " . $cartIdResult->num_rows . "<br>";
+                    $displayLimit = 1;
+                    $count = 0;
 
-                    if ($cartIdResult->num_rows > 0) {
-                        $cart = $cartIdResult->fetch_assoc();
-                        $cart_id = $cart['cart_id'];
-
-                        // Debugging: Print the cart_id
-                        echo "Cart ID: " . htmlspecialchars($cart_id) . "<br>";
-
-                        // Fetch products from cart_items associated with the cart_id
-                        $sql = "SELECT p.product_id, p.product_name, p.price, p.product_image
-                                FROM cart_items ci
-                                JOIN products p ON ci.product_id = p.product_id
-                                WHERE ci.cart_id = ?
-                                GROUP BY p.product_id, p.product_name, p.price, p.product_image";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("i", $cart_id);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        // Debugging: Print the number of rows returned
-                        echo "Product Rows: " . $result->num_rows . "<br>";
-
-                        if ($result->num_rows > 0) {
-                            $transactions = [];
-                            while ($row = $result->fetch_assoc()) {
-                                $transactions[] = $row;
+                    foreach ($recommendations as $product_name) {
+                        foreach ($transactions as $transaction) {
+                            if ($product_name == $transaction["product_name"]) {
+                                $product_id = $transaction["product_id"];
+                                $price = $transaction["price"];
+                                $product_image = $transaction["product_image"];
+                                break;
                             }
-
-                            $recommendations = generateRecommendations($transactions);
-                            shuffle($recommendations);
-
-                            $displayLimit = 1;
-                            $count = 0;
-
-                            foreach ($recommendations as $product_name) {
-                                foreach ($transactions as $transaction) {
-                                    if ($product_name == $transaction["product_name"]) {
-                                        $product_id = $transaction["product_id"];
-                                        $price = $transaction["price"];
-                                        $product_image = $transaction["product_image"];
-                                        break;
-                                    }
-                                }
-
-                                echo '<div class="product_box" style="width: 250px;margin: 0 auto;">';
-                                echo '<a href="product_details.php?product_id=' . $product_id . '">';
-                                echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
-                                echo '<div class="product-info">';
-                                echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>FurniView</big></b>&nbsp;<b><big>' . htmlspecialchars($product_name) . '</big></b></h4>';
-                                echo '<h3 class="product-price" style="color: black; float: right;">₱' . htmlspecialchars($price) . '</h3><br><br>';
-                                echo '</div>';
-                                echo '</a>';
-                                echo '</div>';
-
-                                $count++;
-                                if ($count >= $displayLimit) {
-                                    break;
-                                }
-                            }
-                        } else {
-                            echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
-                            echo '<b>No Products available.<b>';
-                            echo '</div>';
                         }
-                    } else {
-                        echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
-                        echo '<b>Invalid order ID.<b>';
+
+                        echo '<div class="product_box" style="width: 250px; margin: 0 auto;">';
+                        echo '<a href="product_details.php?product_id=' . $product_id . '">';
+                        echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
+                        echo '<div class="product-info">';
+                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product_name . '</big></b></h4>';
+                        echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '</h3><br><br>';
                         echo '</div>';
+                        echo '</a>';
+                        echo '</div>';
+
+                        $count++;
+                        if ($count >= $displayLimit) {
+                            break;
+                        }
                     }
                 } else {
-                    echo '<div style="padding: 20px;text-align:center;margin: 0 auto;"><br>';
-                    echo '<b>Invalid order ID.<b>';
+                    echo '<div style="padding: 20px; text-align:center; margin: 0 auto;"><br>';
+                    echo '<b>No Products available.</b>';
                     echo '</div>';
                 }
 
                 $conn->close();
-                ?>
+            ?>
+            </div>
         </div>
-    </div>
+    </div><br><br>
 </div>
 <script src="js/jquery.min.js"></script>
 <script src="js/popper.min.js"></script>

@@ -1,16 +1,6 @@
 <?php
 include 'dbcon.php';
 
-$conn = mysqli_connect('localhost', 'u138133975_ourhome', 'A@&DDb;7', 'u138133975_furniture');
-if (!$conn) {
-	echo ("Connection Failed: " . mysqli_connect_error());
-	exit;
-}
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 if (isset($_GET['delete_id'])) {
     $product_id = (int)$_GET['delete_id']; // Ensure the ID is an integer
 
@@ -26,12 +16,14 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-$sql = "SELECT * FROM users";
-$result = $conn->query($sql);
+$query = "SELECT ci.cart_item_id, u.firstname, u.lastname, p.product_name, p.category, p.price, p.product_image,ci.cart_id, ci.quantity, ci.amount
+          FROM cart_items ci
+          JOIN products p ON ci.product_id = p.product_id
+          JOIN cart c On ci.cart_id = c.cart_id
+          JOIN users u ON c.user_id = u.user_id
+          ORDER BY ci.cart_item_id";
 
-if (!$result) {
-    die("Query failed: " . $conn->error);
-}
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -43,8 +35,8 @@ if (!$result) {
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>FurniView</title>
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+    <title>Our Home</title>
+    <link rel="icon" href="images/icon.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
@@ -62,30 +54,6 @@ if (!$result) {
                 <h4>Orders</h4>
             </div>
         </div>
-        
-<?php
-// Database connection details
-$servername = "localhost";  // Replace with your server name
-$username = "u138133975_ourhome";  // Replace with your MySQL username
-$password = "A@&DDb;7";  // Replace with your MySQL password
-$dbname = "u138133975_furniture";  // Replace with your MySQL database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch cart items and product details query
-$query = "SELECT ci.product_id, p.product_name, p.category, p.price, p.product_image, ci.quantity, ci.amount
-          FROM cart_items ci
-          JOIN products p ON ci.product_id = p.product_id
-          ORDER BY ci.cart_item_id"; // Adjust limit as needed
-
-$result = $conn->query($query);
-?>
 
 <div class="card">
     <div class="card-body">
@@ -111,7 +79,8 @@ $result = $conn->query($query);
         <table class="table datanew">
             <thead>
                 <tr>
-                    <th>Product ID</th>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Price</th>
@@ -121,20 +90,11 @@ $result = $conn->query($query);
                 </tr>
             </thead>
             <tbody>
-                <!-- Sample data row -->
-                <tr>
-                    <td>101</td>
-                    <td>Sample Product</td>
-                    <td>Category 1</td>
-                    <td>25.00</td>
-                    <td><img src="path/to/sample_image.jpg" alt="Product Image" width="50"></td>
-                    <td>2</td>
-                    <td>50.00</td>
-                </tr>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><?php echo $row["product_id"]; ?></td>
+                            <td><?php echo $row["cart_item_id"]; ?></td>
+                            <td><?php echo $row["firstname"]; ?> <?php echo $row["lastname"]; ?></td>
                             <td><?php echo $row["product_name"]; ?></td>
                             <td><?php echo $row["category"]; ?></td>
                             <td><?php echo $row["price"]; ?></td>
@@ -145,7 +105,7 @@ $result = $conn->query($query);
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="text-center">No cart items found</td>
+                        <td colspan="8" class="text-center">No cart items found</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -154,11 +114,6 @@ $result = $conn->query($query);
 </div>
 </div>
 </div>
-
-
-
-
-
 
 <script>
     document.querySelectorAll('.delete-btn').forEach(button => {

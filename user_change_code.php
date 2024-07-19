@@ -9,7 +9,7 @@
 
     <title>Verification</title>
 
-    <link rel="shortcut icon" href="assets/img/FurniView.png">
+    <link rel="shortcut icon" href="assets/img/Our Home.png">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
@@ -121,7 +121,7 @@ if (isset($_POST['resend_verification'])) {
         $mail->Password = 'ecae dvfi mhpi aozw';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
-        $mail->setFrom('rejusocute101@gmail.com', 'FurniView');
+        $mail->setFrom('rejusocute101@gmail.com', 'Our Home');
         $mail->addAddress($email);
         $mail->isHTML(true);
 
@@ -139,7 +139,7 @@ if (isset($_POST['resend_verification'])) {
 }
 ?>
     <div class="image-container" margin-right: 100px;>
-        <img src="assets/img/FurniView.png" alt="Pic" class="text-img">
+        <img src="assets/img/Our Home.png" alt="Pic" class="text-img">
     </div>
     <div class="row">
 
@@ -181,7 +181,7 @@ if (isset($_POST['resend_verification'])) {
 
                     </div>
                     <div class="card-body bg-light-alt text-center" >
-                        <h5  class="text-muted d-none d-sm-inline-block" style="color: black;">FurniView Furniture Shop</h5>
+                        <h5  class="text-muted d-none d-sm-inline-block" style="color: black;">Our Home Furniture Shop</h5>
                     </div>
                 </div>
             </div>

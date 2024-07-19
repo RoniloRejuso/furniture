@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FurniView</title>
+    <title>Our Home</title>
     <link rel="icon" href="images/icon.png">
     <link href="assets/css/login.css" rel="stylesheet">
     <!-- Add Font Awesome CSS -->
@@ -105,7 +105,7 @@
     </script>
                     <a href="signup.php" style="color: #ffd698;"><small>Sign-Up</small></a>
                 </div>
-                <img src="assets/img/FurniView.png" alt="" style="width: 200px; height: auto; margin-top: 5px;">
+                <img src="assets/img/Our Home.png" alt="" style="width: 200px; height: auto; margin-top: 5px;">
             </form>
 
         </div>

@@ -95,7 +95,7 @@ if(isset($_GET['product_id'])) {
                     <img src="<?php echo $product['product_image']; ?>" alt="Product Image">
                 </div>
                 <div class="product-info">
-                    <h2 class="product-name"><b>FurniView <?php echo $product['product_name']; ?></b></h2>
+                    <h2 class="product-name"><b>Our Home <?php echo $product['product_name']; ?></b></h2>
                     <h3 class="product-price">₱<?php echo $product['price']; ?></h3>
                     <div class="product-description">
                         <p>Description: <?php echo $product['description']; ?></p>
@@ -179,7 +179,7 @@ if(isset($_GET['product_id'])) {
                         echo '<a href="product_details.php?product_id=' . $product_id . '">';
                         echo '<img src="' . $product_image . '" class="image_1" alt="Product Image">';
                         echo '<div class="product-info">';
-                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>FurniView</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
+                        echo '<h4 class="product-name" style="margin-left: 20px;"><b><big>Our Home</big></b>&nbsp;<b><big>' . $product . '</big></b></h4>';
                         echo '<h3 class="product-price" style="color: black; float: right;">₱' . $price . '.00</h3><br><br>';
                         echo '</div>';
                         echo '</a>';
@@ -205,7 +205,7 @@ if(isset($_GET['product_id'])) {
         <a href="index.php"><i class="fas fa-home"></i></a>
         <a href="user_prod.php"><i class="fas fa-couch"></i></a>
         <a href="user_carts.php"><i class="fas fa-shopping-bag"></i></a>
-        <a href="user.php"><i class="fas fa-user"></i></a>
+        <a href="user_login.php"><i class="fas fa-user"></i></a>
     </div>
 
     <!-- JavaScript -->

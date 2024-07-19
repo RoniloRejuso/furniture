@@ -54,39 +54,63 @@ if (isset($_POST['order_btn'])) {
     // Update user address in the users table
     $update_user_address_query = mysqli_query($conn, "UPDATE users SET address = '$full_address', phone_number = '$phone_number' WHERE user_id = '$user_id'");
 
-    // Fetch the cart items
-    $select_cart = mysqli_query($conn, "SELECT ci.cart_id, p.product_name, p.price, p.product_image, ci.quantity
-                                        FROM cart_items ci
-                                        JOIN products p ON ci.product_id = p.product_id
-                                        WHERE ci.cart_id IN (SELECT cart_id FROM cart WHERE user_id = '$user_id')");
-
-    $grand_total = 0;
-    $cart_id = null;
-
-    if (mysqli_num_rows($select_cart) > 0) {
-        // Loop through cart items and calculate the grand total
-        while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
-            $cart_id = $fetch_cart['cart_id'];
-            $quantity = intval($fetch_cart['quantity']);
-            $price = floatval($fetch_cart['price']);
-            $total_price = $price * $quantity;
-            $grand_total += $total_price;
+    // Fetch the cart id(s)
+    $select_cart_ids = mysqli_query($conn, "SELECT cart_id FROM cart WHERE user_id = '$user_id'");
+    if (mysqli_num_rows($select_cart_ids) > 0) {
+        $cart_ids = [];
+        while ($cart_row = mysqli_fetch_assoc($select_cart_ids)) {
+            $cart_ids[] = $cart_row['cart_id'];
         }
 
-        // Insert order details into orders table
-        $insert_order_query = mysqli_query($conn, "INSERT INTO orders (cart_id, payment_method, date)
-        VALUES ('$cart_id', '$payment_method', NOW())");
+        foreach ($cart_ids as $cart_id) {
+            // Fetch the cart items for this cart_id
+            $select_cart = mysqli_query($conn, "SELECT ci.cart_id, p.product_id, p.product_name, p.price, ci.quantity
+                                                FROM cart_items ci
+                                                JOIN products p ON ci.product_id = p.product_id
+                                                WHERE ci.cart_id = '$cart_id'");
 
-        if ($insert_order_query) {
-            // Clear cart items after successful order placement
-            $delete_cart_items_query = mysqli_query($conn, "DELETE FROM cart_items WHERE cart_id = '$cart_id'");
-            if ($delete_cart_items_query) {
-                $order_placed = true;
+            if (mysqli_num_rows($select_cart) > 0) {
+                // Initialize grand total
+                $grand_total = 0;
+
+                // Prepare for order insertion
+                $insert_order_query = mysqli_query($conn, "INSERT INTO orders (cart_id, payment_method, date) VALUES ('$cart_id', '$payment_method', NOW())");
+
+                if ($insert_order_query) {
+                    $order_id = mysqli_insert_id($conn);
+
+                    // Iterate through cart items and insert into order_items
+                    while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+                        $product_id = $fetch_cart['product_id'];
+                        $quantity = intval($fetch_cart['quantity']);
+                        $price = floatval($fetch_cart['price']);
+                        $amount = $price * $quantity;
+
+                        // Update grand total
+                        $grand_total += $amount;
+
+                        // Insert order item
+                        $insert_order_item_query = mysqli_query($conn, "INSERT INTO order_items (orders_id, product_id, quantity, price, amount)
+                        VALUES ('$order_id', '$product_id', '$quantity', '$price', '$amount')");
+
+                        if (!$insert_order_item_query) {
+                            die('Failed to insert order item details into the database: ' . mysqli_error($conn));
+                        }
+                    }
+
+                    // Clear cart items after successful order placement
+                    $delete_cart_items_query = mysqli_query($conn, "DELETE FROM cart_items WHERE cart_id = '$cart_id'");
+                    if ($delete_cart_items_query) {
+                        $order_placed = true;
+                    } else {
+                        die('Failed to clear the cart items: ' . mysqli_error($conn));
+                    }
+                } else {
+                    die('Failed to insert order details into the database: ' . mysqli_error($conn));
+                }
             } else {
-                die('Failed to clear the cart items: ' . mysqli_error($conn));
+                die('Your cart is empty!');
             }
-        } else {
-            die('Failed to insert order details into the database: ' . mysqli_error($conn));
         }
     } else {
         die('Your cart is empty!');
@@ -209,9 +233,7 @@ include 'user_header.php';
     }
 </style>
 <body>
-<?php
-include 'user_body.php';
-?>
+<?php include 'user_body.php'; ?>
 <div class="second_header_section">
     <div class="container-fluid">
         <nav class="navbar navbar-light bg-light">
@@ -255,8 +277,8 @@ include 'user_body.php';
                 <div class="section_container">
                     <div class="billing_section">
                         <h2>Billing Address</h2>
-                        <label><input type="radio" name="billing_address" value="same_as_shipping" required> Same as Shipping Address</label>
-                        <label><input type="radio" name="billing_address" value="different" required> Use Different Billing Address</label>
+                        <label><input type="radio" name="billing_address" value="same_as_shipping" required> Home Address</label>
+                        <label><input type="radio" name="billing_address" value="different" required> Use Other Address</label>
 
                         <div id="billing_address_fields" style="display: none;">
                             <h3>Enter Billing Address</h3>

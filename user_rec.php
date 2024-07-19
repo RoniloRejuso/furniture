@@ -2,40 +2,40 @@
 // Define actual product counts
 $actual_product_counts = [
 
-    "FurniView Sofa" => 45,
+    "Our Home Sofa" => 45,
     "Christan Sectional Sofa" => 42,
     "Aubrey Bedframe" => 35,
     "Copenhagen Sectional" => 32,
     "Portland Bar Set" => 30,
     "Hallie Bar Set" => 16,
     "Verel 3 seater sofa" => 16,
-    "FurniView verel 2 seater sofa" => 16
+    "Our Home verel 2 seater sofa" => 16
 ];
 
 // Given data set
 $data_set = [
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Aubrey Bedframe", 1],
     ["Christan Sectional Sofa", 1],
     ["Hallie Bar Set", 1],
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Christan Sectional Sofa", 1],
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Portland Bar Set", 1],
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Aubrey Bedframe", 1],
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Christan Sectional Sofa", 1],
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Copenhagen Sectional", 1],
     ["Aubrey Bedframe", 1],
     ["Portland Bar Set", 1],
     ["Christan Sectional Sofa", 1],
-    ["FurniView Sofa", 1],
+    ["Our Home Sofa", 1],
     ["Copenhagen Sectional", 1],
     ["Portland Bar Set", 1],
     ["Verel 3 seater sofa", 1],
-    ["FurniView verel 2 seater sofa", 1]
+    ["Our Home verel 2 seater sofa", 1]
     // Add more entries from your data set here...
 ];
 
@@ -131,7 +131,7 @@ $most_paired_product = key($product_counts);
                     <th rowspan="2">Total</th>
                 </tr>
                 <tr>
-                    <th>FurniView Sofa</th>
+                    <th>Our Home Sofa</th>
                     <th>Other Products</th>
                 </tr>
                 <?php foreach ($actual_product_counts as $product => $count): ?>

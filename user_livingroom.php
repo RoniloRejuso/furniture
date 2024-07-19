@@ -175,7 +175,7 @@ include 'user_body.php';
                             <img src="<?php echo $product['product_image']; ?>" class="image_1" alt="Product Image">
                             <div class="product-info">
                                 <h4 class="product-name">
-                                    <b>FurniView </b><b><?php echo $product['product_name'];?></b>
+                                    <b>Our Home </b><b><?php echo $product['product_name'];?></b>
                                 </h4>
                                 <h3 class="product-price">₱<?php echo $product['price']; ?></h3><br><br>
                             </div>

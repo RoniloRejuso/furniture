@@ -28,7 +28,7 @@ if (isset($_POST['update_update_btn'])) {
 
 if (isset($_GET['remove'])) {
     $remove_id = $_GET['remove'];
-    mysqli_query($conn, "DELETE FROM cart_items WHERE product_id = '$remove_id'");
+    mysqli_query($conn, "DELETE FROM cart_items WHERE cart_item_id = '$remove_id'");
     header('Location: user_carts.php');
     exit();
 }
@@ -51,6 +51,7 @@ if (isset($_POST['checkout'])) {
         exit();
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,15 +117,15 @@ if (isset($_POST['checkout'])) {
                             </div>
                         </div>
                         <?php
-                        $grand_total += $sub_total;
+                        $grand_total = 0;
                     }
                     ?>
-                    <div class="cart-total">
-                        <p><b>Total Amount: ₱ <span id="total_amount"><?php echo number_format($grand_total, 2); ?></span></b></p>
-                        <div class="checkout-btn">
-                            <button type="button" class="btn" name="checkout" onclick="confirmCheckout()" <?php echo $item_count == 0 ? 'disabled' : ''; ?>>Checkout</button>
+                        <div class="cart-total">
+                            <p><b>Total Amount: ₱ <span id="total_amount"><?php echo number_format($grand_total, 2); ?></span></b></p>
+                            <div class="checkout-btn">
+                                <button type="button" class="btn" name="checkout" onclick="confirmCheckout()" <?php echo $item_count == 0 ? 'disabled' : ''; ?>>Checkout</button>
+                            </div>
                         </div>
-                    </div>
                     <?php
                 } else {
                     echo '<div class="cart-item1">';
@@ -291,41 +292,55 @@ if (isset($_POST['checkout'])) {
     }
 
     function updateTotalAmount() {
-        var totalAmountSpan  = document.getElementById('total_amount');
-        var totalAmount = 0;
+    var totalAmountSpan = document.getElementById('total_amount');
+    var totalAmount = 0;
 
-        var subtotals = document.querySelectorAll('[id^="subtotal_"]');
+    // Fetch all checked items
+    var selectedItems = document.querySelectorAll('input[name="selected_items[]"]:checked');
 
-        subtotals.forEach(function(subtotal) {
-            totalAmount += parseFloat(subtotal.textContent.replace('₱', ''));
+    selectedItems.forEach(function(item) {
+        var product_id = item.value;
+        var quantity = parseInt(document.getElementById('quantity_' + product_id).value);
+        var price = parseFloat(document.getElementById('price_' + product_id).value);
+        var subtotal = quantity * price;
+        totalAmount += subtotal;
+    });
+
+    // Update the total amount display
+    totalAmountSpan.textContent = totalAmount.toFixed(2);
+}
+
+function confirmCheckout() {
+    var selectedItems = document.querySelectorAll('input[name="selected_items[]"]:checked');
+    var totalAmount = 0;
+
+    // Check if any item is selected
+    if (selectedItems.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            text: 'Please select at least one item to checkout!',
+            confirmButtonColor: '#964B33'
         });
-
-        totalAmountSpan.textContent = totalAmount.toFixed(2);
+        return;
     }
 
-    function confirmCheckout() {
-        var selectedItems = document.querySelectorAll('input[name="selected_items[]"]:checked');
-        var totalAmount = 0;
+    // Calculate the total amount for selected items
+    selectedItems.forEach(function(item) {
+        var product_id = item.value;
+        var quantity = parseInt(document.getElementById('quantity_' + product_id).value);
+        var price = parseFloat(document.getElementById('price_' + product_id).value);
+        var subtotal = quantity * price;
+        totalAmount += subtotal;
+    });
 
-        selectedItems.forEach(function(item) {
-            var product_id = item.value;
-            var quantity = parseInt(document.getElementById('quantity_' + product_id).value);
-            var price = parseFloat(document.getElementById('price_' + product_id).value);
-            var subtotal = quantity * price;
-            totalAmount += subtotal;
-        });
+    // Proceed with checkout
+    var selectedItemsStr = Array.from(selectedItems, item => item.value).join(',');
+    window.location.href = 'user_checkout.php?items=' + encodeURIComponent(selectedItemsStr) + '&total=' + totalAmount.toFixed(2);
+}
 
-        if (selectedItems.length === 0) {
-            Swal.fire({
-                icon: 'error',
-                text: 'Please select at least one item to checkout!',
-                confirmButtonColor: '#964B33'
-            });
-        } else {
-            var selectedItemsStr = Array.from(selectedItems, item => item.value).join(',');
-            window.location.href = 'user_checkout.php?items=' + selectedItemsStr + '&total=' + totalAmount.toFixed(2);
-        }
-    }
+document.querySelectorAll('input[name="selected_items[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateTotalAmount);
+    });
 </script>
 
 </body>
